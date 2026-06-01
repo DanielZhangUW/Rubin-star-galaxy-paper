@@ -2,7 +2,7 @@
 
 This is a manuscript-only repository for the Rubin star-galaxy separation paper.
 
-It intentionally excludes private data, FITS files, parquet files, large catalogs, and bulk analysis outputs. Figures are selected PDF paper figures copied from the analysis repository's `paper_convergence` outputs. A small Section 1 plotting-code snapshot is included for provenance; the full analysis code and data products remain in the main analysis repository.
+It intentionally excludes private data, FITS files, parquet files, large catalogs, and bulk analysis outputs. Figures are selected PNG paper figures copied from the analysis repository's `paper_convergence` outputs. A small Section 1 plotting-code snapshot is included for provenance; the full analysis code and data products remain in the main analysis repository.
 
 This repository is intended to be imported into Overleaf using:
 
@@ -18,13 +18,13 @@ Use Overleaf, or run locally:
 latexmk -pdf main.tex
 ```
 
-The manuscript uses only local `.tex`, `.bib`, and selected PDF figure files.
+The manuscript uses only local `.tex`, `.bib`, and selected PNG figure files.
 
 ## Repository Contents
 
 - `main.tex`: manuscript entry point
 - `sections/`: manuscript section files
-- `figures/`: selected PDF figures for the paper draft
+- `figures/`: selected PNG figures for the paper draft
 - `analysis_code/section1_paper_convergence/`: small Section 1 plotting-code snapshot copied from the analysis repository; no data files are included
 - `references.bib`: bibliography file
 - `notes/`: figure source manifest and Overleaf/GitHub setup notes
