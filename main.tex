@@ -1,32 +1,38 @@
-\documentclass[11pt]{article}
-
-\usepackage[margin=1in]{geometry}
-\usepackage{graphicx}
-\usepackage{xcolor}
-\usepackage{amsmath}
-\usepackage[numbers,sort&compress]{natbib}
-\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
-
-\graphicspath{{figures/}}
-
-\title{Probabilistic Star-Galaxy Separation in Rubin LSST Catalogs}
-\author{Authors}
-\date{\today}
+\documentclass[twocolumn]{aastex631}
 
 \begin{document}
 
-\maketitle
+\title{Probabilistic Star-Galaxy Separation in Rubin LSST Catalogs}
 
-\input{sections/00_abstract}
-\input{sections/01_introduction}
-\input{sections/02_data}
-\input{sections/03_extendedness_baseline}
-\input{sections/04_bayesian_method}
-\input{sections/05_results}
-\input{sections/06_discussion}
-\input{sections/07_conclusion}
+\author{authors...}
+\affiliation{University of Washington, Seattle}
 
-\bibliographystyle{plainnat}
-\bibliography{references}
+\begin{abstract}
+
+The classification of resolved and unresolved sources, commonly referred to as star-galaxy separation, is a fundamental step in the analysis of wide-field imaging surveys such as the Rubin LSST. Rubin photometric catalogs provide an \texttt{extendedness} classifier based on the difference between PSF and CModel magnitudes. This is a useful baseline morphology tool for star-galaxy separation by distinguishing between unresolved and extended sources. However, the resulting classification is fundamentally a binary classification metric. In this work, we model the distribution of sources in the two-dimensional space defined by \(\Delta m = m_{\mathrm{PSF}} - m_{\mathrm{CModel}}\) and \(m_{\mathrm{CModel}}\). At fixed magnitude, the distribution is represented as a mixture of unresolved and resolved components, and we define \(p_S\) as the posterior probability that a source belongs to the unresolved component. We apply this method to the Rubin DP1 and DP2 source catalogs and validate the resulting classifications using external HST labels. This validation allows us to compare the probability \(p_S\)-based classifier directly with the Rubin \texttt{extendedness} baseline. Our results show that the \(p_S\)-based classifier can correctly classify more unresolved and resolved sources than the Rubin \texttt{extendedness} baseline, leading to improved overall classification performance. 
+
+\end{abstract}
+
+\section{Introduction}
+
+Star-Galaxy separation is a fundamental step in wide-field imaging surveys. In imaging data, an unresolved source is an object whose light profile is consistent with the point-spread function (PSF), so it appears point-like rather than spatially extended. A resolved source, by contrast, has measurable spatial extension beyond the PSF. In this work, we use the term unresolved source selection because the morphology measured from the imaging data does not uniquely map onto the physical source class. Such unresolved sources can include stars, quasars, etc., whose individual components are not resolved. Sources with measurable spatial extension classified as resolved are typically galaxies.
+
+Reliable unresolved-source selection is important for Rubin science cases, including studies of Milky Way structure and stellar populations, quasar selection, photometric calibration, transient science, and the removal of stellar foregrounds from extragalactic samples.
+
+
+
+
+\section{Data}
+
+\section{Method}
+
+\section{Results}
+
+\section{Discussion}
+
+\section{Conclusions}
+
+\bibliography{refs}
+\bibliographystyle{aasjournal}
 
 \end{document}
