@@ -1,0 +1,170 @@
+\documentclass[linenumbers,amsmath,trackchanges]{aastex702}
+%%
+%% \documentclass[argument1,argument2,argument3,...]{aastex7}
+%%      Six of the arguments are typestting options. They are:
+%%  twocolumn   : two text columns, 10 point font, single spaced article.
+%%                This is the most compact and represent the final published
+%%                derived PDF copy of the accepted manuscript from the publisher
+%%  default     : one text column, 10 point font, single spaced (default).
+%%  manuscript  : one text column, 12 point font, double spaced article.
+%%  preprint    : one text column, 12 point font, single spaced article.  
+%%  preprint2   : two text columns, 12 point font, single spaced article.
+%%  modern      : a stylish, single text column, 12 point font, article with
+%% 		  wider left and right margins. This uses the Daniel
+%% 		  Foreman-Mackey and David Hogg design.
+%% Note that you can submit to the AAS Journals in any of these 6 styles.
+%%
+%% There are other optional arguments one can invoke to allow other stylistic
+%% actions. The available options are:
+%%   linenumbers  : turn on linenumbering. Note this is mandatory for AAS
+%%                  Journal submissions and revisions.
+%%   trackchanges : Shows added text in bold.
+%%   longauthor   : Do not use the more compressed footnote style (default) for 
+%%                  the author/collaboration/affiliations. Instead print all
+%%                  affiliation information after each name. Creates a much 
+%%                  longer author list but may be desirable for short 
+%%                  author papers.
+%% twocolappendix : make 2 column appendix.
+%%   anonymous    : Do not show the authors, affiliations, acknowledgments,
+%%                  and author contributions for dual anonymous review.
+%%  resetfootnote : Reset footnotes to 1 in the body of the manuscript.
+%%                  Useful when there are a lot of authors and affiliations
+%%		    in the front matter.
+%% Since v6, AASTeX has included \hyperref support. While we have built in 
+%% specific %% defaults into the classfile you can manually override them 
+%% with the \hypersetup command. For example,
+%% \hypersetup{linkcolor=red,citecolor=green,filecolor=cyan,urlcolor=magenta}
+%% will change the color of the internal links to red, the links to the
+%% bibliography to green, the file links to cyan, and the external links to
+%% magenta. Additional information on \hyperref options can be found here:
+%% https://www.tug.org/applications/hyperref/manual.html#x1-40003
+
+
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{amsmath}
+ 
+\graphicspath{{figures/}}
+
+
+%% If you want to create your own macros, you can do so
+%% using \newcommand. Your macros should appear before
+%% the \begin{document} command.
+%%
+\newcommand{\vdag}{(v)^\dagger}
+\newcommand\aastex{AAS\TeX}
+\newcommand\latex{La\TeX}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% The following section outlines numerous optional output that
+%% can be displayed in the front matter or as running meta-data.
+%%
+%% Running header information. A short title on odd pages and 
+%% short author list on even pages. Note that this
+%% information may be modified in production.
+%%\shorttitle{AASTeX v7.0.2 Sample article}
+%%\shortauthors{The Terra Mater collaboration}
+%%
+%% Include dates for submitted, revised, and accepted.
+%%\received{February 1, 2025}
+%%\revised{March 1, 2025}
+%%\accepted{\today}
+%%
+%% Indicate AAS Journal the manuscript was submitted to.
+%%\submitjournal{PSJ}
+%% Note that this command adds "Submitted to " the argument.
+%%
+%% You can add a light gray and diagonal water-mark to the first page 
+%% with this command:
+% \watermark{DRAFT}
+ 
+\begin{document}  
+ 
+\title{Improved Probabilistic Star-Galaxy Separation Method for Rubin LSST Catalogs}
+ 
+
+\correspondingauthor{{\v Z}eljko Ivezi{\'c}}
+ 
+\author[0000-0001-5250-2633, gname=\v{Z}eljko, sname=Ivezi\'{c}]{\v{Z}. Ivezi\'{c}}
+\affiliation{Department of Astronomy, University of Washington, Box 351580, Seattle, WA 98195, USA}
+\email[show]{ivezic@uw.edu}
+
+\author{Jinshuo Zhang} 
+\affiliation{Department of Astronomy, University of Washington, Box 351580, Seattle, WA 98195, USA}
+\email{jinshuoz@uw.edu} 
+
+\author{Nirav Nemali}
+\affiliation{Department of Astronomy, University of Washington, Box 351580, Seattle, WA 98195, USA}
+\email{niravn6@uw.edu}
+
+\author{Colin T. Slater}
+\affiliation{Department of Astronomy, University of Washington, Box 351580, Seattle, WA 98195, USA}
+\email{ctslater@uw.edu} 
+
+\author{Dan Taranu}
+\affiliation{Department of Astrophysical Sciences, Princeton University, Princeton, NJ 08544, USA}
+\email{dan.s.taranu@gmail.com}  
+
+\author{{Robert H. Lupton}}
+\affiliation{Department of Astrophysical Sciences, Princeton University, Princeton, NJ 08544, USA}
+\email{rhl@astro.princeton.edu} 
+
+
+
+\begin{abstract}
+The classification of resolved and unresolved sources, commonly referred to as star-galaxy
+separation, is a fundamental step in the analysis of wide-field imaging surveys such as the Rubin
+LSST. Rubin photometric catalogs provide an \texttt{extendedness} classifier based on the difference
+between PSF and CModel magnitudes. This is a useful baseline morphology tool for star-galaxy
+separation by distinguishing between unresolved and extended sources. However, the resulting
+classification is fundamentally a binary classification metric. In this work, we implement the
+star-galaxy separation method from Slater, Ivezi\'{c} \& Lupton (2020). We model the
+distribution of sources in the two-dimensional space defined by \(\Delta m = m_{\mathrm{PSF}} -
+m_{\mathrm{CModel}}\) and \(m_{\mathrm{CModel}}\). At fixed magnitude, the distribution is
+represented as a mixture of unresolved and resolved components, and we define \(p_S\) as the
+posterior probability that a source belongs to the unresolved component. We apply this method to the
+Rubin DP1 and DP2 source catalogs and validate the resulting classifications using external HST
+labels. This validation allows us to compare the probability \(p_S\)-based classifier directly with
+the Rubin \texttt{extendedness} baseline. Our results show that the \(p_S\)-based classifier can
+correctly classify more unresolved and resolved sources than the Rubin \texttt{extendedness}
+baseline, leading to improved overall classification performance.
+\end{abstract}
+
+%% Keywords should appear after the \end{abstract} command. 
+%% The AAS Journals now uses Unified Astronomy Thesaurus (UAT) concepts:
+%% https://astrothesaurus.org
+%% You will be asked to selected these concepts during the submission process
+%% but this old "keyword" functionality is maintained in case authors want
+%% to include these concepts in their preprints.
+\keywords{\uat{Galaxies}{573} --- \uat{Cosmology}{343}  --- \uat{Stellar astronomy}{1583} --- \uat{Solar physics}{1476}}
+
+% \date{\today}
+
+\section{Introduction} 
+
+We implement the star-galaxy separation method from \cite{2020AJ....159...65S}... 
+ 
+\input{sections/01_introduction}
+
+\input{sections/02_data}
+\input{sections/03_extendedness_baseline}
+\input{sections/04_bayesian_method}
+\input{sections/05_results}
+\input{sections/06_discussion}
+\input{sections/07_conclusion}
+
+
+\bibliography{paper}{}
+\bibliographystyle{aasjournalv7.1}
+\end{document}
+ 
+- modeling dmag vs. mag using KDE: 2021PASP..133e4502M 
+
+- GP classifier with 5,000 simulated training observations
+averaged over 100 simulation iterations: area under the curve is 0.985
+2022AJ....163..148M 
+
+
+
+
