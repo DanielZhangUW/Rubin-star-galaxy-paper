@@ -39,12 +39,39 @@ This manifest lists the current Section 2 and Section 5 paper-convergence output
 - Purpose: Shows color-color loci after classifying with the Eq.54-prior ugrizy method.
 - Caveat: This is a method-label visualization, not an external-truth plot.
 
+## Section 2 Eq.54 + pS_color Integration
+
+### fig2_4_cosmos_r_pS_map_16_26_eq54prior_color
+- PNG: `figures/section2_bayesian_method/fig2_4_cosmos_r_pS_map_16_26_eq54prior_color.png`
+- Purpose: Shows the r-band posterior map after adding the color-only likelihood factor to the morphology log-likelihood ratio and applying the Eq.54 prior once.
+- Caveat: This is a first-pass post-hoc integration using `logit(pS_color)` as a color likelihood ratio.
+
+### fig2_5_cosmos_r_pS_vs_extendedness_performance_eq54prior_color
+- PNG: `figures/section2_bayesian_method/fig2_5_cosmos_r_pS_vs_extendedness_performance_eq54prior_color.png`
+- Purpose: Compares r-band extendedness, morphology-only Eq.54 r posterior, and Eq.54 r plus color performance.
+- Caveat: The Eq.54 prior remains very conservative at faint magnitudes for threshold-based star selection.
+
+### fig2_6_cosmos_multiband_r_gri_ugrizy_performance_eq54prior_color
+- PNG: `figures/section2_bayesian_method/fig2_6_cosmos_multiband_r_gri_ugrizy_performance_eq54prior_color.png`
+- Purpose: Compares color-integrated Eq.54 performance for r, gri, and ugrizy summed-logLR scores.
+- Caveat: The color likelihood factor is added once to each morphology-band combination before applying the magnitude prior once.
+
+### fig2_7_cosmos_ugrizy_method_color_color_2x4_eq54prior_color
+- PNG: `figures/section2_bayesian_method/fig2_7_cosmos_ugrizy_method_color_color_2x4_eq54prior_color.png`
+- Purpose: Shows color-color loci after classifying with the color-integrated Eq.54 ugrizy posterior.
+- Caveat: Very few faint objects pass the `pS >= 0.5` star threshold because the Eq.54 prior strongly favors galaxies at the faint end.
+
 ## Section 5.1 Red-Source Diagnostic
 
 ### fig5_1_cosmos_red_sources_r_pS_hist_vs_all_eq54prior
 - PNG: `figures/section5_discussion/fig5_1_cosmos_red_sources_r_pS_hist_vs_all_eq54prior.png`
 - Purpose: Compares Eq.54-prior r-band pS distributions for all COSMOS sources and red sources with `r-i > 1.4`.
 - Caveat: The Eq.54 magnitude prior suppresses faint-end star probabilities and should be considered when interpreting red-source pS distributions.
+
+### fig5_10_cosmos_eq54_vs_eq54_color_pS_hist_by_rmag
+- PNG: `figures/section5_discussion/fig5_10_cosmos_eq54_vs_eq54_color_pS_hist_by_rmag.png`
+- Purpose: Compares morphology-only Eq.54 pS, color-only `pS_color`, and color-integrated Eq.54 pS distributions by r magnitude bin.
+- Caveat: Diagnostic comparison only; the color-integrated Section 2 figures are the main current outputs from this update.
 
 ## pS_color COSMOS And ECDFS Diagnostics
 

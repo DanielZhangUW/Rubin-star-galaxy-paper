@@ -1,0 +1,34 @@
+metric,value,notes
+eq54_rows,865287.0,outputs/dp2_cosmos_ps_v9_eq54prior.parquet
+pS_color_rows,588841.0,outputs/dp2_cosmos_ps_color_v1.parquet
+joined_rows,588841.0,inner join on unique object_id
+valid_color_feature_rows,524494.0,pS_color valid feature flag
+truth_labeled_rows,294093.0,truth labels from pS_color output
+pS_r_eq54prior_finite_count,588096.0,
+pS_r_eq54prior_min,3.054832631291235e-08,
+pS_r_eq54prior_median,5.66884274429325e-08,
+pS_r_eq54prior_max,0.9999998300013939,
+pS_r_eq54prior_color_finite_count,523977.0,
+pS_r_eq54prior_color_min,3.054835779446944e-14,
+pS_r_eq54prior_color_median,5.707283718806354e-10,
+pS_r_eq54prior_color_max,0.9999999999998299,
+pS_gri_eq54prior_finite_count,585428.0,
+pS_gri_eq54prior_min,3.054838834285879e-20,
+pS_gri_eq54prior_median,6.99500940715666e-20,
+pS_gri_eq54prior_max,1.0,
+pS_gri_eq54prior_color_finite_count,523340.0,
+pS_gri_eq54prior_color_min,3.0548418891277754e-26,
+pS_gri_eq54prior_color_median,7.96025039157571e-22,
+pS_gri_eq54prior_color_max,1.0,
+pS_ugrizy_eq54prior_finite_count,499083.0,
+pS_ugrizy_eq54prior_min,3.05484799882069e-38,
+pS_ugrizy_eq54prior_median,1.0133562681607103e-30,
+pS_ugrizy_eq54prior_max,1.0,
+pS_ugrizy_eq54prior_color_finite_count,499083.0,
+pS_ugrizy_eq54prior_color_min,3.054851053671729e-44,
+pS_ugrizy_eq54prior_color_median,1.4131425700497155e-34,
+pS_ugrizy_eq54prior_color_max,1.0,
+pS_color_finite_count,524494.0,
+pS_color_min,0.0,
+pS_color_median,0.005,
+pS_color_max,1.0,
