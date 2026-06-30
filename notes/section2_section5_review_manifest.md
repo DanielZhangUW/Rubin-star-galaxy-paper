@@ -61,6 +61,16 @@ This manifest lists the current Section 2 and Section 5 paper-convergence output
 - Purpose: Shows color-color loci after classifying with the color-integrated Eq.54 ugrizy posterior.
 - Caveat: Very few faint objects pass the `pS >= 0.5` star threshold because the Eq.54 prior strongly favors galaxies at the faint end.
 
+### fig2_8_cosmos_eq54_color_roc_3bins
+- PNG: `figures/section2_bayesian_method/fig2_8_cosmos_eq54_color_roc_3bins.png`
+- Purpose: Shows star-positive ROC/AUC curves for the color-integrated Eq.54 r, gri, and ugrizy scores in three r magnitude bins.
+- Caveat: ROC/AUC assesses ranking performance; fixed-threshold behavior at `pS > 0.5` is reported separately.
+
+### fig2_9_cosmos_pS_vs_extendedness_roc_3bins_eq54prior_color
+- PNG: `figures/section2_bayesian_method/fig2_9_cosmos_pS_vs_extendedness_roc_3bins_eq54prior_color.png`
+- Purpose: Compares the r-band color-integrated Eq.54 ROC curve, morphology-only Eq.54 r ROC curve, and r-band extendedness binary operating-point line.
+- Caveat: Extendedness is binary, so its display is an operating-point step line rather than a smooth ROC curve.
+
 ## Section 5.1 Red-Source Diagnostic
 
 ### fig5_1_cosmos_red_sources_r_pS_hist_vs_all_eq54prior
