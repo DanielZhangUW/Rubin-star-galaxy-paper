@@ -32,14 +32,14 @@ BINS = [
 ]
 
 COLOR_SCORES = [
-    ("r + color", "pS_r_eq54prior_color", "#1f77b4"),
-    ("gri + color", "pS_gri_eq54prior_color", "#ff7f0e"),
-    ("ugrizy + color", "pS_ugrizy_eq54prior_color", "#2ca02c"),
+    ("r morphology + color", "pS_r_eq54prior_color", "#1f77b4"),
+    ("gri morphology + color", "pS_gri_eq54prior_color", "#ff7f0e"),
+    ("ugrizy morphology + color", "pS_ugrizy_eq54prior_color", "#2ca02c"),
 ]
 
 R_COMPARISON_SCORES = [
-    ("Eq.54 r + color", "pS_r_eq54prior_color", "#1f77b4"),
-    ("Eq.54 morphology r", "pS_r_eq54prior", "#222222"),
+    ("r morphology + color", "pS_r_eq54prior_color", "#1f77b4"),
+    ("r morphology only", "pS_r_eq54prior", "#222222"),
 ]
 
 MORPHOLOGY_REFERENCE_SCORES = [
@@ -188,7 +188,7 @@ def make_fig2_8(summary: pd.DataFrame, curves: dict[tuple[str, str], tuple[np.nd
         ax.legend(fontsize=8, loc="lower right", frameon=True)
     for suffix in ["png", "pdf"]:
         out = paths.figure_dir / f"fig2_8_cosmos_eq54_color_roc_3bins.{suffix}"
-        if out.exists():
+        if out.exists() and os.environ.get("OVERWRITE_CURRENT_ROC_OUTPUTS") != "1":
             raise FileExistsError(f"Refusing to overwrite existing file: {out}")
         fig.savefig(out, dpi=220, bbox_inches="tight")
     plt.close(fig)
@@ -229,12 +229,15 @@ def make_fig2_9(summary: pd.DataFrame, curves: dict[tuple[str, str], tuple[np.nd
             fpr = fp / (fp + tn) if (fp + tn) > 0 else np.nan
             contamination = fp / (tp + fp) if (tp + fp) > 0 else np.nan
             purity = tp / (tp + fp) if (tp + fp) > 0 else np.nan
-            ax.plot(
-                [0.0, fpr, 1.0],
-                [0.0, tpr, 1.0],
+            ax.scatter(
+                [fpr],
+                [tpr],
                 color="#d62728",
-                lw=2.0,
-                ls="-.",
+                s=48,
+                marker="o",
+                edgecolors="black",
+                linewidths=0.6,
+                zorder=5,
                 label="r extendedness",
             )
             ext_summary_rows.append(
