@@ -10,6 +10,7 @@ from pathlib import Path
 
 import joblib
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 import numpy as np
 import pandas as pd
 from sklearn.metrics import roc_auc_score
@@ -199,18 +200,20 @@ def _plot_method_color_color(ps_color: pd.DataFrame, output_png: Path) -> list[P
             star_like = ps_color.loc[finite & class_star]
             if len(galaxy_like):
                 plot_gal = galaxy_like.sample(min(len(galaxy_like), 90000), random_state=42)
-                ax.scatter(plot_gal[xcol], plot_gal[ycol], s=1.8, c=COLORS["galaxy"], alpha=0.10, linewidths=0, label="pS_color < 0.5")
+                ax.scatter(plot_gal[xcol], plot_gal[ycol], s=1.8, c=COLORS["galaxy"], alpha=0.10, linewidths=0)
             if len(star_like):
                 plot_star = star_like.sample(min(len(star_like), 40000), random_state=42)
-                ax.scatter(plot_star[xcol], plot_star[ycol], s=2.2, c=COLORS["star"], alpha=0.35, linewidths=0, label="pS_color >= 0.5")
+                ax.scatter(plot_star[xcol], plot_star[ycol], s=2.2, c=COLORS["star"], alpha=0.35, linewidths=0)
             ax.set_xlim(*xlim)
             ax.set_ylim(*ylim)
             ax.set_xlabel(xlabel, labelpad=8)
             ax.set_ylabel(ylabel, labelpad=8)
-            ax.set_title(f"{lo:g} < r < {hi:g}\nN_starlike={len(star_like):,}, N_gallike={len(galaxy_like):,}", pad=12)
-    handles, labels = axes.flat[0].get_legend_handles_labels()
-    if handles:
-        fig.legend(handles, labels, loc="lower center", ncol=2, frameon=True, bbox_to_anchor=(0.5, 0.018))
+            ax.set_title(f"{lo:g} < r < {hi:g}\nN_unres={len(star_like):,}, N_res={len(galaxy_like):,}", pad=12)
+    handles = [
+        Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["galaxy"], markeredgewidth=0, markersize=5, alpha=0.55, label="resolved"),
+        Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["star"], markeredgewidth=0, markersize=5, alpha=0.85, label="unresolved"),
+    ]
+    fig.legend(handles=handles, loc="lower center", ncol=2, frameon=True, bbox_to_anchor=(0.5, 0.018))
     return save_figure(fig, output_png)
 
 

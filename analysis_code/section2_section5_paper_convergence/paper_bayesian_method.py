@@ -6,6 +6,7 @@ from pathlib import Path
 import sys
 
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 import numpy as np
 import pandas as pd
 
@@ -349,14 +350,14 @@ def plot_fig2_7_method_color_color(scored: pd.DataFrame, output_png: Path) -> tu
         star = scored.loc[finite & method_star]
         gal_plot = downsample_frame(gal, 80000)
         star_plot = downsample_frame(star, 30000)
-        ax.scatter(gal_plot[x_col], gal_plot[y_col], s=2, c=COLORS["galaxy"], alpha=0.10, linewidths=0, label=f"method galaxy N={len(gal):,}")
-        ax.scatter(star_plot[x_col], star_plot[y_col], s=3, c=COLORS["star"], alpha=0.40, linewidths=0, label=f"method star N={len(star):,}")
+        ax.scatter(gal_plot[x_col], gal_plot[y_col], s=2, c=COLORS["galaxy"], alpha=0.10, linewidths=0)
+        ax.scatter(star_plot[x_col], star_plot[y_col], s=3, c=COLORS["star"], alpha=0.40, linewidths=0)
         xlim, ylim = COLOR_COLOR_LIMITS[limit_key]
         ax.set_xlim(xlim)
         ax.set_ylim(ylim)
         ax.set_xlabel(x_label)
         ax.set_ylabel(y_label)
-        ax.set_title(f"{lo:g} < rmag < {hi:g}\nN_star={len(star):,}, N_gal={len(gal):,}")
+        ax.set_title(f"{lo:g} < rmag < {hi:g}\nN_unres={len(star):,}, N_res={len(gal):,}")
         rows.append(
             {
                 "x_column": x_col,
@@ -369,8 +370,11 @@ def plot_fig2_7_method_color_color(scored: pd.DataFrame, output_png: Path) -> tu
                 "notes": "no Eq. 54 prior calibration yet",
             }
         )
-    handles, labels = axes[0, 0].get_legend_handles_labels()
-    fig.legend(handles, labels, loc="lower center", ncol=2, frameon=True, bbox_to_anchor=(0.5, 0.02))
+    handles = [
+        Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["galaxy"], markeredgewidth=0, markersize=5, alpha=0.55, label="resolved"),
+        Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["star"], markeredgewidth=0, markersize=5, alpha=0.85, label="unresolved"),
+    ]
+    fig.legend(handles=handles, loc="lower center", ncol=2, frameon=True, bbox_to_anchor=(0.5, 0.02))
     for ax in axes.flat:
         leg = ax.get_legend()
         if leg is not None:

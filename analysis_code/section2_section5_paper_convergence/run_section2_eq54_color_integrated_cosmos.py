@@ -20,6 +20,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 import numpy as np
 import pandas as pd
 
@@ -268,13 +269,13 @@ def score_stats(df: pd.DataFrame, col: str) -> dict[str, float | int]:
 def build_performance_rows(eval_df: pd.DataFrame, matched: pd.DataFrame) -> pd.DataFrame:
     rows: list[dict[str, object]] = []
     methods = [
-        ("eq54_morphology_r", "pS_r_eq54prior", "morphology-only Eq.54 r"),
+        ("eq54_morphology_r", "pS_r_eq54prior", "r morphology only"),
         ("pS_color_only", "pS_color", "color-only Random Forest"),
-        ("eq54_color_r", "pS_r_eq54prior_color", "Eq.54 r + color"),
-        ("eq54_morphology_gri", "pS_gri_eq54prior", "morphology-only Eq.54 gri"),
-        ("eq54_color_gri", "pS_gri_eq54prior_color", "Eq.54 gri + color"),
-        ("eq54_morphology_ugrizy", "pS_ugrizy_eq54prior", "morphology-only Eq.54 ugrizy"),
-        ("eq54_color_ugrizy", "pS_ugrizy_eq54prior_color", "Eq.54 ugrizy + color"),
+        ("eq54_color_r", "pS_r_eq54prior_color", "r morphology + color"),
+        ("eq54_morphology_gri", "pS_gri_eq54prior", "gri morphology only"),
+        ("eq54_color_gri", "pS_gri_eq54prior_color", "gri morphology + color"),
+        ("eq54_morphology_ugrizy", "pS_ugrizy_eq54prior", "ugrizy morphology only"),
+        ("eq54_color_ugrizy", "pS_ugrizy_eq54prior_color", "ugrizy morphology + color"),
     ]
     for lo, hi in PERFORMANCE_BINS:
         in_bin = eval_df["cmodel_mag_r"].ge(lo) & eval_df["cmodel_mag_r"].lt(hi)
@@ -406,7 +407,7 @@ def plot_fig2_4(repo_root: Path, joined: pd.DataFrame) -> list[Path]:
         rasterized=True,
     )
     cbar = fig.colorbar(sc, ax=ax, pad=0.015)
-    cbar.set_label("pS_r Eq.54 + color")
+    cbar.set_label("pS_r, morphology + color")
     ax.set_xlim(16, 26)
     finite_y = use["psf_minus_cmodel_r"].dropna().to_numpy(float)
     if finite_y.size:
@@ -414,7 +415,7 @@ def plot_fig2_4(repo_root: Path, joined: pd.DataFrame) -> list[Path]:
         ax.set_ylim(max(-0.4, lo), min(2.2, hi))
     ax.set_xlabel("r CModel magnitude")
     ax.set_ylabel("r PSF - CModel")
-    ax.set_title("COSMOS r-band pS map, Eq.54 + color")
+    ax.set_title("COSMOS r-band pS map, morphology + color")
     return save_figure(fig, out, write_pdf=True)
 
 
@@ -448,8 +449,8 @@ def plot_fig2_5(repo_root: Path, performance: pd.DataFrame) -> list[Path]:
         repo_root / FIGURE_DIR / "fig2_5_cosmos_r_pS_vs_extendedness_performance_eq54prior_color.png",
         [
             ("r_extendedness", "r extendedness", "#ff7f0e"),
-            ("eq54_morphology_r", "Eq.54 morphology r", "#222222"),
-            ("eq54_color_r", "Eq.54 r + color", "#1f77b4"),
+            ("eq54_morphology_r", "r morphology only", "#222222"),
+            ("eq54_color_r", "r morphology + color", "#1f77b4"),
         ],
     )
 
@@ -459,9 +460,9 @@ def plot_fig2_6(repo_root: Path, performance: pd.DataFrame) -> list[Path]:
         performance,
         repo_root / FIGURE_DIR / "fig2_6_cosmos_multiband_r_gri_ugrizy_performance_eq54prior_color.png",
         [
-            ("eq54_color_r", "r + color", "#1f77b4"),
-            ("eq54_color_gri", "g+r+i + color", "#2ca02c"),
-            ("eq54_color_ugrizy", "u+g+r+i+z+y + color", "#9467bd"),
+            ("eq54_color_r", "r morphology + color", "#1f77b4"),
+            ("eq54_color_gri", "gri morphology + color", "#2ca02c"),
+            ("eq54_color_ugrizy", "ugrizy morphology + color", "#9467bd"),
         ],
     )
 
@@ -486,13 +487,13 @@ def plot_fig2_7(repo_root: Path, joined: pd.DataFrame) -> list[Path]:
             gal_panel = panel.loc[~method_star[finite]]
             gal_plot = downsample_frame(gal_panel, 80_000, random_state=RANDOM_SEED)
             star_plot = downsample_frame(star_panel, 45_000, random_state=RANDOM_SEED)
-            ax.scatter(gal_plot[xcol], gal_plot[ycol], s=1.0, c=COLORS["galaxy"], alpha=0.08, linewidths=0, rasterized=True, label="classified galaxy")
-            ax.scatter(star_plot[xcol], star_plot[ycol], s=1.3, c=COLORS["star"], alpha=0.28, linewidths=0, rasterized=True, label="classified star")
+            ax.scatter(gal_plot[xcol], gal_plot[ycol], s=1.0, c=COLORS["galaxy"], alpha=0.08, linewidths=0, rasterized=True)
+            ax.scatter(star_plot[xcol], star_plot[ycol], s=1.3, c=COLORS["star"], alpha=0.28, linewidths=0, rasterized=True)
             ax.set_xlim(*xlim)
             ax.set_ylim(*ylim)
             ax.set_xlabel(xlabel)
             ax.set_ylabel(ylabel)
-            ax.set_title(f"{lo:g} < r < {hi:g}\nN_star={len(star_panel):,}, N_gal={len(gal_panel):,}")
+            ax.set_title(f"{lo:g} < r < {hi:g}\nN_unres={len(star_panel):,}, N_res={len(gal_panel):,}")
             rows.append(
                 {
                     "x_color": xcol,
@@ -506,8 +507,11 @@ def plot_fig2_7(repo_root: Path, joined: pd.DataFrame) -> list[Path]:
                     "threshold": OPERATING_THRESHOLD,
                 }
             )
-    handles, labels = axes[0, 0].get_legend_handles_labels()
-    fig.legend(handles[:2], labels[:2], loc="lower center", ncol=2, bbox_to_anchor=(0.5, 0.01), frameon=True)
+    handles = [
+        Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["galaxy"], markeredgewidth=0, markersize=5, alpha=0.55, label="resolved"),
+        Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["star"], markeredgewidth=0, markersize=5, alpha=0.85, label="unresolved"),
+    ]
+    fig.legend(handles=handles, loc="lower center", ncol=2, bbox_to_anchor=(0.5, 0.01), frameon=True)
     fig.subplots_adjust(left=0.08, right=0.98, top=0.96, bottom=0.07, hspace=0.58, wspace=0.30)
     saved = save_figure(fig, out, write_pdf=True)
     summary = repo_root / RESULT_DIR / "fig2_7_cosmos_ugrizy_method_color_color_2x4_eq54prior_color_summary.csv"
@@ -519,9 +523,9 @@ def plot_fig5_10(repo_root: Path, joined: pd.DataFrame) -> list[Path]:
     set_paper_style()
     out = repo_root / FIGURE5_DIR / "fig5_10_cosmos_eq54_vs_eq54_color_pS_hist_by_rmag.png"
     scores = [
-        ("pS_r_eq54prior", "Eq.54 morphology r", "#222222"),
+        ("pS_r_eq54prior", "r morphology only", "#222222"),
         ("pS_color", "pS_color", "#ff7f0e"),
-        ("pS_r_eq54prior_color", "Eq.54 r + color", "#1f77b4"),
+        ("pS_r_eq54prior_color", "r morphology + color", "#1f77b4"),
     ]
     fig, axes = plt.subplots(3, 3, figsize=(14.6, 10.2), sharex=True, sharey=False)
     hist_bins = np.linspace(0, 1, 41)

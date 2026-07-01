@@ -15,6 +15,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 import numpy as np
 import pandas as pd
 import pyarrow.parquet as pq
@@ -563,13 +564,13 @@ def plot_fig2_7(repo_root: Path, full: pd.DataFrame) -> list[Path]:
             star = panel[panel["method_star_like"]]
             gal_plot = downsample_frame(gal, 45_000, random_state=RANDOM_SEED + row_idx * 10 + col_idx)
             star_plot = downsample_frame(star, 45_000, random_state=RANDOM_SEED + row_idx * 10 + col_idx + 1)
-            ax.scatter(gal_plot[xcol], gal_plot[ycol], s=1.1, alpha=0.12, color=COLORS["galaxy"], label="method galaxy-like" if row_idx == 0 and col_idx == 0 else None, rasterized=True)
-            ax.scatter(star_plot[xcol], star_plot[ycol], s=1.1, alpha=0.22, color=COLORS["star"], label="method star-like" if row_idx == 0 and col_idx == 0 else None, rasterized=True)
+            ax.scatter(gal_plot[xcol], gal_plot[ycol], s=1.1, alpha=0.12, color=COLORS["galaxy"], rasterized=True)
+            ax.scatter(star_plot[xcol], star_plot[ycol], s=1.1, alpha=0.22, color=COLORS["star"], rasterized=True)
             ax.set_xlim(*xlim)
             ax.set_ylim(*ylim)
             ax.set_xlabel(xlabel, labelpad=8)
             ax.set_ylabel(ylabel, labelpad=8)
-            ax.set_title(f"{mag_low:g} < r < {mag_high:g}\nN_star-like={len(star):,}, N_gal-like={len(gal):,}", pad=10)
+            ax.set_title(f"{mag_low:g} < r < {mag_high:g}\nN_unres={len(star):,}, N_res={len(gal):,}", pad=10)
             rows.append(
                 {
                     "color_plane": f"{xlabel} vs {ylabel}",
@@ -587,8 +588,11 @@ def plot_fig2_7(repo_root: Path, full: pd.DataFrame) -> list[Path]:
                     "N_method_galaxy_like_plotted": int(len(gal_plot)),
                 }
             )
-    handles, labels = axes[0, 0].get_legend_handles_labels()
-    fig.legend(handles, labels, loc="lower center", ncol=2, bbox_to_anchor=(0.5, -0.012), frameon=True)
+    handles = [
+        Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["galaxy"], markeredgewidth=0, markersize=5, alpha=0.55, label="resolved"),
+        Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["star"], markeredgewidth=0, markersize=5, alpha=0.85, label="unresolved"),
+    ]
+    fig.legend(handles=handles, loc="lower center", ncol=2, bbox_to_anchor=(0.5, -0.012), frameon=True)
     fig.subplots_adjust(hspace=0.62, wspace=0.28, bottom=0.08)
     saved = save_figure(fig, out_png, write_pdf=True)
     pd.DataFrame(rows).to_csv(summary_path, index=False)

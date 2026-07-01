@@ -11,6 +11,7 @@ from datetime import datetime
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 import numpy as np
 import pandas as pd
 
@@ -609,7 +610,6 @@ def plot_fig2_7(repo_root: Path, full: pd.DataFrame, columns: dict[str, str]) ->
                 s=1.1,
                 alpha=0.12,
                 color=COLORS["galaxy"],
-                label="method galaxy-like" if row_idx == 0 and col_idx == 0 else None,
                 rasterized=True,
             )
             ax.scatter(
@@ -618,7 +618,6 @@ def plot_fig2_7(repo_root: Path, full: pd.DataFrame, columns: dict[str, str]) ->
                 s=1.1,
                 alpha=0.22,
                 color=COLORS["star"],
-                label="method star-like" if row_idx == 0 and col_idx == 0 else None,
                 rasterized=True,
             )
             ax.set_xlim(*xlim)
@@ -627,7 +626,7 @@ def plot_fig2_7(repo_root: Path, full: pd.DataFrame, columns: dict[str, str]) ->
             ax.set_ylabel(ylabel, labelpad=8)
             ax.set_title(
                 f"{mag_low:g} < r < {mag_high:g}\n"
-                f"N_star-like={len(star):,}, N_gal-like={len(gal):,}",
+                f"N_unres={len(star):,}, N_res={len(gal):,}",
                 pad=10,
             )
             rows.append(
@@ -647,8 +646,11 @@ def plot_fig2_7(repo_root: Path, full: pd.DataFrame, columns: dict[str, str]) ->
                     "N_method_galaxy_like_plotted": int(len(gal_plot)),
                 }
             )
-    handles, labels = axes[0, 0].get_legend_handles_labels()
-    fig.legend(handles, labels, loc="lower center", ncol=2, bbox_to_anchor=(0.5, -0.012), frameon=True)
+    handles = [
+        Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["galaxy"], markeredgewidth=0, markersize=5, alpha=0.55, label="resolved"),
+        Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["star"], markeredgewidth=0, markersize=5, alpha=0.85, label="unresolved"),
+    ]
+    fig.legend(handles=handles, loc="lower center", ncol=2, bbox_to_anchor=(0.5, -0.012), frameon=True)
     fig.subplots_adjust(hspace=0.62, wspace=0.28, bottom=0.08)
     saved = save_figure(fig, out_png, write_pdf=True)
 
@@ -672,8 +674,8 @@ def plot_fig2_7(repo_root: Path, full: pd.DataFrame, columns: dict[str, str]) ->
                 "",
                 "## Method-label definition",
                 "- `pS_ugrizy = mean(pS_u, pS_g, pS_r, pS_i, pS_z, pS_y)` over finite values.",
-                f"- method star-like if `pS_ugrizy >= {OPERATING_THRESHOLD}`.",
-                f"- method galaxy-like if `pS_ugrizy < {OPERATING_THRESHOLD}`.",
+                f"- unresolved if `pS_ugrizy >= {OPERATING_THRESHOLD}`.",
+                f"- resolved if `pS_ugrizy < {OPERATING_THRESHOLD}`.",
                 "",
                 "No pS values were reconstructed or prior-corrected in this pass.",
             ]
