@@ -86,11 +86,11 @@
 
 \correspondingauthor{{\v Z}eljko Ivezi{\'c}}
  
-\author[0000-0001-5250-2633, gname=\v{Z}eljko, sname=Ivezi\'{c}]{\v{Z}. Ivezi\'{c}}
+\author[0000-0001-5250-2633, gname=\v{Z}eljko, sname=Ivezi\'{c}]{\v{Z}eljko Ivezi\'{c}}
 \affiliation{Department of Astronomy, University of Washington, Box 351580, Seattle, WA 98195, USA}
 \email[show]{ivezic@uw.edu}
 
-\author[0009-0004-0944-9098]{Jinshuo Zhang} 
+\author{Jinshuo Zhang} 
 \affiliation{Department of Astronomy, University of Washington, Box 351580, Seattle, WA 98195, USA}
 \email{jinshuoz@uw.edu} 
 
@@ -98,37 +98,50 @@
 \affiliation{Department of Astronomy, University of Washington, Box 351580, Seattle, WA 98195, USA}
 \email{niravn6@uw.edu}
 
-\author{Colin T. Slater}
-\affiliation{Department of Astronomy, University of Washington, Box 351580, Seattle, WA 98195, USA}
-\email{ctslater@uw.edu} 
-
 \author{Dan Taranu}
 \affiliation{Department of Astrophysical Sciences, Princeton University, Princeton, NJ 08544, USA}
 \email{dan.s.taranu@gmail.com}  
 
-\author{{Robert H. Lupton}}
+\author{Colin T. Slater}
+\affiliation{Department of Astronomy, University of Washington, Box 351580, Seattle, WA 98195, USA}
+\email{ctslater@uw.edu} 
+
+\author{Robert H. Lupton}
 \affiliation{Department of Astrophysical Sciences, Princeton University, Princeton, NJ 08544, USA}
 \email{rhl@astro.princeton.edu} 
+
+\author{other Rubin coauthors}
+\affiliation{Rubin Observatory}
+\email{verarubin@noirlab.edu} 
 
 
 
 \begin{abstract}
-The classification of resolved and unresolved sources, commonly referred to as star-galaxy
-separation, is a fundamental step in the analysis of wide-field imaging surveys such as the Rubin
-LSST. Rubin photometric catalogs provide an \texttt{extendedness} classifier based on the difference
-between PSF and CModel magnitudes. This is a useful baseline morphology tool for star-galaxy
-separation by distinguishing between unresolved and extended sources. However, the resulting
-classification is fundamentally a binary classification metric. In this work, we implement the
-star-galaxy separation method from Slater, Ivezi\'{c} \& Lupton (2020). We model the
-distribution of sources in the two-dimensional space defined by \(\Delta m = m_{\mathrm{PSF}} -
-m_{\mathrm{CModel}}\) and \(m_{\mathrm{CModel}}\). At fixed magnitude, the distribution is
-represented as a mixture of unresolved and resolved components, and we define \(p_S\) as the
-posterior probability that a source belongs to the unresolved component. We apply this method to the
-Rubin DP1 and DP2 source catalogs and validate the resulting classifications using external HST
-labels. This validation allows us to compare the probability \(p_S\)-based classifier directly with
-the Rubin \texttt{extendedness} baseline. Our results show that the \(p_S\)-based classifier can
-correctly classify more unresolved and resolved sources than the Rubin \texttt{extendedness}
-baseline, leading to improved overall classification performance.
+The morphological classification of resolved and unresolved sources, commonly referred to as ``star-galaxy
+separation'', is a fundamental step in the analysis of wide-field imaging surveys such as Rubin Observatory's
+Legacy Survey of Space and Time (LSST). Star-galaxy separation becomes increasingly challenging at
+the faint magnitudes
+probed by LSST because galaxy counts rise rapidly  with magnitude while their angular sizes become
+progressively smaller. LSST photometric catalogs provide a binary classifier \texttt{extendedness} in each band, based on the
+threshold difference between PSF, \(m_{\mathrm{PSF}}\), and CModel, \(m_{\mathrm{CModel}}\),
+magnitudes.  While this parameter provides a useful baseline for morphological classification, its binary nature
+prevents the optimal combination of information from multiple bands, as well as from other
+classification methods (e.g., those based on colors or external datasets). In this work, we implement
+the Bayesian star-galaxy classification method of Slater, Ivezi\'{c} \& Lupton (2020).
+In each band, we model the distribution of sources in the two-dimensional space defined by
+\(\Delta m = m_{\mathrm{PSF}} - m_{\mathrm{CModel}}\) and magnitude \(m_{\mathrm{CModel}}\).
+At a fixed magnitude, the distribution is modeled as a mixture of unresolved and resolved
+components which, with appropriately chosen priors for the star-to-galaxy number ratio, allows us to
+compute \(p_S\), the posterior probability that a source is unresolved.
+We apply this method to the Rubin DP1 and DP2 object catalogs and validate the resulting classifications using external HST
+labels in the COSMOS field. Using these labels as the ground truth, we quantitatively compare the performance of the \(p_S\)-based
+classifier with that of the Rubin \texttt{extendedness} parameter. We find that the \(p_S\)-based classifier
+consistently outperforms the Rubin \texttt{extendedness} baseline, with the improvement
+increasing as additional bands are incorporated.  Approximately, the \(p_S\) classifier
+achieves the same classification performance at a magnitude limit about one
+magnitude fainter than the \texttt{extendedness} classifer. Depending on the scientific
+application, this morphological classification can be further improved by incorporating
+complementary color-based classifiers.
 \end{abstract}
 
 %% Keywords should appear after the \end{abstract} command. 
@@ -139,31 +152,29 @@ baseline, leading to improved overall classification performance.
 %% to include these concepts in their preprints.
 \keywords{\uat{Galaxies}{573} --- \uat{Cosmology}{343}  --- \uat{Stellar astronomy}{1583} --- \uat{Solar physics}{1476}}
 
-% \date{\today}
+\date{\today}
 
-\section{Introduction} 
-
-We implement the star-galaxy separation method from \cite{2020AJ....159...65S}... 
+\input{introduction}
+\input{method}
+\input{performance}
+\input{discussion} 
  
-\input{sections/01_introduction}
-
-\input{sections/02_data}
-\input{sections/03_extendedness_baseline}
-\input{sections/04_bayesian_method}
-\input{sections/05_results}
-\input{sections/06_discussion}
-\input{sections/07_conclusion}
-
-
 \bibliography{paper}{}
 \bibliographystyle{aasjournalv7.1}
 \end{document}
- 
+
+
+
+
+
+COMPILE WITH:
+> latexmk -pdf paper.tex
+
 - modeling dmag vs. mag using KDE: 2021PASP..133e4502M 
 
 - GP classifier with 5,000 simulated training observations
-averaged over 100 simulation iterations: area under the curve is 0.985
-2022AJ....163..148M 
+     averaged over 100 simulation iterations: area under the curve is 0.985
+     2022AJ....163..148M 
 
 
 

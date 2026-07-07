@@ -1,0 +1,42 @@
+\section{Introduction}
+
+The morphological classification of resolved and unresolved sources\footnote{Note that some stars can be
+resolved, such as Asymptotic Giant Branch stars, while quasars and galaxies can be unresolved.}, commonly
+referred to as ``star-galaxy separation'', is a fundamental step in the analysis of wide-field imaging surveys
+such as the Rubin's Legacy Survey of Space and Time (LSST). At bright magnitudes this problem is
+relatively simple, since stars outnumber galaxies and the galaxies that do exist are obviously extended on the sky.
+Star-galaxy separation becomes increasingly harder at faint magnitudes, such as those probed by
+Rubin's Legacy Survey of Space and Time (LSST; for details see \citealt{2019ApJ...873..111I} and references therein)
+because galaxy counts rapidly increase with magnitude, while their angular sizes become smaller.
+
+A variety of methods have been proposed in the literature for morphological classification of sources in images. 
+\cite{2020AJ....159...65S} (hereafter SIL2020) discussed the statistical foundations of morphological star–galaxy separation and showed
+that many of the star-galaxy separation metrics in common use today, e.g., by Sloan Digital Sky Survey (SDSS) {\it photo}
+pipeline \citep{2002SPIE.4836..350L}, or SExtractor pipeline \citep{1996A&AS..117..393B}, are closely
+related both to each other, and to the Bayesian model odds ratio, first derived by \cite{1979AJ.....84.1526S}.
+SIL2020 quantified the scaling of various algorithms with the source noise properties and showed that the Bayesian model
+odds ratio achieves the best peformance. They also showed how to probabilistically combine multiple measurements,
+either of the same type (e.g., subsequent exposures), or differing types (e.g., multiple bandpasses), or differing
+methodologies (e.g., morphological and color-based classification).
+
+Following SDSS, LSST photometric catalogs use a binary classifier \texttt{extendedness} in each band, based on the
+threshold difference between PSF, \(m_{\mathrm{PSF}}\), and CModel, \(m_{\mathrm{CModel}}\),
+magnitudes, \(\Delta m = m_{\mathrm{PSF}} - m_{\mathrm{CModel}}\). For unresolved sources, this \(\Delta m \)
+is vanishing within noise, with \texttt{extendedness=0}, while for resolved objects, selected by \(\Delta m >
+0.016\) mag, \texttt{extendedness=1}. Resolved objects have positive \(\Delta m \) because their
+PSF flux is smaller than CModel flux due to a narrow weighting PSF profile. For an illustration of \(\Delta m \)
+distribution in Rubin's Data Preview 1 catalogs, see Fig.~28 in \cite{2026AJ....171..360V}. 
+
+Although  \texttt{extendedness} was successfuly used in thousands of papers based on SDSS catalogs, this
+approach is not optimal for LSST. As discussed in SIL2020, when the star-galaxy separation threshold is optimized
+at the faint, low S/N, end of the data, the ability to recognize barely resolved objects at the bright end is not fully exploited. 
+More importantly, the binary nature of \texttt{extendedness} parameter prevents optimal combination of information from
+different bands, as well as from other classification methods (e.g., based on colors, or other datasets). SIL2020 showed how
+to turn \(\Delta m \) into a probability distribution, which then allows proper probabilistic combination of multiple bands.
+With appropriately chosen priors for star-to-galaxy counts ratio, the posterior probability that a source is unresolved
+(or resolved), can be computed in Bayesian framwork. 
+
+The main goal of this paper is to implement the steps towards Bayesian star-galaxy separation outlined in SIL2020
+using Rubin's Data Preview 2 data. We describe our dataset and method in \S 2, and quantify its performance using
+HST-based labels in \S 3. We discuss our results and how to retrieve our catalog with improved star-galaxy separation in \S 4. 
+ 
