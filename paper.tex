@@ -178,4 +178,25 @@ COMPILE WITH:
 
 
 
+TRACTS vs. PATCHES
+
+In the Rubin Science Pipelines, tracts and patches are the two levels of spatial subdivision used
+for coadds and object catalogs. They are designed to make processing and storage scalable
+while preserving continuity across the sky. A tract is a relatively large region of the sky,
+approximately 1.75$^\deg$ x 1.75$^\deg$ (the exact size depends on the sky map projection).
+that is processed as a unit. Tracts overlap slightly with neighboring tracts to avoid edge effects.
+Each tract has a unique integer tract ID (e.g., 9813). Tracts are defined by a sky map
+(e.g., the RingsSkyMap used for DP1 and DP2).  
+
+Each tract is subdivided into a regular grid of patches, indexed by two integers, with each tract
+in DP1/DP2 containing 9 × 9 = 81 patches. The patch size is about 12 arcmin by 12 arcmin
+(approximately, one CCD). Patches overlap slightly with neighboring patches. A patch is the basic
+processing unit for many pipeline tasks, such as source detection, measurement, and deblending.
+This two-level hierarchy offers several advantages.
+tracts keep astrometric and photometric calibration consistent over a large area,
+define a convenient unit for coadds and catalogs, and simplify distributed processing.
+Patches allow parallel processing on many CPUs, keep memory requirements manageable,
+and localize expensive tasks such as deblending.
+
+
 
