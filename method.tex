@@ -91,6 +91,7 @@ misclassified when using default \texttt{extendedness} parameter.
 
 
 
+\clearpage
 \subsection{Bayesian Star-Galaxy Separation Method}
 
 Summary of the method, expressions from SlL2020... 
@@ -101,10 +102,109 @@ Summary of the method, expressions from SlL2020...
 %Figure~\ref{} 
 
 
-\subsubsection{Mixture Model for \(Delta m\) vs. \(m_{\mathrm{CModel}}\) diagram} 
+\subsubsection{Mixture Model for \(\Delta m\) vs. \(m_{\mathrm{CModel}}\) diagram} 
 
-XXX We need Nirav to describe in detail how the fits are done (what bins, what weights, etc).
-We also show figures that demonstrate performance (e.g. histograms and 2D residuals). 
+At a fixed CModel magnitude, the distribution of \(\Delta m\) is modeled as a mixture
+of an unresolved (star) component and \(K\) resolved (galaxy) components. The unresolved
+component is a single Gaussian with mean \(\mu_U\), width \(\sigma_U\), and weight \(w_U\).
+Each resolved component is a skew-normal distribution with weight \(w_{R,k}\), location
+\(\mu_{R,k}\), scale \(\sigma_{R,k}\), and shape parameter \(\alpha_{R,k}\). The full
+mixture probability density function is
+\begin{equation}
+  p(\Delta m \,|\, m) = w_U \, \mathcal{G}(\Delta m;\, \mu_U,\, \sigma_U)
+    + \sum_{k=1}^{K} w_{R,k} \, \mathcal{S}(\Delta m;\, \mu_{R,k},\, \sigma_{R,k},\, \alpha_{R,k}),
+  \label{eq:mixture_pdf}
+\end{equation}
+where \(\mathcal{G}\) denotes the Gaussian and \(\mathcal{S}\) the skew-normal distribution,
+and the weights are constrained to sum to unity: \(w_U = 1 - \sum_k w_{R,k}\).
+
+The fitting is performed independently in bins of CModel magnitude. At bright magnitudes
+(\(m_{\mathrm{CModel}} < 22\)), where the resolved population is relatively simple, we use
+\(K = 2\) resolved components in bins of width 1--3~mag spanning
+\(15 < m_{\mathrm{CModel}} < 22\). At faint magnitudes (\(m_{\mathrm{CModel}} \geq 22\)),
+where the galaxy morphology distribution is more complex, we use \(K = 3\) resolved components
+in finer bins of width 0.5--1~mag spanning \(22 \leq m_{\mathrm{CModel}} < 27\). Within each
+magnitude bin, \(\Delta m\) values in the range \((-0.5, 1.5)\) are histogrammed into 300 bins
+and normalized to a probability density. The mixture model is fit to these histograms using
+bounded least-squares optimization with Poisson-like uncertainties
+\(\sigma_i = \sqrt{N_i + 1} \,/\, (N \, \delta)\), where \(N_i\) is the count in bin \(i\),
+\(N\) is the total number of sources in the magnitude slice, and \(\delta\) is the histogram
+bin width.
+
+This fitting procedure is carried out in three steps. In the first step, all mixture parameters
+are fit independently in each magnitude bin. This free fit works well at bright magnitudes,
+where unresolved and resolved sources are clearly separated in \(\Delta m\). However, at faint
+magnitudes (\(m_{\mathrm{CModel}} \gtrsim 24\)), photometric noise broadens the unresolved
+Gaussian until it becomes degenerate with the resolved components. The fitter can no longer
+reliably distinguish the two populations, causing the unresolved Gaussian to absorb flux from
+the galaxy distribution. This inflates the inferred star fraction at faint magnitudes.
+
+To prevent this degeneracy, we impose smooth constraints on the unresolved component.
+In the second step, the per-bin star parameters from step~1 are replaced with smooth
+functions of magnitude: \(\mu_U\) is fixed to a single value (the median across all bins,
+typically \(\approx 0\) in each band); \(\sigma_U(m)\) is fit with the photometric error model
+from \citet{2007AJ....134.2236S} (their eq.~5),
+\begin{equation}
+  \sigma_U(m) = \sqrt{\sigma_0^2 + a^2 \cdot 10^{\,b\,(m - 25)}},
+  \label{eq:sesar_sigma}
+\end{equation}
+where \(\sigma_0\), \(a\), and \(b\) are free parameters; and \(w_U(m)\) is modeled as a linear
+fit to \(\log_{10}(w_U)\) versus magnitude, using only bins brighter than
+\(m_{\mathrm{CModel}} = 24\) where the free fit is reliable. This smooth model is then
+extrapolated to fainter magnitude bins. In the third step, with the unresolved component
+(\(\mu_U\), \(\sigma_U\), \(w_U\)) fixed to the smooth curves from step~2, only the resolved
+skew-normal parameters are re-fit in each magnitude bin. The resolved weights are rescaled to
+sum to \((1 - w_U)\) so that the total mixture remains a proper probability density.
+The effectiveness of this constrained fitting procedure is demonstrated in
+Figure~\ref{fig:star_galaxy_ratio_v8v9}, which compares the galaxy-to-star count ratio
+\(\log_{10}(N_{\mathrm{gal}}/N_{\mathrm{star}})\) as a function of magnitude for models
+with and without the smooth constraints. The unconstrained model exhibits a spurious turnover
+at faint magnitudes, while the constrained model recovers the expected monotonically increasing
+ratio in agreement with the COSMOS2020 external truth labels.
+
+\begin{figure*}
+  \centering
+  \includegraphics[width=\textwidth]{section2_bayesian_method/star_galaxy_ratio_vs_rmag_v8v9.png}
+  \caption{Galaxy-to-star count ratio \(\log_{10}(N_{\mathrm{gal}}/N_{\mathrm{star}})\) vs.\
+    r-band CModel magnitude. The unconstrained mixture model (V8, faded curves) exhibits a
+    spurious turnover at \(m \gtrsim 24\) due to the unresolved Gaussian absorbing galaxy flux.
+    The constrained model (V9, bold curves) recovers the expected monotonically increasing
+    ratio, in good agreement with the COSMOS2020 truth labels (green dashed). Dotted lines show
+    the Rubin \texttt{extendedness}-based classification for comparison.}
+  \label{fig:star_galaxy_ratio_v8v9}
+\end{figure*}
+
+From the fitted model, the probability that a source is unresolved is computed as the ratio of
+the unresolved component to the total mixture density at the observed \((\Delta m,\,
+m_{\mathrm{CModel}})\):
+\begin{equation}
+  p_S = \frac{w_U \, \mathcal{G}(\Delta m;\, \mu_U,\, \sigma_U)}{p(\Delta m \,|\, m)}.
+  \label{eq:pS}
+\end{equation}
+The model parameters are looked up by the CModel magnitude bin in which each source falls.
+The quality of the fits is illustrated in Figure~\ref{fig:slice_fits}, which shows the
+mixture model overlaid on the observed \(\Delta m\) histograms in each magnitude bin, and in
+Figure~\ref{fig:model2d_residuals}, which shows the 2D data, model, and residual maps in the
+\(\Delta m\) vs.\ \(m_{\mathrm{CModel}}\) plane.
+
+\begin{figure*}
+  \centering
+  \includegraphics[width=\textwidth]{section2_bayesian_method/fig2_2_cosmos_r_slice_fits_v9fit.png}
+  \caption{Observed \(\Delta m\) histograms (black) and fitted mixture models (red) for the
+    r-band in each CModel magnitude bin. The unresolved Gaussian component is shown as a blue
+    dashed line and the resolved skew-normal components as orange dotted lines.}
+  \label{fig:slice_fits}
+\end{figure*}
+
+\begin{figure*}
+  \centering
+  \includegraphics[width=\textwidth]{section2_bayesian_method/fig2_3_cosmos_ury_model2d_residuals_v9fit.png}
+  \caption{Two-dimensional comparison of the observed (left), modeled (center), and residual
+    (right) source density in the \(\Delta m\) vs.\ \(m_{\mathrm{CModel}}\) plane. The small
+    residuals demonstrate that the constrained mixture model provides an adequate description of
+    the data across the full magnitude range.}
+  \label{fig:model2d_residuals}
+\end{figure*}
 
 
 \subsubsection{Priors for Star-Galaxy Counts ratio} 
