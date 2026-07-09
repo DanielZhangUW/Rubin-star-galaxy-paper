@@ -60,19 +60,100 @@ def _limit_string(limits) -> str:
     return str(tuple(float(x) for x in limits))
 
 
-def _scatter_class(ax, df: pd.DataFrame, class_col: str, x_col: str, y_col: str, max_gal: int = 90000) -> dict:
+def _smooth_hist2d(hist: np.ndarray, sigma: float = 1.0) -> np.ndarray:
+    try:
+        from scipy.ndimage import gaussian_filter
+    except ImportError:
+        return hist
+    return gaussian_filter(hist, sigma=sigma)
+
+
+def _draw_density_contours(
+    ax,
+    data: pd.DataFrame,
+    x_col: str,
+    y_col: str,
+    xlim,
+    ylim,
+    color: str,
+    *,
+    bins: int = 120,
+    sigma: float = 1.0,
+    linewidth: float = 1.0,
+    alpha: float = 0.78,
+) -> bool:
+    x_range = (float(min(xlim)), float(max(xlim)))
+    y_range = (float(min(ylim)), float(max(ylim)))
+    use = data[[x_col, y_col]].copy()
+    use[x_col] = pd.to_numeric(use[x_col], errors="coerce")
+    use[y_col] = pd.to_numeric(use[y_col], errors="coerce")
+    use = use[
+        np.isfinite(use[x_col])
+        & np.isfinite(use[y_col])
+        & use[x_col].between(*x_range)
+        & use[y_col].between(*y_range)
+    ]
+    if len(use) < 100:
+        return False
+    hist, x_edges, y_edges = np.histogram2d(
+        use[x_col],
+        use[y_col],
+        bins=bins,
+        range=[x_range, y_range],
+    )
+    smooth = _smooth_hist2d(hist.T, sigma=sigma)
+    positive = smooth[smooth > 0]
+    if positive.size < 8:
+        return False
+    levels = np.nanpercentile(positive, [50, 68, 82, 92, 97])
+    levels = np.unique(levels[levels > 0])
+    if levels.size < 2:
+        return False
+    x_centers = 0.5 * (x_edges[:-1] + x_edges[1:])
+    y_centers = 0.5 * (y_edges[:-1] + y_edges[1:])
+    ax.contour(
+        x_centers,
+        y_centers,
+        smooth,
+        levels=levels,
+        colors=color,
+        linewidths=linewidth,
+        alpha=alpha,
+    )
+    return True
+
+
+def _scatter_points(ax, data: pd.DataFrame, x_col: str, y_col: str, color: str, *, s: float = 10.0, alpha: float = 0.58) -> None:
+    use = data[[x_col, y_col]].copy()
+    use[x_col] = pd.to_numeric(use[x_col], errors="coerce")
+    use[y_col] = pd.to_numeric(use[y_col], errors="coerce")
+    use = use[np.isfinite(use[x_col]) & np.isfinite(use[y_col])]
+    ax.scatter(
+        use[x_col],
+        use[y_col],
+        s=s,
+        c=color,
+        alpha=alpha,
+        linewidths=0,
+        rasterized=True,
+    )
+
+
+def _scatter_class(ax, df: pd.DataFrame, class_col: str, x_col: str, y_col: str, xlim, ylim) -> dict:
     star_like, galaxy_like, valid = class_masks(df, class_col)
     finite = valid & np.isfinite(df[x_col]) & np.isfinite(df[y_col])
     gal = df.loc[galaxy_like & finite]
     star = df.loc[star_like & finite]
-    gal_plot = downsample_frame(gal, max_gal)
-    star_plot = downsample_frame(star, 30000)
-    ax.scatter(gal_plot[x_col], gal_plot[y_col], s=2.0, c=COLORS["galaxy"], alpha=0.10, linewidths=0, label="resolved")
-    ax.scatter(star_plot[x_col], star_plot[y_col], s=3.0, c=COLORS["star"], alpha=0.45, linewidths=0, label="unresolved")
+    drew_contours = _draw_density_contours(ax, gal, x_col, y_col, xlim, ylim, COLORS["galaxy"])
+    if not drew_contours:
+        _scatter_points(ax, gal, x_col, y_col, COLORS["galaxy"], s=2.0, alpha=0.18)
+    _scatter_points(ax, star, x_col, y_col, COLORS["star"], s=10.0, alpha=0.58)
     return {
         "N_unresolved_finite": int(len(star)),
         "N_resolved_finite": int(len(gal)),
         "N_nan_or_other": int((~valid).sum()),
+        "resolved_display": "density_contours" if drew_contours else "scatter_fallback",
+        "unresolved_display": "scatter_points",
     }
 
 
@@ -99,8 +180,8 @@ def plot_extendedness_color_color(
         for col_idx, (lo, hi) in enumerate(MAG_SPLITS):
             ax = axes[row_idx, col_idx]
             use = df.loc[rmag.gt(lo) & rmag.lt(hi)]
-            counts = _scatter_class(ax, use, class_col, x_col, y_col)
             xlim, ylim = COLOR_COLOR_LIMITS[limit_key]
+            counts = _scatter_class(ax, use, class_col, x_col, y_col, xlim, ylim)
             ax.set_xlim(xlim)
             ax.set_ylim(ylim)
             ax.set_xlabel(x_label)
@@ -120,8 +201,8 @@ def plot_extendedness_color_color(
                 }
             )
     handles = [
-        Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["galaxy"], markeredgewidth=0, markersize=5, alpha=0.55, label="resolved"),
-        Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["star"], markeredgewidth=0, markersize=5, alpha=0.85, label="unresolved"),
+        Line2D([0], [0], color=COLORS["galaxy"], lw=1.4, alpha=0.78, label="resolved"),
+        Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["star"], markeredgewidth=0, markersize=7, alpha=0.75, label="unresolved"),
     ]
     fig.legend(handles=handles, loc="lower center", ncol=2, frameon=True, bbox_to_anchor=(0.5, 0.012))
     for ax in axes.flat:
@@ -129,34 +210,6 @@ def plot_extendedness_color_color(
         if leg is not None:
             leg.remove()
     return save_figure(fig, output_png), pd.DataFrame(rows)
-
-
-def _plot_density_contours(ax, data: pd.DataFrame, x_col: str, y_col: str, color: str) -> bool:
-    """Draw count-density contours for dense CMD panels."""
-
-    if len(data) < 500:
-        return False
-    x = pd.to_numeric(data[x_col], errors="coerce").to_numpy()
-    y = pd.to_numeric(data[y_col], errors="coerce").to_numpy()
-    finite = np.isfinite(x) & np.isfinite(y)
-    x = x[finite]
-    y = y[finite]
-    if x.size < 500:
-        return False
-    x_edges = np.linspace(-0.8, 4.0, 90)
-    y_edges = np.linspace(16.0, 26.0, 90)
-    hist, xe, ye = np.histogram2d(x, y, bins=(x_edges, y_edges))
-    positive = hist[hist > 0]
-    if positive.size < 8:
-        return False
-    levels = np.nanpercentile(positive, [55, 70, 82, 91, 97])
-    levels = np.unique(levels[levels > 0])
-    if len(levels) < 2:
-        return False
-    xc = 0.5 * (xe[:-1] + xe[1:])
-    yc = 0.5 * (ye[:-1] + ye[1:])
-    ax.contour(xc, yc, hist.T, levels=levels, colors=color, linewidths=1.2, alpha=0.85)
-    return True
 
 
 def plot_confusion_cmd(
@@ -182,23 +235,27 @@ def plot_confusion_cmd(
     rows = []
     for idx, (ax, (label, mask, color, subtitle)) in enumerate(zip(axes.flat, categories)):
         data = matched.loc[mask]
-        if idx >= 2:
-            used_contours = _plot_density_contours(ax, data, "color_gi", "dp2_cmodel_mag_r", color)
-            if not used_contours:
-                plot_data = downsample_frame(data, 90000)
-                ax.scatter(plot_data["color_gi"], plot_data["dp2_cmodel_mag_r"], s=2.5, c=color, alpha=0.18, linewidths=0)
-                display_style = "scatter"
-                main_style_reason = "contour density had too few populated bins"
-            else:
-                display_style = "contour"
-                main_style_reason = "dense truth-galaxy panels are clearer as density contours"
-        else:
-            plot_data = downsample_frame(data, 90000)
-            ax.scatter(plot_data["color_gi"], plot_data["dp2_cmodel_mag_r"], s=8.0, c=color, alpha=0.25, linewidths=0)
-            display_style = "scatter"
-            main_style_reason = "truth-star panels have fewer objects and are readable as scatter"
         ax.set_xlim(-0.8, 4.0)
         ax.set_ylim(26, 16)
+        if label.startswith("G"):
+            drew_contours = _draw_density_contours(
+                ax,
+                data,
+                "color_gi",
+                "dp2_cmodel_mag_r",
+                (-0.8, 4.0),
+                (16.0, 26.0),
+                COLORS["galaxy"],
+                bins=100,
+            )
+            if not drew_contours:
+                _scatter_points(ax, data, "color_gi", "dp2_cmodel_mag_r", COLORS["galaxy"], s=2.0, alpha=0.18)
+            display_style = "density_contours" if drew_contours else "scatter_fallback"
+            main_style_reason = "truth-galaxy panels use red density contours"
+        else:
+            _scatter_points(ax, data, "color_gi", "dp2_cmodel_mag_r", COLORS["star"], s=10.0, alpha=0.58)
+            display_style = "scatter_points"
+            main_style_reason = "truth-star panels use larger blue scatter points"
         ax.set_title(f"{label}: {subtitle}\nN={len(data):,}")
         if idx // 2 == 1:
             ax.set_xlabel("g-i")

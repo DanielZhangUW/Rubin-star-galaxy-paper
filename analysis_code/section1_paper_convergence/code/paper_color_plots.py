@@ -17,12 +17,118 @@ def _scatter_truth(ax, df: pd.DataFrame, x_col: str, y_col: str, x_label: str, y
     stars, galaxies = truth_masks(df)
     gal = df.loc[galaxies & np.isfinite(df[x_col]) & np.isfinite(df[y_col])]
     star = df.loc[stars & np.isfinite(df[x_col]) & np.isfinite(df[y_col])]
-    gal_plot = downsample_frame(gal, max_gal)
-    star_plot = downsample_frame(star, 25000)
-    ax.scatter(gal_plot[x_col], gal_plot[y_col], s=2.0, c=COLORS["galaxy"], alpha=0.10, linewidths=0, label="galaxy")
-    ax.scatter(star_plot[x_col], star_plot[y_col], s=3.0, c=COLORS["star"], alpha=0.45, linewidths=0, label="star")
+    gal_plot = gal[[x_col, y_col]].copy()
+    gal_plot["_color"] = COLORS["galaxy"]
+    star_plot = star[[x_col, y_col]].copy()
+    star_plot["_color"] = COLORS["star"]
+    plot = pd.concat([gal_plot, star_plot], ignore_index=True)
+    plot = plot.sample(frac=1.0, random_state=42)
+    ax.scatter(
+        plot[x_col],
+        plot[y_col],
+        s=2.0,
+        c=plot["_color"],
+        alpha=0.18,
+        linewidths=0,
+        rasterized=True,
+    )
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label)
+
+
+def _truth_contours_and_star_points(
+    ax,
+    df: pd.DataFrame,
+    x_col: str,
+    y_col: str,
+    x_label: str,
+    y_label: str,
+    xlim,
+    ylim,
+) -> tuple[int, int]:
+    return _contour_galaxies_scatter_stars(
+        ax,
+        df,
+        x_col,
+        y_col,
+        x_label,
+        y_label,
+        xlim,
+        ylim,
+    )
+
+
+def _smooth_hist2d(hist: np.ndarray, sigma: float = 1.0) -> np.ndarray:
+    try:
+        from scipy.ndimage import gaussian_filter
+    except ImportError:
+        return hist
+    return gaussian_filter(hist, sigma=sigma)
+
+
+def _contour_galaxies_scatter_stars(
+    ax,
+    df: pd.DataFrame,
+    x_col: str,
+    y_col: str,
+    x_label: str,
+    y_label: str,
+    xlim,
+    ylim,
+) -> tuple[int, int]:
+    stars, galaxies = truth_masks(df)
+    finite = np.isfinite(df[x_col]) & np.isfinite(df[y_col])
+    gal = df.loc[galaxies & finite, [x_col, y_col]].copy()
+    star = df.loc[stars & finite, [x_col, y_col]].copy()
+
+    x_range = (float(min(xlim)), float(max(xlim)))
+    y_range = (float(min(ylim)), float(max(ylim)))
+    gal = gal[
+        gal[x_col].between(*x_range)
+        & gal[y_col].between(*y_range)
+    ]
+    star = star[
+        star[x_col].between(*x_range)
+        & star[y_col].between(*y_range)
+    ]
+
+    if len(gal) > 10:
+        hist, x_edges, y_edges = np.histogram2d(
+            gal[x_col],
+            gal[y_col],
+            bins=120,
+            range=[x_range, y_range],
+        )
+        smooth = _smooth_hist2d(hist.T, sigma=1.0)
+        positive = smooth[smooth > 0]
+        if positive.size:
+            levels = np.nanpercentile(positive, [50, 68, 82, 92, 97])
+            levels = np.unique(levels[levels > 0])
+            if levels.size:
+                x_centers = 0.5 * (x_edges[:-1] + x_edges[1:])
+                y_centers = 0.5 * (y_edges[:-1] + y_edges[1:])
+                ax.contour(
+                    x_centers,
+                    y_centers,
+                    smooth,
+                    levels=levels,
+                    colors=COLORS["galaxy"],
+                    linewidths=1.0,
+                    alpha=0.78,
+                )
+
+    ax.scatter(
+        star[x_col],
+        star[y_col],
+        s=10.0,
+        c=COLORS["star"],
+        alpha=0.58,
+        linewidths=0,
+        rasterized=True,
+    )
+    ax.set_xlabel(x_label)
+    ax.set_ylabel(y_label)
+    return int(len(star)), int(len(gal))
 
 
 def _limit_string(limits) -> str:
@@ -268,30 +374,37 @@ def plot_fig1_2(samples: dict[str, pd.DataFrame], output_png: Path) -> tuple[lis
 
     rows = []
     for ax, x_col, y_col, x_label, y_label, xlim, ylim, fixed_ylim in panels:
-        _scatter_truth(ax, matched, x_col, y_col, x_label, y_label)
-        ax.set_xlim(xlim)
         if ylim is None:
             vals = pd.to_numeric(matched[y_col], errors="coerce")
             lo, hi = np.nanpercentile(vals, [1, 99])
             pad = 0.08 * (hi - lo) if np.isfinite(hi - lo) and hi > lo else 0.1
             ylim = (lo - pad, hi + pad)
+        n_star_finite, n_galaxy_finite = _contour_galaxies_scatter_stars(
+            ax,
+            matched,
+            x_col,
+            y_col,
+            x_label,
+            y_label,
+            xlim,
+            ylim,
+        )
+        ax.set_xlim(xlim)
         ax.set_ylim(ylim)
-        stars, galaxies = truth_masks(matched)
-        finite = np.isfinite(matched[x_col]) & np.isfinite(matched[y_col])
         rows.append(
             {
                 "panel": y_label,
                 "x_column": x_col,
                 "y_column": y_col,
-                "N_star_finite": int((stars & finite).sum()),
-                "N_galaxy_finite": int((galaxies & finite).sum()),
+                "N_star_finite": n_star_finite,
+                "N_galaxy_finite": n_galaxy_finite,
                 "xlim": _limit_string(xlim),
                 "ylim": _limit_string(ylim),
             }
         )
     handles = [
-        Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["galaxy"], markeredgewidth=0, markersize=5, alpha=0.55, label="galaxy"),
-        Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["star"], markeredgewidth=0, markersize=5, alpha=0.85, label="star"),
+        Line2D([0], [0], color=COLORS["galaxy"], lw=1.4, alpha=0.78, label="galaxies"),
+        Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["star"], markeredgewidth=0, markersize=7, alpha=0.75, label="stars"),
     ]
     fig.legend(handles=handles, loc="upper center", ncol=2, frameon=True, bbox_to_anchor=(0.5, 0.985))
     return save_figure(fig, output_png), pd.DataFrame(rows)
@@ -318,28 +431,35 @@ def plot_fig1_3(
         for col_idx, (lo, hi) in enumerate(mag_bins):
             ax = axes[row_idx, col_idx]
             use = matched.loc[rmag.gt(lo) & rmag.lt(hi)]
-            _scatter_truth(ax, use, x_col, y_col, x_label, y_label, max_gal=65000)
             xlim, ylim = COLOR_COLOR_LIMITS[limit_key]
+            n_star_finite, n_galaxy_finite = _truth_contours_and_star_points(
+                ax,
+                use,
+                x_col,
+                y_col,
+                x_label,
+                y_label,
+                xlim,
+                ylim,
+            )
             ax.set_xlim(xlim)
             ax.set_ylim(ylim)
-            stars, galaxies = truth_masks(use)
-            finite = np.isfinite(use[x_col]) & np.isfinite(use[y_col])
-            ax.set_title(f"{lo:g} < rmag < {hi:g}\nN_star={int((stars & finite).sum()):,}, N_gal={int((galaxies & finite).sum()):,}")
+            ax.set_title(f"{lo:g} < rmag < {hi:g}\nN_star={n_star_finite:,}, N_gal={n_galaxy_finite:,}")
             rows.append(
                 {
                     "x_column": x_col,
                     "y_column": y_col,
                     "mag_low": lo,
                     "mag_high": hi,
-                    "N_star_finite": int((stars & finite).sum()),
-                    "N_galaxy_finite": int((galaxies & finite).sum()),
+                    "N_star_finite": n_star_finite,
+                    "N_galaxy_finite": n_galaxy_finite,
                     "xlim": _limit_string(xlim),
                     "ylim": _limit_string(ylim),
                 }
             )
     handles = [
-        Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["galaxy"], markeredgewidth=0, markersize=5, alpha=0.55, label="galaxy"),
-        Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["star"], markeredgewidth=0, markersize=5, alpha=0.85, label="star"),
+        Line2D([0], [0], color=COLORS["galaxy"], lw=1.4, alpha=0.78, label="galaxies"),
+        Line2D([0], [0], marker="o", color="none", markerfacecolor=COLORS["star"], markeredgewidth=0, markersize=7, alpha=0.75, label="stars"),
     ]
     fig.legend(handles=handles, loc="lower center", ncol=2, frameon=True, bbox_to_anchor=(0.5, 0.012))
     for ax in axes.flat:
