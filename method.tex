@@ -1,239 +1,353 @@
+\providecommand{\FloatBarrier}{\clearpage}
+\renewcommand{\topfraction}{0.92}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.06}
+\renewcommand{\floatpagefraction}{0.75}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{5}
 
 \section{Methodology and Data}
+\label{sec:data-methods}
 
-Section outline
+We first define the COSMOS validation sample and use it to illustrate how the
+morphology and color distributions evolve toward the survey limit.  We then
+describe the Bayesian classification framework, the magnitude-binned mixture
+model with skew-normal resolved components \citep{Azzalini1985SkewNormal}
+used to estimate the class-conditional morphology distributions, and
+the source-count prior inferred from the fitted component normalizations.
 
-\subsection{Rubin Data Preview 2} 
+The per-band morphology statistic used throughout this analysis is
+\begin{equation*}
+    \Delta m_b \equiv
+    m_{{\rm PSF},b}-m_{{\rm CModel},b}.
+\end{equation*}
+where $b$ denotes a photometric band.  For an unresolved source, the PSF and
+CModel measurements agree within their uncertainties and
+$\Delta m_b\simeq0$, whereas a resolved source generally has
+$\Delta m_b>0$ because the PSF-weighted flux does not capture all of its
+extended light.
 
-We use the COSMOS field because of the availability of external
-COSMOS2020/FARMER labels \citep{2022ApJS..258...11W}. For the COSMOS
-validation sample, we select Rubin DP2 sources in the rectangular region
-\(149.7 < {\rm RA} < 150.7\) and \(1.7 < {\rm Dec} < 2.7\), with
-\(16 \le r_{\rm CModel} < 26\). External star--galaxy labels are taken from
-the COSMOS2020/FARMER reference catalog and matched to DP2 sources using a
-0.5 arcsec matching radius. After applying the same region and magnitude cuts,
-the DP2 sample contains 269,606 sources, of which 193,586 are matched to
-external labels and 76,020 are unmatched. The raw DP2-side matching fraction is
-therefore \(193{,}586/269{,}606 \simeq 0.718\). The matched validation sample
-contains 8,788 stars and 184,798 galaxies, using \(\texttt{truth\_binary}=1\)
-for stars and \(\texttt{truth\_binary}=0\) for galaxies.
+\subsection{Rubin Data Preview 2 Processing and External COSMOS Classifications}
+\label{sec:data}
+
+We use a Rubin DP2 object-catalog processing of the COSMOS field, which provides a
+deep, well-studied external reference catalog from COSMOS2020/FARMER
+\citep{Weaver2022}.  We select DP2 sources in the rectangular region
+$149.7^{\circ}<\mathrm{R.A.}<150.7^{\circ}$ and
+$1.7^{\circ}<\mathrm{Decl.}<2.7^{\circ}$, with
+$16\leq r_{\rm CModel}<26$.  The Rubin sample is matched to the external
+catalog with a maximum angular separation of $0.5\arcsec$.
+
+After the sky and magnitude selections, the DP2 sample contains 269,606
+sources.  Of these, 193,586 have an external match and 76,020 do not, giving a
+raw Rubin-side matching fraction of $193{,}586/269{,}606\simeq0.718$.  We
+encode the matched reference sample as 8,788 stars and 184,798 galaxies.  The
+unmatched objects are retained when displaying the Rubin source population,
+but only matched objects with the required finite measurements are used for
+the validation metrics.  For the purposes of this analysis, we adopt the
+matched COSMOS2020/FARMER classifications as the external truth labels used
+to evaluate the Rubin classifications.
+
+The mixture-fitting count-ratio diagnostic in
+Figure~\ref{fig:sg-count-ratio} also includes the ECDFS field as an internal
+comparison.  All class-labeled validation results presented in this paper use
+the COSMOS matched sample.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\columnwidth]{fig01_cosmos_sky_coverage.png}
+    \caption{COSMOS validation footprint.  Gray points show the selected
+    Rubin DP2 sources in the common COSMOS region, and green points show the
+    subset matched to COSMOS2020/FARMER external classifications within
+    $0.5\arcsec$.}
+    \label{fig:cosmos-footprint}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\columnwidth]{fig02_cosmos_dataset_overview.png}
+    \caption{Magnitude distribution of the COSMOS validation sample.  The
+    black curve shows all selected DP2 sources, while the blue and red
+    curves show matched reference stars and galaxies, respectively.  Counts
+    are shown per magnitude using $0.5$-mag bins.}
+    \label{fig:cosmos-magnitude-distribution}
+\end{figure}
+
+Figures~\ref{fig:cosmos-footprint} and
+\ref{fig:cosmos-magnitude-distribution} show the sky coverage and magnitude
+distribution of the selected sample.  The matched sample contains about 21
+times more galaxies than stars.  Consequently, even a small fraction of
+galaxies assigned to the stellar class can contribute appreciably to the
+selected stellar sample.
+
+\subsection{Morphology and Color Distributions of the Reference Classes}
+\label{sec:reference-distributions}
+
+The external classifications provide a reference with which to examine the
+observed morphology and color distributions.  The upper-left panel of
+Figure~\ref{fig:reference-overview} shows the two classes in the
+$(r_{\rm CModel},\Delta m_r)$ plane.  Reference stars form a narrow sequence
+near $\Delta m_r=0$, while the galaxy distribution extends to positive
+$\Delta m_r$.  The overlap grows toward faint magnitudes as the measurement
+uncertainty increases and the apparent sizes of galaxies decrease.
+
+The remaining panels of Figure~\ref{fig:reference-overview} show that color
+adds information beyond morphology.  Reference stars follow recognizable
+sequences in these color--color planes, while reference galaxies span a
+wider range of colors.  Figure~\ref{fig:reference-colors-by-magnitude}
+compares the same planes for $16<r_{\rm CModel}<25$ and
+$25<r_{\rm CModel}<26$.  In the faint interval, larger color uncertainties
+broaden the stellar sequences and make the two classes more difficult to
+distinguish.  Where applied, the CModel colors are corrected for Galactic
+extinction, while the plotted $r$-band CModel magnitude is not extinction
+corrected.
 
 \begin{figure*}[t]
-  \centering
-  \includegraphics[width=0.5\textwidth]{fig01_cosmos_sky_coverage.png}
-  \caption{
-  COSMOS validation footprint. Gray points show selected Rubin DP2 sources in
-  the common COSMOS region, and green points show the subset matched to
-  COSMOS2020/FARMER external labels using a 0.5 arcsec matching radius.
-  }
-  \label{fig:cosmos_sky_coverage}
+    \centering
+    \includegraphics[width=\textwidth]{fig03_truth_morphology_color.png}
+    \caption{Morphology and color distributions of the externally classified
+    COSMOS sample.  Blue points show reference stars and red contours show
+    reference galaxies.  The upper-left panel displays
+    $\Delta m_r=m_{{\rm PSF},r}-m_{{\rm CModel},r}$ as a function of
+    $r$-band CModel magnitude; the upper-right panel shows the
+    $(g-i,r_{\rm CModel})$ color--magnitude diagram; and the lower panels show
+    two representative color--color projections.  The plotted $r$-band
+    CModel magnitude is not corrected for Galactic extinction, while the
+    colors are extinction corrected where applicable.}
+    \label{fig:reference-overview}
 \end{figure*}
 
 \begin{figure*}[t]
-  \centering
-  \includegraphics[width=0.5\textwidth]{fig02_cosmos_dataset_overview.png}
-  \caption{
-  Magnitude distribution of the COSMOS validation sample. The black curve shows
-  all selected DP2 sources, while the blue and red curves show matched
-  COSMOS2020/FARMER stars and galaxies. Counts are shown per magnitude using
-  0.5 mag bins.
-  }
-  \label{fig:cosmos_counts}
+    \centering
+    \includegraphics[width=\textwidth,height=0.68\textheight,keepaspectratio]{fig04_truth_color_color.png}
+    \caption{Color--color distributions of the external reference classes in
+    two $r$-band CModel-magnitude intervals.  The left column shows
+    $16<r_{\rm CModel}<25$, and the right column shows
+    $25<r_{\rm CModel}<26$.  From top to bottom, the panels display
+    $(u-g,g-r)$, $(g-r,r-i)$, $(r-i,i-z)$, and $(i-z,z-y)$.  Blue points show
+    reference stars and red contours show reference galaxies.  In the faint
+    interval, the reference-star colors are more dispersed and are less clearly
+    separated from the galaxy distribution.}
+    \label{fig:reference-colors-by-magnitude}
 \end{figure*}
 
+\subsection{The Rubin \texttt{extendedness} Baseline}
+\label{sec:extendedness-baseline}
 
+We use the default Rubin $r$-band \texttt{extendedness} assignment as the
+catalog baseline, with
+$\Delta m_r=m_{{\rm PSF},r}-m_{{\rm CModel},r}$. Objects with
+$\Delta m_r\leq0.016\,\mathrm{mag}$ are assigned to the unresolved class,
+and objects above this boundary are assigned to the resolved class.  This
+fixed catalog rule provides the traditional Rubin baseline for comparison
+with the probabilistic classifier introduced in
+Section~\ref{sec:bayesian-sg}.
 
+Figure~\ref{fig:extendedness-confusion} compares the Rubin assignments with
+the COSMOS truth labels across color and magnitude.  Agreement is strongest
+at bright magnitudes.  At $r_{\rm CModel}\gtrsim24$, an increasing number of
+COSMOS galaxies are assigned to the unresolved class, and these objects
+become the main source of contamination in the Rubin star-like sample.
 
-\subsection{The distributions of sources classified using HST labels}
-
-The external COSMOS2020/FARMER labels provide the reference classification used
-to examine the morphology and color distributions of stars and galaxies. These
-distributions motivate the probabilistic star--galaxy separation model
-developed below.
-
-The top left panel in Figure~\ref{fig:truth_morphology_color} shows the distribution of stars and galaxies classified
-using HST labels in the \(\Delta m = m_{\mathrm{PSF}} - m_{\mathrm{CModel}}\) vs. \(m_{\mathrm{CModel}}\)
-diagram. Modeling this distribution is the key ingredient of the star-galaxy separation method developed here. 
-
-
-\begin{figure*}
-  \centering
-  \includegraphics[width=\textwidth]{fig03_truth_morphology_color.png}
-  \caption{COSMOS/COSMOS2020 truth-label morphology and color overview. The r-band CModel magnitude
-    is uncorrected for ISM dust extinction, while the CModel colors are dust-corrected where applicable.}
-  \label{fig:truth_morphology_color}
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=\textwidth,height=0.68\textheight,keepaspectratio]{fig05_r_extendedness_color_color.png}
+    \caption{The default Rubin $r$-band \texttt{extendedness} assignment
+    compared with the external COSMOS reference classifications in the
+    $(g-i,r_{\rm CModel})$ color--magnitude plane.  The four panels separate the
+    sample by COSMOS truth label and Rubin assignment, and the panel titles give
+    the corresponding object counts.  The main failure mode occurs at
+    $r_{\rm CModel}\gtrsim24$, where increasing numbers of COSMOS galaxies are
+    assigned to the unresolved class.}
+    \label{fig:extendedness-confusion}
 \end{figure*}
 
-The top right panel in Figure~\ref{fig:truth_morphology_color} shows that galaxies, in addition to
-outnumbering stars at faint magnitudes, have on average bluer colors than stars. 
+\subsection{Bayesian Star--Galaxy Separation}
+\label{sec:bayesian-sg}
 
-Color-color diagrams shown in the bottom two panels in Figure~\ref{fig:truth_morphology_color}
-demonstrate that colors can be used to enhance morphological star-galaxy separation. 
-Nevertheless, Figure~\ref{fig:truth_color_color} and the top left panel in
-Figure~\ref{fig:truth_morphology_color} show that increased noise close to the faint
-magnitude limit will cause deteriorated performance for both morphological and color-based
-star-galaxy separation methods. 
+Following \citet{Slater2020}, we separate the evidence supplied by an
+individual morphology measurement from the expected relative abundance of
+the two source populations.  Let ${\rm U}$ and ${\rm R}$ denote the unresolved
+and resolved hypotheses, and let $d_b$ denote the morphology measurement in
+band $b$.  At magnitude $m$, Bayes' theorem gives the posterior odds
+\begin{equation*}
+\mathcal{O_{\rm U/R}}
+=
+\frac{P({\rm U}\mid d_b,m)}{P({\rm R}\mid d_b,m)}
+=
+\frac{\pi_{\rm U}(m)}{\pi_{\rm R}(m)}
+\frac{\mathcal{L}_{{\rm U},b}(d_b\mid m)}
+     {\mathcal{L}_{{\rm R},b}(d_b\mid m)}.
+\end{equation*}
+Here $\mathcal{L}_{{\rm U},b}$ and $\mathcal{L}_{{\rm R},b}$ are the
+class-conditional morphology densities.  Their ratio measures how strongly
+the observed morphology favors the unresolved or resolved hypothesis.
+The factors $\pi_{\rm U}$ and $\pi_{\rm R}$ are the expected fractions of the
+two populations at that magnitude before the morphology of the individual
+source is used.  We denote the resulting unresolved-source posterior by
+\begin{equation*}
+    p_{\rm S}\equiv P({\rm U}\mid d_b,m).
+\end{equation*}
+The subscript ${\rm S}$ indicates the star-like, unresolved component; it does
+not assert that every unresolved source is physically a star.  If
+$O_{\rm U/R}$ denotes the posterior odds in the preceding equation, then
+\begin{equation*}
+    p_{\rm S}=\frac{O_{\rm U/R}}{1+O_{\rm U/R}}.
+\end{equation*}
 
+For conditionally independent measurements in a set of bands $\mathcal{B}$,
+the morphology likelihood ratios may be combined as
+\begin{equation*}
+    \mathcal{B}_{\rm morph}
+    =\prod_{b\in\mathcal{B}}
+     \frac{\mathcal{L}_{{\rm U},b}(d_b\mid m_b)}
+          {\mathcal{L}_{{\rm R},b}(d_b\mid m_b)}.
+\end{equation*}
+In the multiband implementation, the $r$-band source-count prior is applied
+once after the usable per-band morphology evidence has been combined:
+\begin{equation*}
+    O_{\rm U/R}
+    =\frac{\pi_{\rm U}(m_r)}{\pi_{\rm R}(m_r)}
+     \mathcal{B}_{\rm morph}.
+\end{equation*}
+Applying the population prior once prevents the same source-count information
+from being counted repeatedly across bands.  The product above treats the
+per-band morphology measurements as conditionally independent given the
+source class.  A complementary classifier can be included in the same
+framework when its calibrated output can be expressed as a compatible
+likelihood ratio
+\citep{Henrion2011BayesianSG,Slater2020}.
 
-\begin{figure*}
-  \centering
-  \includegraphics[width=\textwidth]{fig04_truth_color_color.png}
-  \caption{Similar to Figure~\ref{fig:truth_morphology_color}, except that data are 
-    split by r-band CModel magnitude
-   to show deterioration close to the faint magnitude limit (left: 16 $<$ rmag $<$ 25; right: 25 $<$
-   rmag $<$ 26).}
-  \label{fig:truth_color_color}
-\end{figure*}
+The continuous $p_{\rm S}$ value is the primary output of the method.  When a
+binary catalog assignment is required, we use the maximum-posterior rule:
+objects with $p_{\rm S}\geq0.5$ are assigned to the unresolved class and
+objects with $p_{\rm S}<0.5$ to the resolved class.  This convention is
+fixed and used for every binary classification reported in this paper.
 
+\subsection{Implementation of the Probabilistic Morphology Model}
+\label{sec:implementation}
 
-\subsection{The distributions of sources classified using \texttt{extendedness} parameter} 
+\subsubsection{Mixture Model for $\Delta m$ vs. $m_{\rm CModel}$ diagram}
+\label{sec:mixture-model}
 
-Difficulties with star-galaxy separation encountered at the faint end are illustrated in
-Figure~\ref{fig:r_extendedness_confusion_cmd}, which compares subsamples classified
-using HST ground-truth labels and \texttt{extendedness} parameter in the r band.
-As evident, a significant fraction of faint sources within 2 magnitudes from the faint limit are 
-misclassified when using default \texttt{extendedness} parameter. 
-
-\begin{figure*}
-  \centering
-  \includegraphics[width=\textwidth]{fig06_r_extendedness_confusion_cmd.png}
-  \caption{Performance of default \texttt{extendedness} parameter in the r band
-    relative to HST ground-truth labels. The top left and bottom right panels show
-    correctly classified unresolved and resolved sources in the r vs. g-i color-magnitude
-    diagram, with counts shown in the title. The bottom left and the top right panels
-    show misclassified sources. Note that the stellar sample selected by \texttt{extendedness}
-    is severely contaminated by galaxies for \(m_{\mathrm{CModel}} > 24\).}
-  \label{fig:r_extendedness_confusion_cmd}
-\end{figure*}
-
-
-
-
-\clearpage
-\subsection{Bayesian Star-Galaxy Separation Method}
-
-Summary of the method, expressions from SlL2020... 
-
-
-\subsection{Implementation of the SIL2020 method}
-
-%Figure~\ref{} 
-
-
-\subsubsection{Mixture Model for \(\Delta m\) vs. \(m_{\mathrm{CModel}}\) diagram} 
-
-At a fixed CModel magnitude, the distribution of \(\Delta m\) is modeled as a mixture
-of an unresolved (star) component and \(K\) resolved (galaxy) components. The unresolved
-component is a single Gaussian with mean \(\mu_U\), width \(\sigma_U\), and weight \(w_U\).
-Each resolved component is a skew-normal distribution with weight \(w_{R,k}\), location
-\(\mu_{R,k}\), scale \(\sigma_{R,k}\), and shape parameter \(\alpha_{R,k}\). The full
-mixture probability density function is
+At a fixed CModel magnitude, the distribution of $\Delta m$ is modeled as a mixture of an unresolved (star) component and $K$ resolved (galaxy) components. The unresolved component is a single Gaussian with mean $\mu_U$, width $\sigma_U$, and weight $w_U$. Each resolved component is a skew-normal distribution with weight $w_{R,k}$, location $\mu_{R,k}$, scale $\sigma_{R,k}$, and shape parameter $\alpha_{R,k}$. The full mixture probability density function is
 \begin{equation}
-  p(\Delta m \,|\, m) = w_U \, \mathcal{G}(\Delta m;\, \mu_U,\, \sigma_U)
-    + \sum_{k=1}^{K} w_{R,k} \, \mathcal{S}(\Delta m;\, \mu_{R,k},\, \sigma_{R,k},\, \alpha_{R,k}),
-  \label{eq:mixture_pdf}
+    p(\Delta m \mid m)
+    = w_U\,\mathcal{G}(\Delta m;\mu_U,\sigma_U)
+    + \sum_{k=1}^{K} w_{R,k}\,\mathcal{S}(\Delta m;\mu_{R,k},\sigma_{R,k},\alpha_{R,k}),
+    \label{eq:mixture-model}
 \end{equation}
-where \(\mathcal{G}\) denotes the Gaussian and \(\mathcal{S}\) the skew-normal distribution,
-and the weights are constrained to sum to unity: \(w_U = 1 - \sum_k w_{R,k}\).
+where $\mathcal{G}$ denotes the Gaussian and $\mathcal{S}$ the skew-normal distribution, and the weights are constrained to sum to unity: $w_U=1-\sum_k w_{R,k}$.
 
-The fitting is performed independently in bins of CModel magnitude. At bright magnitudes
-(\(m_{\mathrm{CModel}} < 22\)), where the resolved population is relatively simple, we use
-\(K = 2\) resolved components in bins of width 1--3~mag spanning
-\(15 < m_{\mathrm{CModel}} < 22\). At faint magnitudes (\(m_{\mathrm{CModel}} \geq 22\)),
-where the galaxy morphology distribution is more complex, we use \(K = 3\) resolved components
-in finer bins of width 0.5--1~mag spanning \(22 \leq m_{\mathrm{CModel}} < 27\). Within each
-magnitude bin, \(\Delta m\) values in the range \((-0.5, 1.5)\) are histogrammed into 300 bins
-and normalized to a probability density. The mixture model is fit to these histograms using
-bounded least-squares optimization with Poisson-like uncertainties
-\(\sigma_i = \sqrt{N_i + 1} \,/\, (N \, \delta)\), where \(N_i\) is the count in bin \(i\),
-\(N\) is the total number of sources in the magnitude slice, and \(\delta\) is the histogram
-bin width.
+The fitting is performed independently in bins of CModel magnitude. At bright magnitudes ($m_{\rm CModel}<22$), where the resolved population is relatively simple, we use $K=2$ resolved components in bins of width 1--3 mag spanning $15<m_{\rm CModel}<22$. At faint magnitudes ($m_{\rm CModel}\geq22$), where the galaxy morphology distribution is more complex, we use $K=3$ resolved components in finer bins of width 0.5--1 mag spanning $22\leq m_{\rm CModel}<27$. Within each magnitude bin, $\Delta m$ values in the range $(-0.5,1.5)$ are histogrammed into 300 bins and normalized to a probability density. The mixture model is fit to these histograms using bounded least-squares optimization with Poisson-like uncertainties $\sigma_i=\sqrt{N_i+1}/(N\,\delta)$, where $N_i$ is the count in bin $i$, $N$ is the total number of sources in the magnitude slice, and $\delta$ is the histogram bin width.
 
-This fitting procedure is carried out in three steps. In the first step, all mixture parameters
-are fit independently in each magnitude bin. This free fit works well at bright magnitudes,
-where unresolved and resolved sources are clearly separated in \(\Delta m\). However, at faint
-magnitudes (\(m_{\mathrm{CModel}} \gtrsim 24\)), photometric noise broadens the unresolved
-Gaussian until it becomes degenerate with the resolved components. The fitter can no longer
-reliably distinguish the two populations, causing the unresolved Gaussian to absorb flux from
-the galaxy distribution. This inflates the inferred star fraction at faint magnitudes.
+This fitting procedure is carried out in three steps. In the first step, all mixture parameters are fit independently in each magnitude bin. This free fit works well at bright magnitudes, where unresolved and resolved sources are clearly separated in $\Delta m$. However, at faint magnitudes ($m_{\rm CModel}\gtrsim24$), photometric noise broadens the unresolved Gaussian until it becomes degenerate with the resolved components. The fitter can no longer reliably distinguish the two populations, causing the unresolved Gaussian to absorb flux from the galaxy distribution. This inflates the inferred star fraction at faint magnitudes.
 
-To prevent this degeneracy, we impose smooth constraints on the unresolved component.
-In the second step, the per-bin star parameters from step~1 are replaced with smooth
-functions of magnitude: \(\mu_U\) is fixed to a single value (the median across all bins,
-typically \(\approx 0\) in each band); \(\sigma_U(m)\) is fit with the photometric error model
-from \citet{2007AJ....134.2236S} (their eq.~5),
+To prevent this degeneracy, we impose smooth constraints on the unresolved component. In the second step, the per-bin star parameters from step 1 are replaced with smooth functions of magnitude: $\mu_U$ is fixed to a single value (the median across all bins, typically $\approx0$ in each band); $\sigma_U(m)$ is fit with the photometric error model from B.~\citet{Sesar2007} (their eq. 5),
 \begin{equation}
-  \sigma_U(m) = \sqrt{\sigma_0^2 + a^2 \cdot 10^{\,b\,(m - 25)}},
-  \label{eq:sesar_sigma}
+    \sigma_U(m)=\sqrt{\sigma_0^2+a^2\cdot10^{b(m-25)}},
+    \label{eq:unresolved-width}
 \end{equation}
-where \(\sigma_0\), \(a\), and \(b\) are free parameters; and \(w_U(m)\) is modeled as a linear
-fit to \(\log_{10}(w_U)\) versus magnitude, using only bins brighter than
-\(m_{\mathrm{CModel}} = 24\) where the free fit is reliable. This smooth model is then
-extrapolated to fainter magnitude bins. In the third step, with the unresolved component
-(\(\mu_U\), \(\sigma_U\), \(w_U\)) fixed to the smooth curves from step~2, only the resolved
-skew-normal parameters are re-fit in each magnitude bin. The resolved weights are rescaled to
-sum to \((1 - w_U)\) so that the total mixture remains a proper probability density.
-The effectiveness of this constrained fitting procedure is demonstrated in
-Figure~\ref{fig:star_galaxy_ratio_v8v9}, which compares the galaxy-to-star count ratio
-\(\log_{10}(N_{\mathrm{gal}}/N_{\mathrm{star}})\) as a function of magnitude for models
-with and without the smooth constraints. The unconstrained model exhibits a spurious turnover
-at faint magnitudes, while the constrained model recovers the expected monotonically increasing
-ratio in agreement with the COSMOS2020 external truth labels.
+where $\sigma_0$, $a$, and $b$ are free parameters; and $w_U(m)$ is modeled as a linear fit to $\log_{10}(w_U)$ versus magnitude, using only bins brighter than $m_{\rm CModel}=24$ where the free fit is reliable. This smooth model is then extrapolated to fainter magnitude bins. In the third step, with the unresolved component ($\mu_U$, $\sigma_U$, $w_U$) fixed to the smooth curves from step 2, only the resolved skew-normal parameters are re-fit in each magnitude bin. The resolved weights are rescaled to sum to $(1-w_U)$ so that the total mixture remains a proper probability density. The effectiveness of this constrained fitting procedure is demonstrated in Figure~\ref{fig:sg-count-ratio}, which compares the galaxy-to-star count ratio $\log_{10}(N_{\rm gal}/N_{\rm star})$ as a function of magnitude for models with and without the smooth constraints. The unconstrained model exhibits a spurious turnover at faint magnitudes, while the constrained model recovers the expected monotonically increasing ratio in agreement with the COSMOS2020 external truth labels.
 
-\begin{figure*}
-  \centering
-  \includegraphics[width=\textwidth]{section2_bayesian_method/star_galaxy_ratio_vs_rmag_v8v9.png}
-  \caption{Galaxy-to-star count ratio \(\log_{10}(N_{\mathrm{gal}}/N_{\mathrm{star}})\) vs.\
-    r-band CModel magnitude. The unconstrained mixture model (V8, faded curves) exhibits a
-    spurious turnover at \(m \gtrsim 24\) due to the unresolved Gaussian absorbing galaxy flux.
-    The constrained model (V9, bold curves) recovers the expected monotonically increasing
-    ratio, in good agreement with the COSMOS2020 truth labels (green dashed). Dotted lines show
-    the Rubin \texttt{extendedness}-based classification for comparison.}
-  \label{fig:star_galaxy_ratio_v8v9}
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=\textwidth]{fig06_r_extendedness_confusion_cmd.png}
+    \caption{Galaxy-to-star count ratio $\log_{10}(N_{\rm gal}/N_{\rm star})$ vs. r-band CModel magnitude. The unconstrained mixture model (V8, faded curves) exhibits a spurious turnover at $m\gtrsim24$ due to the unresolved Gaussian absorbing galaxy flux. The constrained model (V9, bold curves) recovers the expected monotonically increasing ratio, in good agreement with the COSMOS2020 truth labels (green dashed). Dotted lines show the Rubin \texttt{extendedness}-based classification for comparison.}
+    \label{fig:sg-count-ratio}
 \end{figure*}
 
-From the fitted model, the probability that a source is unresolved is computed as the ratio of
-the unresolved component to the total mixture density at the observed \((\Delta m,\,
-m_{\mathrm{CModel}})\):
+From the fitted model, the probability that a source is unresolved is computed as the ratio of the unresolved component to the total mixture density at the observed $(\Delta m,m_{\rm CModel})$:
 \begin{equation}
-  p_S = \frac{w_U \, \mathcal{G}(\Delta m;\, \mu_U,\, \sigma_U)}{p(\Delta m \,|\, m)}.
-  \label{eq:pS}
+    p_S=\frac{w_U\,\mathcal{G}(\Delta m;\mu_U,\sigma_U)}{p(\Delta m\mid m)}.
+    \label{eq:ps-posterior}
 \end{equation}
-The model parameters are looked up by the CModel magnitude bin in which each source falls.
-The quality of the fits is illustrated in Figure~\ref{fig:slice_fits}, which shows the
-mixture model overlaid on the observed \(\Delta m\) histograms in each magnitude bin, and in
-Figure~\ref{fig:model2d_residuals}, which shows the 2D data, model, and residual maps in the
-\(\Delta m\) vs.\ \(m_{\mathrm{CModel}}\) plane.
+The model parameters are looked up by the CModel magnitude bin in which each source falls. The quality of the fits is illustrated in Figure~\ref{fig:mixture-slices}, which shows the mixture model overlaid on the observed $\Delta m$ histograms in each magnitude bin, and in Figure~\ref{fig:mixture-map}, which shows the 2D data, model, and residual maps in the $\Delta m$ vs. $m_{\rm CModel}$ plane.
 
-\begin{figure*}
-  \centering
-  \includegraphics[width=\textwidth]{section2_bayesian_method/fig2_2_cosmos_r_slice_fits_v9fit.png}
-  \caption{Observed \(\Delta m\) histograms (black) and fitted mixture models (red) for the
-    r-band in each CModel magnitude bin. The unresolved Gaussian component is shown as a blue
-    dashed line and the resolved skew-normal components as orange dotted lines.}
-  \label{fig:slice_fits}
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=\textwidth]{fig07_r_extendedness_performance.png}
+    \caption{Observed $\Delta m$ histograms (black) and fitted mixture models (red) for the r-band in each CModel magnitude bin. The unresolved Gaussian component is shown as a blue dashed line and the resolved skew-normal components as orange dotted lines.}
+    \label{fig:mixture-slices}
 \end{figure*}
 
-\begin{figure*}
-  \centering
-  \includegraphics[width=\textwidth]{section2_bayesian_method/fig2_3_cosmos_ury_model2d_residuals_v9fit.png}
-  \caption{Two-dimensional comparison of the observed (left), modeled (center), and residual
-    (right) source density in the \(\Delta m\) vs.\ \(m_{\mathrm{CModel}}\) plane. The small
-    residuals demonstrate that the constrained mixture model provides an adequate description of
-    the data across the full magnitude range.}
-  \label{fig:model2d_residuals}
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=\textwidth]{fig07_r_extendedness_performance.png}
+    \caption{Two-dimensional comparison of the observed (left), modeled (center), and residual (right) source density in the $\Delta m$ vs. $m_{\rm CModel}$ plane. The small residuals demonstrate that the constrained mixture model provides an adequate description of the data across the full magnitude range.}
+    \label{fig:mixture-map}
 \end{figure*}
 
+\subsubsection{Magnitude-dependent Source-count Priors}
+\label{sec:sg-priors}
 
-\subsubsection{Priors for Star-Galaxy Counts ratio} 
+The normalization parameters of the best-fit mixture provide a
+magnitude-dependent prior for the relative abundance of unresolved and
+resolved sources. Here ``prior'' means the expected class ratio at a given
+magnitude before the morphology measurement of an individual source is
+considered. It is therefore a population term, rather than an alternative
+choice of the $p_{\rm S}=0.5$ catalog-assignment boundary. In the notation of
+Section~\ref{sec:bayesian-sg}, the fitted priors are
+\begin{equation}
+    \pi_{\rm U}(m)=w_{\rm U}(m),
+    \qquad
+    \pi_{\rm R}(m)=\sum_{k=1}^{K}w_{{\rm R},k}(m)
+                  =1-w_{\rm U}(m).
+    \label{eq:mixture-priors}
+\end{equation}
+The corresponding resolved-to-unresolved count ratio is
+\begin{equation}
+    R_{\rm R/U}(m)
+    \equiv\frac{N_{\rm R}(m)}{N_{\rm U}(m)}
+    =\frac{\pi_{\rm R}(m)}{\pi_{\rm U}(m)}
+    =\frac{1-w_{\rm U}(m)}{w_{\rm U}(m)}.
+    \label{eq:count-prior}
+\end{equation}
+When the unresolved and resolved populations are identified with stars and
+galaxies, respectively, $R_{\rm R/U}$ is the galaxy-to-star count ratio shown
+in Figure~\ref{fig:sg-count-ratio}. Equation~\ref{eq:ps-posterior} already
+incorporates this prior through $w_{\rm U}$ and the total mixture density. The
+prior must therefore be applied only once; multiplying an additional count
+ratio into Equation~\ref{eq:ps-posterior} would double-count the same
+population information.
 
-Here we discuss how the normalization parameters from the best-fit mixture can be used
-to set priors for the star-to-galaxy number ratio. We also compare to the HST curve, as well
-as to TRILEGAL-based curve. 
+For comparison, the HST-based external COSMOS ratio is measured in the same
+magnitude bins as
+\begin{equation}
+    \widehat{R}_{\rm G/S}^{\rm HST}(m_j)
+    =\frac{N_{{\rm gal},{\rm HST}}(m_j)}
+           {N_{\star,{\rm HST}}(m_j)},
+    \label{eq:reference-count-ratio}
+\end{equation}
+using the matched COSMOS classifications described in
+Section~\ref{sec:data} \citep{Leauthaud2007COSMOSACS,Robin2007COSMOSStars,
+Weaver2022}. Because these labels do not enter the mixture fit, the HST curve
+is an external empirical check on the inferred abundance trend. The agreement
+of the constrained curve with the overall rise of the HST ratio supports the
+use of the fitted normalization as a prior. The statistical uncertainty of
+this ratio increases in bins containing few reference stars.
 
+TRILEGAL provides a complementary prediction for the stellar surface density
+along the COSMOS line of sight \citep{Girardi2005TRILEGAL,
+DalTio2022TRILEGAL}. Because TRILEGAL predicts stellar counts rather than
+galaxy counts, we compare it directly with the stellar surface density in the
+COSMOS reference sample. In magnitude bin $m_j$, the observed stellar surface
+density is
+\begin{equation}
+    \widehat{n}_{\star}^{\rm COSMOS}(m_j)
+    =\frac{N_{\star,{\rm COSMOS}}(m_j)}
+           {A_{\rm eff}\,\Delta m_j},
+    \label{eq:cosmos-star-counts}
+\end{equation}
+where $A_{\rm eff}$ is the effective matched area and $\Delta m_j$ is the bin
+width. The COSMOS and TRILEGAL counts are compared using the same photometric
+band, extinction convention, magnitude bins, source selection, and
+solid-angle normalization. This direct comparison avoids introducing an
+empirical galaxy numerator into the TRILEGAL diagnostic. The posterior
+probabilities used in this work retain the empirical mixture prior of
+Equation~\ref{eq:mixture-priors}; neither the HST count ratio nor the TRILEGAL
+stellar-count prediction is used to modify the posterior or the fixed
+$p_{\rm S}=0.5$ catalog-assignment boundary.
 
-
-
-
-
-
+\FloatBarrier
