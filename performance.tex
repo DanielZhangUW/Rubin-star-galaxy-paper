@@ -1,0 +1,53 @@
+\providecommand{\FloatBarrier}{\clearpage}
+
+\section{Performance of the Bayesian Classifier}
+\label{sec:performance}
+
+\subsection{Validation Metrics}
+\label{sec:validation-metrics}
+
+We evaluate the classifiers using the matched COSMOS2020/FARMER reference
+sample \citep{Weaver2022}.  The one-to-one match, constructed with a maximum
+separation of $0.5\arcsec$, contains 193,586 objects: 8,788 reference-labeled
+stars and 184,798 reference-labeled galaxies.  Throughout this section, $r$
+denotes the Rubin $r$-band CModel magnitude.
+
+The validation sample becomes strongly galaxy dominated at faint magnitudes.
+An overall accuracy would consequently be uninformative: a classifier could
+obtain a high value by assigning nearly every faint source to the galaxy class
+while recovering few stars.  We therefore evaluate the star-candidate and
+galaxy-candidate samples separately.  For a target class $X$, where $X$ is
+either stars or galaxies, we define completeness, purity, and contamination as
+
+\begin{align}
+    C_X &\equiv \frac{\mathrm{TP}_X}
+                       {\mathrm{TP}_X+\mathrm{FN}_X},
+    \label{eq:completeness}\\
+    P_X &\equiv \frac{\mathrm{TP}_X}
+                       {\mathrm{TP}_X+\mathrm{FP}_X},
+    \label{eq:purity}\\
+    f_{\mathrm{cont},X} &\equiv 1-P_X
+      =\frac{\mathrm{FP}_X}{\mathrm{TP}_X+\mathrm{FP}_X}.
+    \label{eq:contamination}
+\end{align}
+
+Completeness is the fraction of reference objects of class $X$ that are
+recovered, whereas purity is the fraction of the selected sample that belongs
+to class $X$ according to the reference labels.  Purity is particularly
+important for the imbalanced faint sample because even a modest false-positive
+rate can produce substantial contamination \citep{SaitoRehmsmeier2015}.
+
+For a receiver operating characteristic (ROC) curve, the false-positive rate
+for target class $X$ is
+
+\begin{equation}
+    \mathrm{FPR}_X \equiv
+    \frac{\mathrm{FP}_X}{\mathrm{FP}_X+\mathrm{TN}_X}.
+    \label{eq:false-positive-rate}
+\end{equation}
+
+Its denominator contains all reference members of the opposite class and
+therefore differs from the denominator of contamination.  The true-positive
+rate on the ROC curve is equal to $C_X$.  The area under the ROC curve (AUC)
+summarizes how well a continuous score orders the two classes
+\citep{Fawcett2006ROC}.

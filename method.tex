@@ -150,9 +150,9 @@ at bright magnitudes.  At $r_{\rm CModel}\gtrsim24$, an increasing number of
 COSMOS galaxies are assigned to the unresolved class, and these objects
 become the main source of contamination in the Rubin star-like sample.
 
-\begin{figure*}[t]
+\begin{figure*}[!t]
     \centering
-    \includegraphics[width=\textwidth,height=0.68\textheight,keepaspectratio]{fig05_r_extendedness_color_color.png}
+    \includegraphics[width=\textwidth,height=0.64\textheight,keepaspectratio]{fig05_r_extendedness_confusion_cmd.png}
     \caption{The default Rubin $r$-band \texttt{extendedness} assignment
     compared with the external COSMOS reference classifications in the
     $(g-i,r_{\rm CModel})$ color--magnitude plane.  The four panels separate the
@@ -172,13 +172,11 @@ the two source populations.  Let ${\rm U}$ and ${\rm R}$ denote the unresolved
 and resolved hypotheses, and let $d_b$ denote the morphology measurement in
 band $b$.  At magnitude $m$, Bayes' theorem gives the posterior odds
 \begin{equation*}
-\mathcal{O_{\rm U/R}}
-=
-\frac{P({\rm U}\mid d_b,m)}{P({\rm R}\mid d_b,m)}
-=
-\frac{\pi_{\rm U}(m)}{\pi_{\rm R}(m)}
-\frac{\mathcal{L}_{{\rm U},b}(d_b\mid m)}
-     {\mathcal{L}_{{\rm R},b}(d_b\mid m)}.
+    \frac{P({\rm U}\mid d_b,m)}{P({\rm R}\mid d_b,m)}
+    =
+    \frac{\pi_{\rm U}(m)}{\pi_{\rm R}(m)}
+    \frac{\mathcal{L}_{{\rm U},b}(d_b\mid m)}
+         {\mathcal{L}_{{\rm R},b}(d_b\mid m)}.
 \end{equation*}
 Here $\mathcal{L}_{{\rm U},b}$ and $\mathcal{L}_{{\rm R},b}$ are the
 class-conditional morphology densities.  Their ratio measures how strongly
@@ -251,9 +249,9 @@ To prevent this degeneracy, we impose smooth constraints on the unresolved compo
 \end{equation}
 where $\sigma_0$, $a$, and $b$ are free parameters; and $w_U(m)$ is modeled as a linear fit to $\log_{10}(w_U)$ versus magnitude, using only bins brighter than $m_{\rm CModel}=24$ where the free fit is reliable. This smooth model is then extrapolated to fainter magnitude bins. In the third step, with the unresolved component ($\mu_U$, $\sigma_U$, $w_U$) fixed to the smooth curves from step 2, only the resolved skew-normal parameters are re-fit in each magnitude bin. The resolved weights are rescaled to sum to $(1-w_U)$ so that the total mixture remains a proper probability density. The effectiveness of this constrained fitting procedure is demonstrated in Figure~\ref{fig:sg-count-ratio}, which compares the galaxy-to-star count ratio $\log_{10}(N_{\rm gal}/N_{\rm star})$ as a function of magnitude for models with and without the smooth constraints. The unconstrained model exhibits a spurious turnover at faint magnitudes, while the constrained model recovers the expected monotonically increasing ratio in agreement with the COSMOS2020 external truth labels.
 
-\begin{figure*}[t]
+\begin{figure*}[!t]
     \centering
-    \includegraphics[width=\textwidth]{fig06_r_extendedness_confusion_cmd.png}
+    \includegraphics[width=\textwidth,height=0.62\textheight,keepaspectratio]{fig06_star_galaxy_ratio_vs_rmag_v8v9.png}
     \caption{Galaxy-to-star count ratio $\log_{10}(N_{\rm gal}/N_{\rm star})$ vs. r-band CModel magnitude. The unconstrained mixture model (V8, faded curves) exhibits a spurious turnover at $m\gtrsim24$ due to the unresolved Gaussian absorbing galaxy flux. The constrained model (V9, bold curves) recovers the expected monotonically increasing ratio, in good agreement with the COSMOS2020 truth labels (green dashed). Dotted lines show the Rubin \texttt{extendedness}-based classification for comparison.}
     \label{fig:sg-count-ratio}
 \end{figure*}
@@ -265,17 +263,17 @@ From the fitted model, the probability that a source is unresolved is computed a
 \end{equation}
 The model parameters are looked up by the CModel magnitude bin in which each source falls. The quality of the fits is illustrated in Figure~\ref{fig:mixture-slices}, which shows the mixture model overlaid on the observed $\Delta m$ histograms in each magnitude bin, and in Figure~\ref{fig:mixture-map}, which shows the 2D data, model, and residual maps in the $\Delta m$ vs. $m_{\rm CModel}$ plane.
 
-\begin{figure*}[t]
+\begin{figure*}[!t]
     \centering
-    \includegraphics[width=\textwidth]{fig07_r_extendedness_performance.png}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{figures/section2_bayesian_method/fig2_2_cosmos_r_slice_fits_v9fit.png}
     \caption{Observed $\Delta m$ histograms (black) and fitted mixture models (red) for the r-band in each CModel magnitude bin. The unresolved Gaussian component is shown as a blue dashed line and the resolved skew-normal components as orange dotted lines.}
     \label{fig:mixture-slices}
 \end{figure*}
 
-\begin{figure*}[t]
+\begin{figure*}[!t]
     \centering
-    \includegraphics[width=\textwidth]{fig07_r_extendedness_performance.png}
-    \caption{Two-dimensional comparison of the observed (left), modeled (center), and residual (right) source density in the $\Delta m$ vs. $m_{\rm CModel}$ plane. The small residuals demonstrate that the constrained mixture model provides an adequate description of the data across the full magnitude range.}
+    \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{figures/section2_bayesian_method/fig2_3_cosmos_ury_model2d_residuals_v9fit.png}
+    \caption{Two-dimensional comparison of the observed (left), modeled (center), and residual (right) source density in the $\Delta m$ vs. $m_{\rm CModel}$ plane. The residual panels show the localized and magnitude-dependent differences that remain between the constrained mixture model and the data.}
     \label{fig:mixture-map}
 \end{figure*}
 
