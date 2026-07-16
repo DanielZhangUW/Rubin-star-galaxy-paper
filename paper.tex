@@ -83,14 +83,13 @@
  
 \title{Improved Probabilistic Star-Galaxy Separation Method for Rubin LSST Catalogs}
  
-
 \correspondingauthor{{\v Z}eljko Ivezi{\'c}}
  
 \author[0000-0001-5250-2633, gname=\v{Z}eljko, sname=Ivezi\'{c}]{\v{Z}eljko Ivezi\'{c}}
 \affiliation{Department of Astronomy, University of Washington, Box 351580, Seattle, WA 98195, USA}
 \email[show]{ivezic@uw.edu}
 
-\author[0009-0004-0944-9098]{Jinshuo Zhang}
+\author[0009-0004-0944-9098]{Jinshuo Zhang} 
 \affiliation{Department of Astronomy, University of Washington, Box 351580, Seattle, WA 98195, USA}
 \email{jinshuoz@uw.edu} 
 
@@ -127,7 +126,7 @@ threshold difference between PSF, \(m_{\mathrm{PSF}}\), and CModel, \(m_{\mathrm
 magnitudes.  While this parameter provides a useful baseline for morphological classification, its binary nature
 prevents the optimal combination of information from multiple bands, as well as from other
 classification methods (e.g., those based on colors or external datasets). In this work, we implement
-the Bayesian star-galaxy classification method of Slater, Ivezi\'{c} \& Lupton (2020).
+the Bayesian star-galaxy classification method of Slater, Ivezi\'{c} \& Lupton (2020), which overcomes these shortcomings.
 In each band, we model the distribution of sources in the two-dimensional space defined by
 \(\Delta m = m_{\mathrm{PSF}} - m_{\mathrm{CModel}}\) and magnitude \(m_{\mathrm{CModel}}\).
 At a fixed magnitude, the distribution is modeled as a mixture of unresolved and resolved
@@ -176,10 +175,10 @@ COMPILE WITH:
      averaged over 100 simulation iterations: area under the curve is 0.985
      2022AJ....163..148M 
 
-
+ 
 
 TRACTS vs. PATCHES
-
+LA
 In the Rubin Science Pipelines, tracts and patches are the two levels of spatial subdivision used
 for coadds and object catalogs. They are designed to make processing and storage scalable
 while preserving continuity across the sky. A tract is a relatively large region of the sky,
@@ -200,3 +199,16 @@ and localize expensive tasks such as deblending.
 
 
 
+WE MAY NEED IT FOR LATER (Daniel added it, ZI removed it as it was redundant with Introduction:
+
+The principal per-band morphology statistic used throughout this analysis is
+\begin{equation*}
+    \Delta m_b \equiv  m_{{\rm PSF},b}-m_{{\rm CModel},b}.
+\end{equation*}
+where $b$ denotes a photometric band.  For an unresolved source, the PSF and CModel measurements agree within
+their uncertainties and $\Delta m_b\simeq0$, whereas a resolved source generally has
+$\Delta m_b>0$ because the PSF-weighted flux does not capture all of its extended light.
+
+
+
+ 

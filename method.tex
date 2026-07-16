@@ -7,166 +7,155 @@
 \setcounter{bottomnumber}{2}
 \setcounter{totalnumber}{5}
 
-\section{Methodology and Data}
+
+\section{Data and Methodology}
 \label{sec:data-methods}
 
-We first define the COSMOS validation sample and use it to illustrate how the
-morphology and color distributions evolve toward the survey limit.  We then
-describe the Bayesian classification framework, the magnitude-binned mixture
-model with skew-normal resolved components \citep{Azzalini1985SkewNormal}
-used to estimate the class-conditional morphology distributions, and
-the source-count prior inferred from the fitted component normalizations.
+We first describe Rubin and HST data used in our analysis, followed by a brief review of the Bayesian star-galaxy
+separation method proposed in SIL2020. We conclude this Section with a description of detailed method
+implementation steps, and discuss the performance of Rubin's default method and our Bayesian star-galaxy
+separation method in the next Section. 
 
-The per-band morphology statistic used throughout this analysis is
-\begin{equation*}
-    \Delta m_b \equiv
-    m_{{\rm PSF},b}-m_{{\rm CModel},b}.
-\end{equation*}
-where $b$ denotes a photometric band.  For an unresolved source, the PSF and
-CModel measurements agree within their uncertainties and
-$\Delta m_b\simeq0$, whereas a resolved source generally has
-$\Delta m_b>0$ because the PSF-weighted flux does not capture all of its
-extended light.
 
-\subsection{Rubin Data Preview 2 Processing and External COSMOS Classifications}
+\subsection{Rubin Data Preview 2} 
 \label{sec:data}
 
-We use a Rubin DP2 object-catalog processing of the COSMOS field, which provides a
-deep, well-studied external reference catalog from COSMOS2020/FARMER
-\citep{Weaver2022}.  We select DP2 sources in the rectangular region
-$149.7^{\circ}<\mathrm{R.A.}<150.7^{\circ}$ and
-$1.7^{\circ}<\mathrm{Decl.}<2.7^{\circ}$, with
-$16\leq r_{\rm CModel}<26$.  The Rubin sample is matched to the external
-catalog with a maximum angular separation of $0.5\arcsec$.
+All data collected with the LSST Camera (XXX: REF) during the commissioning of the Rubin Observatory
+will be released as Data Preview 2. Coadded deep images and resulting catalogs have been released
+in July 2026. These coadded images are based on about 24,000 single-visit images and cover about
+3,000 sq. deg. of sky. In our analysis we focus on the COSMOS field because it is both already well observed
+by Rubin (to about 1 magnitude shallower limit than anticipated for 10-year LSST) and space-based HST
+COSMOS2020/FARMER star and galaxy labels are available \citep{2022ApJS..258...11W}. As a control
+sample for code robustness, we also use Rubin data for the Extended Chandra Deep Field South (ECDFS). 
 
-After the sky and magnitude selections, the DP2 sample contains 269,606
-sources.  Of these, 193,586 have an external match and 76,020 do not, giving a
-raw Rubin-side matching fraction of $193{,}586/269{,}606\simeq0.718$.  We
-encode the matched reference sample as 8,788 stars and 184,798 galaxies.  The
-unmatched objects are retained when displaying the Rubin source population,
-but only matched objects with the required finite measurements are used for
-the validation metrics.  For the purposes of this analysis, we adopt the
-matched COSMOS2020/FARMER classifications as the external truth labels used
-to evaluate the Rubin classifications.
+For the COSMOS validation sample, we select Rubin DP2 sources in the rectangular region
+\(149.7 < {\rm RA} < 150.7\) and \(1.7 < {\rm Dec} < 2.7\), with
+\(16 \le r_{\rm CModel} < 26\). Objects listed in the COSMOS2020/FARMER reference catalog are
+matched to DP2 sources using a 0.5 arcsec matching radius. Within the selected region and magnitude
+ranges, the DP2 sample contains 269,606 objects, of which 193,586 are matched to the
+COSMOS2020/FARMER objects and 76,020 are unmatched (a matching fraction of 72\%). This
+somewhat low matching fraction is due to large areas around bright stars that are masked in the
+COSMOS2020/FARMER catalog (see Figure~\ref{fig:cosmos-footprint}). 
+The matched validation sample contains 8,788 stars and 184,798 galaxies, classified using
+\(\texttt{truth\_binary}=1\) for stars and \(\texttt{truth\_binary}=0\) for galaxies. Their number
+counts as function of magnitude are shown in Figure~\ref{fig:cosmos-magnitude-distribution}.
+The low fraction stars is due to very faint sample limit and high Galactic latitude. 
+% what is galactic latitude for RA = 150.2 and Dec = 2.2 ?
 
-The mixture-fitting count-ratio diagnostic in
-Figure~\ref{fig:sg-count-ratio} also includes the ECDFS field as an internal
-comparison.  All class-labeled validation results presented in this paper use
-the COSMOS matched sample.
 
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=\columnwidth]{fig01_cosmos_sky_coverage.png}
-    \caption{COSMOS validation footprint.  Gray points show the selected
-    Rubin DP2 sources in the common COSMOS region, and green points show the
-    subset matched to COSMOS2020/FARMER external classifications within
-    $0.5\arcsec$.}
-    \label{fig:cosmos-footprint}
-\end{figure}
 
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=\columnwidth]{fig02_cosmos_dataset_overview.png}
-    \caption{Magnitude distribution of the COSMOS validation sample.  The
-    black curve shows all selected DP2 sources, while the blue and red
-    curves show matched reference stars and galaxies, respectively.  Counts
-    are shown per magnitude using $0.5$-mag bins.}
-    \label{fig:cosmos-magnitude-distribution}
-\end{figure}
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.9\textwidth]{fig01_cosmos_sky_coverage.png}
+  \caption{
+  The footprint for the DP2-COSMOS sample analyzed here. Gray points show Rubin DP2 objects 
+  and  green points show the subset matched to the COSMOS2020/FARMER sample from HST using
+  a 0.5 arcsec matching radius.
+  }
+  \label{fig:cosmos-footprint}
+\end{figure*}
 
-Figures~\ref{fig:cosmos-footprint} and
-\ref{fig:cosmos-magnitude-distribution} show the sky coverage and magnitude
-distribution of the selected sample.  The matched sample contains about 21
-times more galaxies than stars.  Consequently, even a small fraction of
-galaxies assigned to the stellar class can contribute appreciably to the
-selected stellar sample.
 
-\subsection{Morphology and Color Distributions of the Reference Classes}
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.9\textwidth]{fig02_cosmos_dataset_overview.png}
+  \caption{
+  Magnitude distribution of the DP2-COSMOS sample. The black curve shows
+  all selected DP2 sources, while the blue and red curves show matched
+  COSMOS2020/FARMER sources classified as stars and galaxies, respectively.
+  Counts are shown per magnitude, using 0.5 mag wide bins.  
+  }
+  \label{fig:cosmos-magnitude-distribution}
+\end{figure*}
+
+
+
+
+
+\subsection{The distributions of sources classified using HST labels}
 \label{sec:reference-distributions}
 
-The external classifications provide a reference with which to examine the
-observed morphology and color distributions.  The upper-left panel of
-Figure~\ref{fig:reference-overview} shows the two classes in the
-$(r_{\rm CModel},\Delta m_r)$ plane.  Reference stars form a narrow sequence
-near $\Delta m_r=0$, while the galaxy distribution extends to positive
-$\Delta m_r$.  The overlap grows toward faint magnitudes as the measurement
-uncertainty increases and the apparent sizes of galaxies decrease.
+The external COSMOS2020/FARMER labels provide the reference classification, considered here as ground
+truth, for examining the distribution of stars and galaxies in various diagrams and for measuring
+the performance of star-galaxy separation methods. Nevertheless, it is quite possible that some very faint
+sources classified as stars might be unresolved galaxies even at HST's resolution. 
 
-The remaining panels of Figure~\ref{fig:reference-overview} show that color
-adds information beyond morphology.  Reference stars follow recognizable
-sequences in these color--color planes, while reference galaxies span a
-wider range of colors.  Figure~\ref{fig:reference-colors-by-magnitude}
-compares the same planes for $16<r_{\rm CModel}<25$ and
-$25<r_{\rm CModel}<26$.  In the faint interval, larger color uncertainties
-broaden the stellar sequences and make the two classes more difficult to
-distinguish.  Where applied, the CModel colors are corrected for Galactic
-extinction, while the plotted $r$-band CModel magnitude is not extinction
-corrected.
+ 
+The top left panel in Figure~\ref{fig:truth_morphology_color} shows the distribution of stars and galaxies classified
+using HST labels in the \(\Delta m = m_{\mathrm{PSF}} - m_{\mathrm{CModel}}\) vs. \(m_{\mathrm{CModel}}\)
+diagram. As we describe in more detail below, modeling this distribution is a key ingredient of the Bayesian star-galaxy
+separation method developed here. 
 
-\begin{figure*}[t]
-    \centering
-    \includegraphics[width=\textwidth]{fig03_truth_morphology_color.png}
-    \caption{Morphology and color distributions of the externally classified
-    COSMOS sample.  Blue points show reference stars and red contours show
-    reference galaxies.  The upper-left panel displays
-    $\Delta m_r=m_{{\rm PSF},r}-m_{{\rm CModel},r}$ as a function of
-    $r$-band CModel magnitude; the upper-right panel shows the
-    $(g-i,r_{\rm CModel})$ color--magnitude diagram; and the lower panels show
-    two representative color--color projections.  The plotted $r$-band
-    CModel magnitude is not corrected for Galactic extinction, while the
-    colors are extinction corrected where applicable.}
-    \label{fig:reference-overview}
+
+\begin{figure*}
+  \centering
+  \includegraphics[width=\textwidth]{fig03_truth_morphology_color.png}
+  \caption{The distribution of stars (blue dots) and galaxies (red countours), classified using HST labels, in various infomative
+    diagrams. The r-band CModel magnitude is uncorrected for the ISM dust extinction, while the CModel-based colors are not.
+   The top left panel shows the \(\Delta m = m_{\mathrm{PSF}} - m_{\mathrm{CModel}}\) vs. \(m_{\mathrm{CModel}}\) diagram, where
+   stars form a narrow sequence centered on \(\Delta m \approx 0\) and for galaxies \(\Delta m >  0 \).  
+   The top right panel shows the $r$ vs. $g-i$ color magnitude diagram and two bottom panels show
+   representative color-color diagrams. In particular, unresolved sources with $u-g < 0.6$ are
+   expected to be a mixture of low-redshift quasars, white dwarfs and unresolved binaries. 
+   XXX remove the title (here and elsewhere - the journal editors don't like it.}
+  \label{fig:truth_morphology_color}
 \end{figure*}
 
-\begin{figure*}[t]
-    \centering
-    \includegraphics[width=\textwidth,height=0.68\textheight,keepaspectratio]{fig04_truth_color_color.png}
-    \caption{Color--color distributions of the external reference classes in
-    two $r$-band CModel-magnitude intervals.  The left column shows
-    $16<r_{\rm CModel}<25$, and the right column shows
-    $25<r_{\rm CModel}<26$.  From top to bottom, the panels display
-    $(u-g,g-r)$, $(g-r,r-i)$, $(r-i,i-z)$, and $(i-z,z-y)$.  Blue points show
-    reference stars and red contours show reference galaxies.  In the faint
-    interval, the reference-star colors are more dispersed and are less clearly
-    separated from the galaxy distribution.}
-    \label{fig:reference-colors-by-magnitude}
+The top right panel in Figure~\ref{fig:truth_morphology_color} shows that galaxies, in addition to
+outnumbering stars at faint magnitudes, have on average SLIGHTLY bluer colors than stars. 
+Color-color diagrams shown in the bottom two panels in Figure~\ref{fig:truth_morphology_color}
+demonstrate that colors can be used to enhance morphological star-galaxy separation. 
+Nevertheless, Figure~\ref{fig:truth_color_color} and the top left panel in
+Figure~\ref{fig:truth_morphology_color} clearly show that increased noise close to the faint
+magnitude limit will cause deteriorated performance for both morphological and color-based
+star-galaxy separation methods. It is notable that the top right panel in Figure~\ref{fig:truth_color_color} a
+implies that most unresolved faint blue sources have $u-g$ color more typical of low-redshift
+quasars than of main sequence stars. 
+
+
+\begin{figure*}
+  \centering
+  \includegraphics[width=\textwidth]{fig04_truth_color_color.png}
+  \caption{Similar to the bottom two panels in Figure~\ref{fig:truth_morphology_color}, except that
+   here all color-color diagrams are shown and data are split by r-band CModel magnitude
+   to show deterioration close to the faint magnitude limit (left: 16 $<$ rmag $<$ 25; right: 25 $<$
+   rmag $<$ 26).}
+  \label{fig:truth_color_color}
 \end{figure*}
 
-\subsection{The Rubin \texttt{extendedness} Baseline}
+
+\subsection{The distributions of sources classified using \texttt{extendedness} parameter} 
 \label{sec:extendedness-baseline}
 
-We use the default Rubin $r$-band \texttt{extendedness} assignment as the
-catalog baseline, with
-$\Delta m_r=m_{{\rm PSF},r}-m_{{\rm CModel},r}$. Objects with
-$\Delta m_r\leq0.016\,\mathrm{mag}$ are assigned to the unresolved class,
-and objects above this boundary are assigned to the resolved class.  This
-fixed catalog rule provides the traditional Rubin baseline for comparison
-with the probabilistic classifier introduced in
-Section~\ref{sec:bayesian-sg}.
+Difficulties with star-galaxy separation encountered at the faint end are illustrated in
+Figure~\ref{fig:r_extendedness_confusion_cmd}, which compares subsamples classified
+using HST ground-truth labels and the default Rubin \texttt{extendedness} binary class in the $r$ band.
+As evident, a significant fraction of faint sources within 2 magnitudes from the faint limit are 
+misclassified when using default \texttt{extendedness} parameter. Misclassifications have
+a more severe impact on stellar sample: only 26\% of ``stars'' selected by \texttt{extendedness}=1
+condition are unresolved in HST data. This high level of contamination increases towards the faint
+end (see the bottom left panel in Figure~\ref{fig:r_extendedness_confusion_cmd}). As the same time,
+the selection completeness for objects unresolved by HST is only 67\%. Due to much higher counts,
+the purity and completeness for galaxies are much higher: 98\% and 89\%, respectively. 
 
-Figure~\ref{fig:extendedness-confusion} compares the Rubin assignments with
-the COSMOS truth labels across color and magnitude.  Agreement is strongest
-at bright magnitudes.  At $r_{\rm CModel}\gtrsim24$, an increasing number of
-COSMOS galaxies are assigned to the unresolved class, and these objects
-become the main source of contamination in the Rubin star-like sample.
-
-\begin{figure*}[!t]
-    \centering
-    \includegraphics[width=\textwidth,height=0.64\textheight,keepaspectratio]{fig05_r_extendedness_confusion_cmd.png}
-    \caption{The default Rubin $r$-band \texttt{extendedness} assignment
-    compared with the external COSMOS reference classifications in the
-    $(g-i,r_{\rm CModel})$ color--magnitude plane.  The four panels separate the
-    sample by COSMOS truth label and Rubin assignment, and the panel titles give
-    the corresponding object counts.  The main failure mode occurs at
-    $r_{\rm CModel}\gtrsim24$, where increasing numbers of COSMOS galaxies are
-    assigned to the unresolved class.}
-    \label{fig:extendedness-confusion}
+\begin{figure*}
+  \centering
+  \includegraphics[width=\textwidth]{fig05_r_extendedness_confusion_cmd.png}
+  \caption{Performance of Rubin's default \texttt{extendedness} parameter in the $r$ band
+    relative to HST ground-truth labels. The top left and bottom right panels show
+    correctly classified unresolved and resolved sources in the $r$ vs. $g-i$ color-magnitude
+    diagram, with counts shown in the title above each panel. The bottom left and the top right panels
+    show misclassified sources. Note that the stellar sample selected by \texttt{extendedness}=0
+    is severely contaminated by galaxies for \(r_{\mathrm{CModel}} > 24\).}
+  \label{fig:r_extendedness_confusion_cmd}
 \end{figure*}
+
+ 
 
 \subsection{Bayesian Star--Galaxy Separation}
 \label{sec:bayesian-sg}
 
-Following \citet{Slater2020}, we separate the evidence supplied by an
+Following SIL2020, we separate the evidence supplied by an
 individual morphology measurement from the expected relative abundance of
 the two source populations.  Let ${\rm U}$ and ${\rm R}$ denote the unresolved
 and resolved hypotheses, and let $d_b$ denote the morphology measurement in
