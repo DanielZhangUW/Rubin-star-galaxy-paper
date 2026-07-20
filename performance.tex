@@ -12,12 +12,12 @@ separation of $0.5\arcsec$, contains 193,586 objects: 8,788 reference-labeled
 stars and 184,798 reference-labeled galaxies.  Throughout this section, $r$
 denotes the Rubin $r$-band CModel magnitude.
 
-The validation sample becomes strongly galaxy dominated at faint magnitudes.
-An overall accuracy would consequently be uninformative: a classifier could
-obtain a high value by assigning nearly every faint source to the galaxy class
-while recovering few stars.  We therefore evaluate the star-candidate and
-galaxy-candidate samples separately.  For a target class $X$, where $X$ is
-either stars or galaxies, we define completeness, purity, and contamination as
+The matched sample contains about 21 times more galaxies than stars, and the
+imbalance is stronger at faint magnitudes.  A single accuracy value would
+therefore be dominated by the much larger galaxy population.  We instead
+evaluate the star-candidate and galaxy-candidate samples separately.  For a
+target class $X$, where $X$ is either stars or galaxies, we define
+completeness, purity, and contamination as
 
 \begin{align}
     C_X &\equiv \frac{\mathrm{TP}_X}
@@ -51,3 +51,201 @@ therefore differs from the denominator of contamination.  The true-positive
 rate on the ROC curve is equal to $C_X$.  The area under the ROC curve (AUC)
 summarizes how well a continuous score orders the two classes
 \citep{Fawcett2006ROC}.
+
+\subsection{Single-band Morphology Performance}
+\label{sec:single-band-performance}
+
+We use the continuous $r$-band scores to compare how well the two reference
+classes are separated, and we use the fixed catalog rules to measure the
+completeness and purity of the selected samples.  Every probabilistic catalog
+classification in this section uses $p_{{\rm S},r}\geq0.5$ for a star-like
+assignment.  The Rubin comparison uses its default boundary,
+$\Delta m_r\leq0.016\,\mathrm{mag}$.
+
+\begin{figure*}[!t]
+    \centering
+    \includegraphics[width=\textwidth]{fig09_morphology_only_roc.png}
+    \caption{Performance of the continuous $r$-band morphology scores for the
+    $0.5\arcsec$ COSMOS validation sample.  The left and right panels treat stars
+    and galaxies as the target class, respectively.  The gray dash-dotted curve
+    uses raw $\Delta m_r$, the blue curve uses the fitted morphology distributions
+    without the source-count prior, and the green curve includes the prior.  The
+    red diamond marks the fixed Rubin \texttt{extendedness} assignment at
+    $\Delta m_r=0.016\,\mathrm{mag}$, and the black circle marks the fixed
+    probabilistic assignment at $p_{{\rm S},r}=0.5$.  Values in parentheses give
+    the AUC of each continuous score.}
+    \label{fig:rband-roc}
+\end{figure*}
+
+\subsubsection{Ranking of the Continuous Scores}
+\label{sec:rband-ranking}
+
+Figure~\ref{fig:rband-roc} compares three continuous $r$-band morphology
+scores.  The first is the measured quantity
+
+\begin{equation}
+    \Delta m_r=m_{{\rm PSF},r}-m_{{\rm CModel},r},
+    \label{eq:delta-m-r}
+\end{equation}
+
+which underlies the Rubin \texttt{extendedness} classification.  The gray
+curve therefore measures the discriminatory information in the raw
+$\Delta m_r$ values.  The fixed Rubin catalog classification is shown
+separately by the red diamond at $\Delta m_r=0.016\,\mathrm{mag}$.  Likewise,
+the fixed probabilistic classification at $p_{{\rm S},r}=0.5$ is marked on the
+prior-informed score by the black circle.
+
+The blue and green curves use the fitted class-conditional morphology
+distributions described in Section~\ref{sec:mixture-model}.  The blue score
+omits the magnitude-dependent source-count prior, whereas the green score
+includes the prior from Section~\ref{sec:sg-priors}.  All three scores are
+evaluated on the same 193,516 objects with finite $r$-band morphology
+measurements.
+
+The AUC is 0.871 for raw $\Delta m_r$, 0.899 for the morphology model without
+the count prior, and 0.901 after the prior is included.  The modeled
+class-conditional distributions therefore improve the overall ordering, while
+the count prior changes the global AUC only slightly.  The ROC curves cross:
+raw $\Delta m_r$ lies above the modeled scores over parts of the displayed
+false-positive-rate range, while the modeled scores perform better elsewhere.
+The higher AUC therefore describes an improvement averaged over the full
+curve, not uniform dominance at every operating region.
+
+\subsubsection{Completeness and Purity of the Fixed Catalog Samples}
+\label{sec:rband-catalog-performance}
+
+Figure~\ref{fig:rband-fixed-performance} compares the samples produced by the
+fixed $p_{{\rm S},r}=0.5$ and Rubin \texttt{extendedness} rules in three
+magnitude intervals.  The unresolved-selected and resolved-selected samples
+are treated as star-candidate and galaxy-candidate samples, respectively.  We
+show completeness and purity; contamination is simply $1-P_X$.
+
+At $16\leq r<24$, the probabilistic star-candidate sample has completeness
+0.878 and purity 0.975, similar to the Rubin selection in this interval.  At
+$24\leq r<25$, the two methods make a different trade-off: the probabilistic
+selection increases stellar purity from 0.318 to 0.558, while stellar
+completeness decreases from 0.582 to 0.268.
+
+At $25\leq r<26$, no evaluated object satisfies $p_{{\rm S},r}\geq0.5$.
+Stellar completeness is therefore zero, and stellar purity is undefined
+because the selected sample is empty.  Thus, the fixed prior-informed
+$r$-band rule does not produce a usable star-candidate sample in the faintest
+interval.  The galaxy-candidate sample remains nearly complete and highly
+pure, but these values are aided by the overwhelming numerical dominance of
+galaxies and do not imply comparable recovery of the rare stellar population.
+
+\begin{figure*}[!t]
+    \centering
+    \includegraphics[width=\textwidth]{fig10_single_band_performance.png}
+    \caption{Completeness (top row) and purity (bottom row) of the
+    star-candidate sample (left column) and galaxy-candidate sample (right column)
+    in three $r$-band magnitude intervals.  Horizontally offset markers compare
+    the fixed $p_{{\rm S},r}=0.5$ assignment with the default Rubin
+    \texttt{extendedness} assignment; the magnitude intervals are not connected
+    by lines.  Error bars show 68\% Wilson binomial intervals, and annotations give
+    the number of selected objects.  At $25\leq r<26$, the probabilistic method
+    selects no star-like objects, so stellar completeness is zero and stellar
+    purity is undefined and is not plotted.}
+    \label{fig:rband-fixed-performance}
+\end{figure*}
+
+\subsection{Multiband Morphology and Color Information}
+\label{sec:multiband-color}
+
+Morphology and broadband colors provide complementary information for
+star--galaxy separation
+\citep{Fadely2012MultiBandSG,Kim2015HybridSG,SevillaNoarbe2018DESY1}.
+Figure~\ref{fig:multiband-color-roc} compares scores based on $r$-band
+morphology, $gri$ morphology, all six $ugrizy$ morphology measurements, and a
+combined morphology-plus-color score.  The band-level morphology information
+is combined before the magnitude-dependent source-count prior is applied.
+Within each magnitude interval, all curves use the same complete-case sample.
+
+\begin{figure*}[!t]
+    \centering
+    \includegraphics[width=\textwidth]{fig11_multiband_color_roc.png}
+    \caption{Ranking performance obtained from multiband morphology and color
+    information.  The top and bottom rows treat stars and galaxies as the target
+    class, respectively, and the columns show three $r$-band magnitude intervals.
+    Curves compare morphology information from the $r$, $gri$, and $ugrizy$ bands
+    with the combined $ugrizy$ morphology-plus-color score.  Every panel uses a
+    common complete-case sample.  The red diamond marks the default Rubin
+    $r$-band \texttt{extendedness} assignment at
+    $\Delta m_r=0.016\,\mathrm{mag}$.  Values in parentheses give the AUC.}
+    \label{fig:multiband-color-roc}
+\end{figure*}
+
+The combined score supplements the $ugrizy$ morphology information with the
+output of a Random Forest classifier based on the five adjacent colors
+$(u-g,g-r,r-i,i-z,z-y)$ \citep{Breiman2001RandomForests}.  Figure~\ref{fig:multiband-color-roc}
+uses this output together with the multiband morphology score as a continuous
+classifier score.
+
+% Before submission, verify from the implementation that the Random Forest
+% values used here are held-out or out-of-fold predictions and confirm the
+% exact rule used to combine the color and morphology scores.
+
+For the star-positive comparison, the $ugrizy$ morphology AUC is 0.978,
+0.777, and 0.721 in the three magnitude intervals, compared with 0.965,
+0.759, and 0.734 for $r$-band morphology alone.  The six-band morphology score
+therefore gives modest gains in the first two intervals, while the $r$-only
+score is slightly higher in the faintest interval.  The $gri$ score is also
+slightly below the $r$-only result in the two faint intervals.  These
+comparisons show that the contribution of an additional morphology band
+depends on the useful depth of its measurements, rather than simply on the
+number of bands included.
+
+Including the color score changes the $ugrizy$ morphology AUC from 0.978 to
+0.986, from 0.777 to 0.815, and from 0.721 to 0.779.  The corresponding
+increments are $+0.008$, $+0.038$, and $+0.058$, so the additional separation
+provided by color becomes progressively larger across the three displayed
+magnitude intervals.  The top row of
+Figure~\ref{fig:multiband-color-roc} gives the completeness of reference stars
+as galaxies are admitted into the star-selected sample, while the bottom row
+gives the completeness of reference galaxies as stars are admitted into the
+galaxy-selected sample.  The two rows therefore expose the trade-off relevant
+to each selected class directly.
+
+\subsection{Color Distributions of the Classifier-selected Samples}
+\label{sec:classifier-selected-colors}
+
+Figure~\ref{fig:color-distributions} shows how the unresolved and resolved
+assignments from the combined $ugrizy$ morphology-plus-color classifier are
+distributed in four two-dimensional color projections.  This provides a
+direct view of the color-space partition produced by the final classifier.
+
+\begin{figure*}[!t]
+    \centering
+    \includegraphics[width=\textwidth,height=0.64\textheight,keepaspectratio]{fig12_ugrizy_color_method_labels.png}
+    \caption{Color--color distributions of the samples assigned to the unresolved
+    and resolved classes by the combined $ugrizy$ morphology-plus-color
+    classifier, shown for $16\leq r<25$ (left) and $25\leq r<26$ (right).  Blue
+    points show unresolved assignments, and red contours show the resolved
+    population.  The two intervals contain 5,855 and 180 unresolved assignments
+    and 106,740 and 25,707 resolved assignments, respectively.  The overlap in
+    the individual two-dimensional projections shows that the final assignment
+    cannot be represented by a single color--color boundary.}
+    \label{fig:color-distributions}
+\end{figure*}
+
+Classifier-selected unresolved objects are plotted as blue points, while red
+density contours show the classifier-selected resolved population.  The
+$16\leq r<25$ interval contains 5,855 unresolved and 106,740 resolved
+assignments; the $25\leq r<26$ interval contains 180 and 25,707, respectively.
+The small number of faint unresolved assignments accounts for the sparse blue
+sample in the right column.  In each individual projection, the blue points
+and red contours overlap substantially.  The final classification is
+therefore not equivalent to a simple boundary in any one of these
+color--color planes; it uses their joint information together with
+morphology.
+
+Taken together, the results show that modeling the $r$-band morphology
+distributions improves the global AUC relative to raw $\Delta m_r$, although
+the ROC curves cross and the gain is not uniform over all false-positive
+rates.  At the fixed $p_{{\rm S},r}=0.5$ boundary, the prior-informed $r$-band
+selection becomes increasingly conservative and selects no star-like objects
+in the faintest interval.  In the multiband comparison, the incremental AUC
+gain from color increases toward fainter magnitudes within the evaluated
+sample.
+
+\FloatBarrier
