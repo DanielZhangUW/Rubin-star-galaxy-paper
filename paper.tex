@@ -132,12 +132,12 @@ In each band, we model the distribution of sources in the two-dimensional space 
 At a fixed magnitude, the distribution is modeled as a mixture of unresolved and resolved
 components which, with appropriately chosen priors for the star-to-galaxy number ratio, allows us to
 compute \(p_S\), the posterior probability that a source is unresolved.
-We apply this method to the Rubin DP1 and DP2 object catalogs and validate the resulting classifications using external HST
+We apply this method to the Rubin Data Preview 2 object catalog and validate the resulting classifications using external HST
 labels in the COSMOS field. Using these labels as the ground truth, we quantitatively compare the performance of the \(p_S\)-based
 classifier with that of the Rubin \texttt{extendedness} parameter. We find that the \(p_S\)-based classifier
 consistently outperforms the Rubin \texttt{extendedness} baseline, with the improvement
 increasing as additional bands are incorporated.  Approximately, the \(p_S\) classifier
-achieves the same classification performance at a magnitude limit about one
+achieves the same classification performance at a magnitude limit about half a 
 magnitude fainter than the \texttt{extendedness} classifer. Depending on the scientific
 application, this morphological classification can be further improved by incorporating
 complementary color-based classifiers.
@@ -153,21 +153,31 @@ complementary color-based classifiers.
 
 \date{\today}
 
+%\input{methodSummary}
+
+
 \input{introduction}
-\input{method}
-\input{performance}
-\input{discussion} 
- 
+\input{datasets}
+
+\input{appendix}
+
+
+% \input{methodology}
+%\input{discussion}
+
 \bibliography{paper}{}
 \bibliographystyle{aasjournalv7.1}
 \end{document}
 
-
-
-
-
 COMPILE WITH:
 > latexmk -pdf paper.tex
+
+ 
+%\input{methodZI}
+%\input{methodBayes}
+%\input{performance}
+
+
 
 - modeling dmag vs. mag using KDE: 2021PASP..133e4502M 
 
@@ -214,4 +224,34 @@ DP2 info:
 https://dp2.lsst.io/
 
 
+
+ZI notes:
+- we need to look at the CMDs representing confusion matrix, as we add more bands
+- we need to try Random Forest using HST labels as training set and compare ROC curves with extendeness;
+       then also add colors as compare (recycle ZI code for RF that exists somewhere)
+- test r_sizeExtendedness, r_model extendedness, griz model extendedness (see Pai et al. 2026)
+- when comparing r, gri and ugrizy, the sample must be fixed
+- r_extendedness must be be on r-only ROC curve by definition
+
  
+
+DANIEL:
+
+I just pushed my manuscript edits for this morning (here). I think the first two sections are in
+good shape. I will now focus on Section 3. ``Methodology and Performance'' and will complete
+the last section once all the plots and analysis are done. I have a few minor things for Daniel
+to help me with: 
+- Figure 3: please remove the title and overplot unresolved sources with r>24.5 with some other
+      color (green?) to distinguish them from bright sources
+- please verify that the object counts shown in Figure 5 and reported in Section 2.2 are consistent 
+      (by adding numbes in Fig. 5, I get 155,131 but we said 193,586 in Sec 2.2)
+- Figure 4: please remove the title and decrease slightly the amount of vertical white space between
+         the panel rows (so that figure becomes a bit shorter) 
+- can you please find this text in Section 2.5 and add this info?
+           DANIEL: can you please add a paragraph here  about how you rejected some HST stars by colors
+                         and what were the numbers (fractions) of rejected objects (and how you handled variation 
+                         with magnitude? 
+
+      
+
+
