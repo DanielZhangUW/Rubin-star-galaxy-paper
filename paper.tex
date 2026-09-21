@@ -55,6 +55,14 @@
 \newcommand{\vdag}{(v)^\dagger}
 \newcommand\aastex{AAS\TeX}
 \newcommand\latex{La\TeX}
+
+\newcommand{\dm}{\mathrm{\Delta m}}
+\newcommand{\ps}{p_{\rm S}}
+\newcommand{\funr}{f_{\rm unr}}
+\newcommand{\fres}{f_{\rm res}}
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% The following section outlines numerous optional output that
@@ -153,17 +161,14 @@ complementary color-based classifiers.
 
 \date{\today}
 
-%\input{methodSummary}
-
-
 \input{introduction}
 \input{datasets}
 
-\input{appendix}
+\input{methodology}
 
+% \input{discussion}
 
-% \input{methodology}
-%\input{discussion}
+%\input{appendix}
 
 \bibliography{paper}{}
 \bibliographystyle{aasjournalv7.1}
@@ -176,14 +181,6 @@ COMPILE WITH:
 %\input{methodZI}
 %\input{methodBayes}
 %\input{performance}
-
-
-
-- modeling dmag vs. mag using KDE: 2021PASP..133e4502M 
-
-- GP classifier with 5,000 simulated training observations
-     averaged over 100 simulation iterations: area under the curve is 0.985
-     2022AJ....163..148M 
 
  
 
@@ -224,7 +221,6 @@ DP2 info:
 https://dp2.lsst.io/
 
 
-
 ZI notes:
 - we need to look at the CMDs representing confusion matrix, as we add more bands
 - we need to try Random Forest using HST labels as training set and compare ROC curves with extendeness;
@@ -233,25 +229,8 @@ ZI notes:
 - when comparing r, gri and ugrizy, the sample must be fixed
 - r_extendedness must be be on r-only ROC curve by definition
 
- 
-
-DANIEL:
-
-I just pushed my manuscript edits for this morning (here). I think the first two sections are in
-good shape. I will now focus on Section 3. ``Methodology and Performance'' and will complete
-the last section once all the plots and analysis are done. I have a few minor things for Daniel
-to help me with: 
-- Figure 3: please remove the title and overplot unresolved sources with r>24.5 with some other
-      color (green?) to distinguish them from bright sources
-- please verify that the object counts shown in Figure 5 and reported in Section 2.2 are consistent 
-      (by adding numbes in Fig. 5, I get 155,131 but we said 193,586 in Sec 2.2)
-- Figure 4: please remove the title and decrease slightly the amount of vertical white space between
-         the panel rows (so that figure becomes a bit shorter) 
-- can you please find this text in Section 2.5 and add this info?
-           DANIEL: can you please add a paragraph here  about how you rejected some HST stars by colors
-                         and what were the numbers (fractions) of rejected objects (and how you handled variation 
-                         with magnitude? 
-
+  
       
+
 
 
