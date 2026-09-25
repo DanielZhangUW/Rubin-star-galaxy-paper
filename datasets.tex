@@ -195,9 +195,22 @@ Because we aim to test statistical performance of our star-galaxy separation met
 objects, we exclude objects with HST ``star'' label that both appear resolved in Rubin data and also
 have Rubin colors inconsistent with the main stellar locus. 
 
-{\bf DANIEL:} can you please add a paragraph here about how you rejected some HST stars by colors
-and what were the numbers (fractions) of rejected objects (and how you handled variation with
-magnitude)? 
+We checked whether HST-labeled stars lie near the empirical COSMOS stellar
+locus. For each source, we calculated its shortest distance to the locus using
+five dereddened CModel colors: $(u-g,\,g-r,\,r-i,\,i-z,\,z-y)$. Because the
+scatter in these colors changes with magnitude, we set a separate distance
+threshold in each Rubin $r$-band CModel magnitude bin. Each threshold was set
+to include at least 80\% of HST-labeled stars with measurements in all five
+colors.
+
+We excluded an HST-labeled star from the performance sample only when it was
+both beyond the color threshold and classified as resolved by Rubin in the
+$r$ band ($\mathrm{extendedness}_r=1$). This removed 836 of the 15,760
+HST-labeled stars (5.30\%), leaving 14,924 (94.70\%). In the two magnitude
+ranges of interest, the exclusions were 104 of 1,388 stars (7.49\%) at
+$24<r<24.5$ and 116 of 1,700 stars (6.82\%) at $24.5<r<25$. Stars without the
+measurements needed to check both criteria were not excluded by this
+procedure.
 
 
 \begin{figure*}
