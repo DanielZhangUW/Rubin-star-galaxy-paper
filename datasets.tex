@@ -115,7 +115,7 @@ quasars than of main sequence stars (for a detailed discussion of the blue star 
  \centering
  \includegraphics[width=\textwidth]{fig03_truth_morphology_color.png}
  \caption{The distribution of stars (blue dots) and galaxies (red countours), classified using HST labels, in various infomative
- diagrams. The CModel-magnitude based colors are corrected for the ISM dust extinction, while the $r$-band CModel magnitude is not.
+ diagrams. Green points show Rubin DP2 sources classified as unresolved ($\mathrm{extendedness}_r=0$) with $r$-band CModel magnitude $>24.5$. The CModel-magnitude based colors are corrected for the ISM dust extinction, while the $r$-band CModel magnitude is not.
  The top left panel shows the \(\Delta m = m_{\mathrm{PSF}} - m_{\mathrm{CModel}}\) vs. \(m_{\mathrm{CModel}}\) diagram, where
  stars form a narrow sequence centered on \(\Delta m \approx 0\) and for galaxies \(\Delta m > 0 \). 
  The top right panel shows the $r$ vs. $g-i$ color magnitude diagram and two bottom panels show
@@ -147,7 +147,7 @@ Figure~\ref{fig:r_extendedness_confusion_cmd}, which compares subsamples classif
 using HST ground-truth labels and the default Rubin \texttt{extendedness} binary class in the $r$ band.
 As evident, a significant fraction of faint sources within about two magnitudes from the faint limit are 
 misclassified when using default \texttt{extendedness} parameter. Misclassifications have
-a more severe impact on stellar sample: only 26\% of ``stars'' selected by \texttt{extendedness}=1
+a more severe impact on stellar sample: only 26\% of ``stars'' selected by \texttt{extendedness}=0
 condition are unresolved in HST data. This high level of stellar sample contamination by faint
 galaxies increases towards the faint end (see the bottom left panel in
 Figure~\ref{fig:r_extendedness_confusion_cmd}).
