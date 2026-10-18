@@ -129,8 +129,7 @@
 The morphological classification of resolved and unresolved sources, commonly referred to as ``star-galaxy
 separation'', is a fundamental step in the analysis of wide-field imaging surveys such as Rubin Observatory's
 Legacy Survey of Space and Time (LSST). Star-galaxy separation becomes increasingly challenging at
-the faint magnitudes
-probed by LSST because galaxy counts rise rapidly  with magnitude while their angular sizes become
+the faint magnitudes probed by LSST because galaxy counts rise rapidly with magnitude while their angular sizes become
 progressively smaller. LSST photometric catalogs provide a binary classifier \texttt{extendedness} in each band, based on the
 threshold difference between PSF, \(m_{\mathrm{PSF}}\), and CModel, \(m_{\mathrm{CModel}}\),
 magnitudes.  While this parameter provides a useful baseline for morphological classification, its binary nature
@@ -140,14 +139,14 @@ the Bayesian star-galaxy classification method of Slater, Ivezi\'{c} \& Lupton (
 In each band, we model the distribution of sources in the two-dimensional space defined by
 \(\Delta m = m_{\mathrm{PSF}} - m_{\mathrm{CModel}}\) and magnitude \(m_{\mathrm{CModel}}\).
 At a fixed magnitude, the distribution is modeled as a mixture of unresolved and resolved
-components which, with appropriately chosen priors for the star-to-galaxy number ratio, allows us to
-compute \(p_S\), the posterior probability that a source is unresolved.
+components which automatically accounts for the varying star-to-galaxy number ratio and
+allows us to compute the posterior probability that a source is resolved. 
 We apply this method to the Rubin Data Preview 2 object catalog and validate the resulting classifications using external HST
-labels in the COSMOS field. Using these labels as the ground truth, we quantitatively compare the performance of the \(p_S\)-based
-classifier with that of the Rubin \texttt{extendedness} parameter. We find that the \(p_S\)-based classifier
-consistently outperforms the Rubin \texttt{extendedness} baseline, with the improvement
-increasing as additional bands are incorporated.  Approximately, the \(p_S\) classifier
-achieves the same classification performance at a magnitude limit about half a 
+labels in the COSMOS field. Using these labels as the ground truth, we quantitatively compare the
+performance of the Bayesian classifier with that of the default Rubin \texttt{extendedness}
+parameter and find that the former consistently outperforms the latter, with the improvement
+increasing as additional bands are incorporated.  Approximately, the Bayesian classifier
+achieves the same classification performance for stellar subsamples at a magnitude limit about half a 
 magnitude fainter than the \texttt{extendedness} classifer. Depending on the scientific
 application, this morphological classification can be further improved by incorporating
 complementary color-based classifiers.

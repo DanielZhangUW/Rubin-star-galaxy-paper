@@ -4,11 +4,11 @@ The morphological classification of resolved and unresolved sources\footnote{Not
 galaxies can be unresolved and even some stars can be resolved, such as Asymptotic Giant Branch stars.}, commonly
 referred to as ``star-galaxy separation'', is a fundamental step in the analysis of wide-field imaging surveys
 such as the Rubin's Legacy Survey of Space and Time (LSST). At bright magnitudes this problem is
-relatively simple, since stars outnumber galaxies and galaxies that exist are obviously extended on the sky.
+relatively simple, since stars outnumber galaxies, and galaxies that exist are obviously extended on the sky.
 Star-galaxy separation becomes increasingly harder at faint magnitudes, such as those probed by
 Rubin's Legacy Survey of Space and Time (LSST; for details see \citealt{2019ApJ...873..111I} and references therein)
 because galaxy counts rapidly increase with magnitude, while their angular sizes become smaller.
-The selection of clean faint stellar samples is especially hard. 
+The selection of clean faint stellar samples at high galactic latitudes is especially hard. 
 
 A variety of methods have been proposed in the literature for morphological classification of sources in images. 
 \cite{2020AJ....159...65S} (hereafter SIL2020) discussed the statistical foundations of morphological star–galaxy separation and showed
@@ -38,8 +38,11 @@ to turn \(\Delta m \) into a probability distribution, which then allows proper 
 With appropriately chosen priors for star-to-galaxy counts ratio, the posterior probability that a source is unresolved
 (or resolved), can be computed in Bayesian framwork. 
 
-The main goal of this paper is to implement the steps towards Bayesian star-galaxy separation outlined in SIL2020
-using Rubin's Data Preview 2 data. We describe our dataset in \S 2, and in \S 3 discuss star-galaxy separation methodology,
-including quantification of its performance using HST-based labels. We discuss our results and how
-to retrieve our catalog with improved star-galaxy separation parameters in \S 4.  
- 
+The main goals of this paper are to implement the steps towards Bayesian star-galaxy separation outlined in SIL2020
+using Rubin's Data Preview 2 data and quantify its performance. We introduce our dataset in \S 2, and in \S 3 describe
+star-galaxy separation methodology, including quantification of its performance using HST-based labels. We discuss
+our results
+% and how to retrieve our catalog with improved star-galaxy separation parameters
+in \S 4.  
+
+
