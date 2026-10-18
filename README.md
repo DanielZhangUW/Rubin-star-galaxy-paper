@@ -15,15 +15,16 @@ After importing into Overleaf, collaborators can edit the manuscript in Overleaf
 Use Overleaf, or run locally:
 
 ```bash
-latexmk -pdf main.tex
+latexmk -pdf paper.tex
 ```
 
 The manuscript uses only local `.tex`, `.bib`, and selected PNG figure files.
 
 ## Repository Contents
 
-- `main.tex`: manuscript entry point
-- `sections/`: manuscript section files
+- `paper.tex`: current manuscript entry point
+- `main.tex`: compatibility entry point that loads `paper.tex`
+- `sections/`: earlier section drafts
 - `figures/`: selected PNG figures for the paper draft
 - `analysis_code/section1_paper_convergence/`: small Section 1 plotting-code snapshot copied from the analysis repository; no data files are included
 - `analysis_code/section2_section5_paper_convergence/`: Section 2/5 plotting-code snapshot copied from the analysis repository; no data files or classifier pickle files are included
