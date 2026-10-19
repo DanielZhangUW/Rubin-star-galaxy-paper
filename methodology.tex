@@ -287,7 +287,7 @@ Figure~\ref{fig:D-observed-distributions} shows the overlap between the HST star
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{D Distribution - r ri riz griz - mag 24-25.png}
+  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{figures/multiband_Ddistributions.png}
   \caption{Observed $D$ distributions of retained HST stars (blue) and HST
     galaxies (orange). Rows show $r$, $ri$, $riz$, and $griz$; columns show
     $24\leq r<24.5$ and $24.5\leq r<25$. Histograms show object counts in
@@ -296,6 +296,7 @@ Figure~\ref{fig:D-observed-distributions} shows the overlap between the HST star
     $D=1.960$, $2.448$, $2.795$, and $3.080$ for the four rows, respectively.}
   \label{fig:D-observed-distributions}
 \end{figure*}
+
 
 Even if the single-band $\dm$ distribution for the resolved component was well described by a single
 log-normal distribution in every band, the resulting $D$ distribution for the resolved component
@@ -328,23 +329,63 @@ samples and compare them with the single-band performance. As before, we focus o
 range, $24\leq r<25$, in two intervals, $24\leq r<24.5$ and
 $24.5\leq r<25$.
 
-Figure~\ref{fig:multiband1} compares the empirical performance of the
+Figure~\ref{fig:multiband_performance} compares the empirical performance of the
 different band combinations in these two magnitude intervals.
+ 
 
-
-\begin{figure*}
+\begin{figure*}[t]
   \centering
-  \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{multibandFig1.png}
-  \caption{Empirical stellar completeness and galaxy contamination for
-    strict $D_B<D_{\rm cut}$ selections using $r$, $ri$, $riz$, and $griz$.
-    Left: $24\leq r<24.5$; right: $24.5\leq r<25$.
-    All curves within a panel use the same retained-HST reference sample
-    with valid $D$ in all required bands. The open circles mark
-    $D_{griz}<3$. Diamonds and squares mark $griz$ thresholds nearest
-    20\% and 50\% measured stellar completeness on a 0.1-spaced threshold
-    grid; the actual $D$ thresholds are labeled. Objects beyond the
-    Fig.~\ref{fig:D-observed-distributions} plotting window remain in the
-    completeness and contamination denominators.}
-  \label{fig:multiband1}
+  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{figures/multiband_performance.png}
+  \caption{The performance of multi-band $D$ classificators for stellar subsamples in two magnitude bins:
+    $24\leq r<24.5$ (left) and $24.5\leq r<25$ (right). Empirical contamination-completeness curves based
+    on objects with HST classification labels are shown for the following band combinations: $r$,
+    $ri$, $riz$ and $griz$. All curves within a panel use the same HST reference sample with valid $D$ in all required bands. 
+    The $D$ thresholds for $griz$ curves are marked at the values of 1.4 (20\% completeness), 3.0 and 3.5 (50\% completeness).
+    Objects that are beyond the plotting window in Fig.~\ref{fig:D-observed-distributions} remain in the
+    completeness and contamination denominators. Note that morphological
+    information from additional bands improves performance.}
+  \label{fig:multiband_performance}
 \end{figure*}
+
+
+
+\subsection{Improved Stellar Classification Using Color Selection}
+
+Colors can help: Figure~\ref{fig:color-ccdiags} 
+
+Performance: Figure~\ref{fig:color-preformance} 
+For $24\leq r<24.5$: at stellar completeness of 50\%, $D_{griz}$ and $g-r>0.3$ decrease
+contamination from 45\% to 25\%; at stellar completeness of 20\%, the contamination level
+is decreased from 40\% to 12\%. Corresponding values for $24.5\leq r<25$ are 78\% to
+63\%, and 72\% to 54\%. 
+
+
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{figures/colorselection-ccdiags.png}
+  \caption{The color distribution of objects morphologically classified as unresolved using Rubin DP2 measurements
+    (with $D$ thresholds selected to ensure 20\% completeness), and then separated into stars (blue dots) and galaxies
+    (red crosses) using HST classification labels, in two magnitude bins: $24\leq r<24.5$ (top) and $24.5\leq r<25$ (bottom).
+    The fraction of HST-classified galaxies in these two subsamples is 33\% and 76\%, respectively. Note that galaxies appear
+    systematically bluer than stars, except for the $z-y$ color, which allows for improved color-based classification.}
+  \label{fig:color-ccdiags}
+\end{figure*}
+
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{figures/colorselection-performance.png}
+  \caption{{\it XXX PLACE HOLDER: will have 3 rows for different colors cuts.}
+    The performance of color-aided multi-band $D$ classificators for stellar subsamples in two magnitude bins:
+    $24\leq r<24.5$ (left) and $24.5\leq r<25$ (right), and for three color cuts: $g-r>0.3$ (top), $g-r>1.0$ (middle)
+    and $r-i>0.8$ (bottom). In each panel, empirical contamination-completeness curves based on objects with HST
+    classification labels are shown for the following band combinations: $r$, $ri$, $riz$ and $griz$. A curve corresponding
+    to the $griz$ case without color cut is also shown for reference. Note the marked decrease of
+    sample contamination when morphological classification is aided with color selection.}
+  \label{fig:color-performance}
+\end{figure*}
+
+
+
 
