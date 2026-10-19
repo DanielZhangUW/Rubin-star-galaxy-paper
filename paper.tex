@@ -135,21 +135,24 @@ threshold difference between PSF, \(m_{\mathrm{PSF}}\), and CModel, \(m_{\mathrm
 magnitudes.  While this parameter provides a useful baseline for morphological classification, its binary nature
 prevents the optimal combination of information from multiple bands, as well as from other
 classification methods (e.g., those based on colors or external datasets). In this work, we implement
-the Bayesian star-galaxy classification method of Slater, Ivezi\'{c} \& Lupton (2020), which overcomes these shortcomings.
+the Bayesian star-galaxy classification method of Slater, Ivezi\'{c} \& Lupton (2020, SIL2020), which overcomes these shortcomings.
 In each band, we model the distribution of sources in the two-dimensional space defined by
 \(\Delta m = m_{\mathrm{PSF}} - m_{\mathrm{CModel}}\) and magnitude \(m_{\mathrm{CModel}}\).
 At a fixed magnitude, the distribution is modeled as a mixture of unresolved and resolved
 components which automatically accounts for the varying star-to-galaxy number ratio and
 allows us to compute the posterior probability that a source is resolved. 
 We apply this method to the Rubin Data Preview 2 object catalog and validate the resulting classifications using external HST
-labels in the COSMOS field. Using these labels as the ground truth, we quantitatively compare the
-performance of the Bayesian classifier with that of the default Rubin \texttt{extendedness}
+labels in the COSMOS field with $5\sigma$ detection limit for point sources in the $r$ band of 26.4.
+Using these labels as the ground truth, we quantitatively compare the performance of the Bayesian classifier with that of the default Rubin \texttt{extendedness}
 parameter and find that the former consistently outperforms the latter, with the improvement
 increasing as additional bands are incorporated.  Approximately, the Bayesian classifier
 achieves the same classification performance for stellar subsamples at a magnitude limit about half a 
-magnitude fainter than the \texttt{extendedness} classifer. Depending on the scientific
-application, this morphological classification can be further improved by incorporating
-complementary color-based classifiers.
+magnitude fainter than the \texttt{extendedness} classifer, and approaches idealized statistical limit
+discussed by SIL2020. Depending on scientific applications, this morphological classification can be
+further improved by incorporating complementary color-based classifiers. For example, the contamination of
+morphologically-selected faint blue stars with $24\leq r<24.5$ and $g-r>0.3$ can be decreased from 45\% to 25\% when
+the $g-r$ cut is explicitly added as selection criterion. This contamination level can be further
+decreased if a lower completeness level can be afforded in a particular science program.
 \end{abstract}
 
 %% Keywords should appear after the \end{abstract} command. 

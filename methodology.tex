@@ -12,17 +12,6 @@ star-galaxy separation in the literature is available in SIL2020.
 
 \subsection{Bayesian Star-Galaxy Separation Method from SIL2020}
 
-We first focus on the single-band case and then extend our discussion to the multi-band case.
-Using realistic simulations, SIL2020 showed that adopting a fixed, predefined threshold for $\Delta m$ to select resolved objects is not optimal. The threshold should depend on magnitude because of variations in the object populations and signal-to-noise ratio due to statistical noise, as well as on sky location because the galaxy-to-star count ratio varies across the sky. Moreover, for an optimal combination of information from different bands or from other classification methods (e.g., based on colors), the observed $\Delta m$ distribution needs to be transformed into a proper probability density function. 
-
-The subsample of objects with HST labels can be used to quantify the $\Delta m$ distribution separately
-for unresolved and resolved objects (see Figure~\ref{fig:magdmcomparison}). However, such a ``training'' sample is currently available only
-for a very small fraction of the LSST footprint (less than 1\% of the area). Instead, we use the fact
-that the very large numbers of objects remaining even after binning in both sky location and magnitude
-can robustly constrain the two components of the $\Delta m$ distribution even when such labels are not
-available a priori. We only use the subsample of objects with HST labels to independently assess the
-performance of our method. 
-
 
 \begin{figure*}
   \centering
@@ -37,6 +26,17 @@ performance of our method.
   }
   \label{fig:magdmcomparison}
 \end{figure*}
+
+We first focus on the single-band case and then extend our discussion to the multi-band case.
+Using realistic simulations, SIL2020 showed that adopting a fixed, predefined threshold for $\Delta m$ to select resolved objects is not optimal. The threshold should depend on magnitude because of variations in the object populations and signal-to-noise ratio due to statistical noise, as well as on sky location because the galaxy-to-star count ratio varies across the sky. Moreover, for an optimal combination of information from different bands or from other classification methods (e.g., based on colors), the observed $\Delta m$ distribution needs to be transformed into a proper probability density function. 
+
+The subsample of objects with HST labels can be used to quantify the $\Delta m$ distribution separately
+for unresolved and resolved objects (see Figure~\ref{fig:magdmcomparison}). However, such a ``training'' sample is currently available only
+for a very small fraction of the LSST footprint (less than 1\% of the area). Instead, we use the fact
+that the very large numbers of objects remaining even after binning in both sky location and magnitude
+can robustly constrain the two components of the $\Delta m$ distribution even when such labels are not
+available a priori. We only use the subsample of objects with HST labels to independently assess the
+performance of our method. 
 
 
 
@@ -127,6 +127,45 @@ and Bayes factor will be important later when combining multiple sources of clas
 
 \subsubsection{Fitting Details}
 
+\begin{figure*} 
+  \centering
+  \includegraphics[width=\textwidth,height=0.62\textheight,keepaspectratio]{fig06_star_galaxy_ratio_vs_rmag_v8v9.png}
+   \caption{Galaxy-to-star count ratio \(\log_{10}(N_{\mathrm{gal}}/N_{\mathrm{star}})\) vs.\
+    r-band CModel magnitude. The unconstrained mixture model (marked V8, faded curves) exhibits a
+    spurious turnover at \(m \gtrsim 24\) due to the unresolved Gaussian absorbing galaxy flux.
+    The constrained model (marked V9, bold curves) recovers the expected monotonically increasing
+    ratio, in good agreement with the COSMOS2020 truth labels (green dashed). Dotted lines show
+    the Rubin \texttt{extendedness}-based classification for comparison (which also shows spurious
+    turnover at the faint end).
+  }
+  \label{fig:star_galaxy_ratio_v8v9}
+\end{figure*}
+
+\begin{figure*}
+  \centering
+  \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{figures/section2_bayesian_method/fig2_2_cosmos_r_slice_fits_v9fit.png}
+  \caption{Observed \(\Delta m\) histograms (black) and fitted mixture models (red) for the
+    r-band in each CModel magnitude bin. The unresolved Gaussian component is shown as a blue
+    dashed line and the resolved log-normal components as orange dotted lines.}
+  \label{fig:slice_fits}
+\end{figure*}
+
+\begin{figure*}
+  \centering
+  \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{figures/section2_bayesian_method/fig2_3_cosmos_ury_model2d_residuals_v9fit.png}
+  \caption{Two-dimensional comparison of observed source counts (left),
+    V9 mixture-model counts (center), and fractional residuals (right) in
+    the \(\Delta m\) vs.\ \(m_{\mathrm{CModel}}\) plane, for the $u$, $r$,
+    and $y$ bands from top to bottom. The first two columns show counts
+    without a square-root transformation and share the same linear color
+    scale within each row. The right column shows
+    $(N_{\rm data}-N_{\rm model})/N_{\rm data}$, with cells containing
+    $N_{\rm data}=0$ masked. Residual color limits are symmetric about zero
+    and set separately for each band, as shown by the individual colorbars.}
+  \label{fig:model2d_residuals}
+\end{figure*}
+
+
 The fitting is performed independently in bins of CModel magnitude. At bright magnitudes
 (\(m_{\mathrm{CModel}} < 22\)), where the resolved population is relatively simple, we use
 \(K = 2\) resolved components in bins of width 1--3~mag spanning
@@ -172,61 +211,23 @@ at faint magnitudes, while the constrained model recovers the expected monotonic
 ratio in agreement with the COSMOS2020 external truth labels (note that in this sample at the faint
 end galaxies outnumber stars by more than a factor of 30). 
 
-\begin{figure*} 
-  \centering
-  \includegraphics[width=\textwidth,height=0.62\textheight,keepaspectratio]{fig06_star_galaxy_ratio_vs_rmag_v8v9.png}
-   \caption{Galaxy-to-star count ratio \(\log_{10}(N_{\mathrm{gal}}/N_{\mathrm{star}})\) vs.\
-    r-band CModel magnitude. The unconstrained mixture model (marked V8, faded curves) exhibits a
-    spurious turnover at \(m \gtrsim 24\) due to the unresolved Gaussian absorbing galaxy flux.
-    The constrained model (marked V9, bold curves) recovers the expected monotonically increasing
-    ratio, in good agreement with the COSMOS2020 truth labels (green dashed). Dotted lines show
-    the Rubin \texttt{extendedness}-based classification for comparison (which also shows spurious
-    turnover at the faint end).
-  }
-  \label{fig:star_galaxy_ratio_v8v9}
-\end{figure*}
-
 The model parameters are selected according to the CModel magnitude bin in which each source falls.
 The quality of the fits is illustrated in Figure~\ref{fig:slice_fits}, which shows the
 mixture model overlaid on the observed \(\Delta m\) histograms in each magnitude bin, and in
 Figure~\ref{fig:model2d_residuals}, which shows the 2D data, model, and residual maps in the
 \(\Delta m\) vs.\ \(m_{\mathrm{CModel}}\) plane.
 
-\begin{figure*}
-  \centering
-  \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{figures/section2_bayesian_method/fig2_2_cosmos_r_slice_fits_v9fit.png}
-  \caption{Observed \(\Delta m\) histograms (black) and fitted mixture models (red) for the
-    r-band in each CModel magnitude bin. The unresolved Gaussian component is shown as a blue
-    dashed line and the resolved log-normal components as orange dotted lines.}
-  \label{fig:slice_fits}
-\end{figure*}
-
-\begin{figure*}
-  \centering
-  \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{figures/section2_bayesian_method/fig2_3_cosmos_ury_model2d_residuals_v9fit.png}
-  \caption{Two-dimensional comparison of observed source counts (left),
-    V9 mixture-model counts (center), and fractional residuals (right) in
-    the \(\Delta m\) vs.\ \(m_{\mathrm{CModel}}\) plane, for the $u$, $r$,
-    and $y$ bands from top to bottom. The first two columns show counts
-    without a square-root transformation and share the same linear color
-    scale within each row. The right column shows
-    $(N_{\rm data}-N_{\rm model})/N_{\rm data}$, with cells containing
-    $N_{\rm data}=0$ masked. Residual color limits are symmetric about zero
-    and set separately for each band, as shown by the individual colorbars.}
-  \label{fig:model2d_residuals}
-\end{figure*}
-
 
 \subsection{The Performance of the \(\Delta m\) Mixture Model} 
 
 Here we use HST labels to evaluate completeness and contamination for the stellar sample
 and compare them with the mixture-model predictions. We focus on the stellar subsample and
-the ``transition'' magnitude range, $24 < r < 24.5$. Brighter than this range, population
-mixing is much smaller, leading to more accurate star-galaxy separation, whereas at fainter
+the ``transition'' magnitude range, $24 < r < 24.5$, in two intervals: $24\leq r<24.5$ and
+$24.5\leq r<25$. Brighter than this range, population mixing is much smaller and measurements
+more accurate, leading to more accurate star-galaxy separation, whereas at fainter
 magnitudes the performance deteriorates rapidly (especially for the stellar subsample).
 
-
- 
+HERE DANIEL WILL ADD FIGURES AND TEXT... 
 
 % Bayes factor: BF(dm) = fG(dm) / fS(dm) 
 % pS = fS(dm) / [fS(dm) + fG(dm)]
@@ -241,15 +242,34 @@ magnitudes the performance deteriorates rapidly (especially for the stellar subs
 
 \subsection{The Multi-band Case}
 
+
+
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{figures/multiband_Ddistributions.png}
+  \caption{Observed $D$ distributions of retained HST stars (blue) and HST
+    galaxies (orange). Rows show $r$, $ri$, $riz$, and $griz$ band combinations used to compute the
+    $D$ metric.; columns show
+    $24\leq r<24.5$ (left) and $24.5\leq r<25$ (right). Histograms show object counts in
+    bins of width $\Delta D=0.25$, over $0\leq D\leq10$ (distributions for HST galaxies extend
+    to much larger $D$ values of $\sim$100). 
+    Half-height vertical lines mark the theoretical $\chi_N$ 95\% thresholds:
+    $D=1.960$, $2.448$, $2.795$, and $3.080$ for the four rows, respectively.}
+  \label{fig:D-observed-distributions}
+\end{figure*}
+
+
+
 We expect classification to improve when $\dm$ measurements from multiple bands are used. However, combining
 information from different bands is a nontrivial statistical problem that is made more complex
 by astrophysical considerations. For example, galaxy morphology is wavelength dependent: 
-different bands emphasize different stellar populations, dust distributions, star-forming regions,
+different bands emphasize different stellar populations, dust distribution, star-forming regions,
 bulges, and disks, and thus a galaxy can show strong resolved structure in one band while being
 close to a PSF in another. A decisive measurement in one band should therefore not necessarily be
 diluted by several bands with weak or absent evidence.  Consequently, combining measurements
-from multiple bands is not as straightforward as combining multiple measurements from a single
-band using eq.~\ref{eq:pSbf} (see Section 5 in SIL2020 for details). 
+from multiple bands is not as straightforward as combining multiple measurements of Bayes Factors
+(see eq.~\ref{eq:bfdef}) from individual bands using eq.~\ref{eq:pSbf} (see Section 5 in SIL2020 for details). 
 
 An optimal Bayesian approach would be to generalize eq.~\ref{eq:mixpdf1} to a vector form and
 model the true object class as an underlying latent variable. The multi-band measurements are
@@ -257,7 +277,7 @@ correlated projections of this latent structure rather than independent measurem
 scalar size. We explored a Gaussian copula construction for combining single-band probabilities,
 but it did not provide a satisfactory description of the desired behavior. We therefore adopt a
 different approach: first combine the measured $\dm$ values across bands into a single statistic
-and then derive the final probabilities from its distribution, analogously to the single-band case. 
+and then derive classification criteria from its distribution, analogously to the single-band case. 
 
 Motivated by the fact that the multi-band $\dm$ distribution for the unresolved component can
 be described as a multivariate Gaussian with diagonal covariance matrix, we define a standardized
@@ -266,72 +286,37 @@ variable in each band
                              D_i = \frac{\dm_i - \mu_{U,i}}{\sigma_{U,i}},
 \end{equation}
 where $i$ is the band index and $\mu_U$ and $\sigma_U$ are the best-fit parameter values for
-the Gaussian fit to the unresolved component (recall that $\mu_U \sim 0$). The bands may be all of
-$ugrizy$ or any subset of $N$ usable bands, $B$. We then define a radial metric
+the Gaussian fit to the unresolved component (recall that $\mu_U \sim 0$). The utilized bands may be all of
+$ugrizy$ or any subset of $N$ usable (depending on data depth and spectral energy distribution of
+objects of interest) bands, $B$. We then define a radial metric
 \begin{equation} 
                                D = \left( \sum_B  D^2_i  \right)^{1/2}. 
 \end{equation}
 When $N=1$, $D \sim |\dm/\sigma_U|$, and it measures the distance from the origin in units of
 $\sigma_U$. For the unresolved component, $D$ follows a $\chi$-distribution with one degree of
-freedom, $\chi_1$, which is also the half-normal distribution. If $\mu_U$ cannot be ignored,
+freedom, $\chi_1$ (which is also the half-normal distribution). If $\mu_U$ cannot be ignored,
 $D$ follows a noncentral $\chi$ distribution. When $N>1$, for the unresolved component
 $D \sim \chi_N$, with an expectation value approximately equal to $\langle D\rangle = \sqrt{N-1/2}$.
-
 Depending on the desired completeness for the unresolved component, a hard $D$ threshold of
 several times $\sqrt{N}$ can be used for sample classification (this is a standard case of
 hypothesis testing in frequentist statistics). However, without a quantitative
 description of the resolved component as well, the resulting sample contamination cannot be
-estimated. 
+estimated.
 
-Figure~\ref{fig:D-observed-distributions} shows the overlap between the HST stars and HST galaxies $D$ distributions and its dependence on the magnitude and band combination.
-
-\begin{figure*}[t]
-  \centering
-  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{figures/multiband_Ddistributions.png}
-  \caption{Observed $D$ distributions of retained HST stars (blue) and HST
-    galaxies (orange). Rows show $r$, $ri$, $riz$, and $griz$; columns show
-    $24\leq r<24.5$ and $24.5\leq r<25$. Histograms show object counts in
-    bins of width $\Delta D=0.25$, over $0\leq D\leq10$.
-    Half-height vertical lines mark the theoretical $\chi_N$ 95\% thresholds:
-    $D=1.960$, $2.448$, $2.795$, and $3.080$ for the four rows, respectively.}
-  \label{fig:D-observed-distributions}
-\end{figure*}
-
-
-Even if the single-band $\dm$ distribution for the resolved component was well described by a single
-log-normal distribution in every band, the resulting $D$ distribution for the resolved component
-would be a complex function because of strong band-to-band correlations (for a toy model,
-see Appendix A). For this reason, we again use a linear combination of log-normal
-distributions to describe the $D$ distribution for the resolved component. To provide more
-flexibility than $\chi_N$, for the unresolved component we use the function
-\begin{equation}
-                                            g(D) = C \, D^a \, \exp(-b\, D^2),
-     \label{eq:Dunr}
-\end{equation}
-where $C$, $a$, and $b$ are free parameters. Note that for the $\chi_N$ distribution, $a=N-1$ and $b=1/2$.
-
-In summary, given the best-fit decomposition (analogous to eq.~\ref{eq:mixpdf1})
-\begin{equation}
-                         p(D \,|\, m, B) = w^D_U \, \gunr(D) +  w^D_R \, \gres (D),
-    \label{eq:mixD1}
-\end{equation}
-with $\gunr(D)$ given by eq.~\ref{eq:Dunr} and $\gres(D)$ modeled as a linear combination of
-log-normal distributions, we compute the probability that an object is unresolved, as well as the completeness
-and contamination analogously to eqs.~\ref{eq:pSdm}-\ref{eq:contS}.
+Figure~\ref{fig:D-observed-distributions} shows $D$ distributions for HST stars and HST galaxies,
+and their dependence on the $r$-band magnitude and band combination. The behavior of $D$
+distributions for HST stars is approximately consistent with expectation ($D \sim \chi_N$);
+for example, the fraction of HST stars selected by theoretical 95\% $D$ threshold is in the
+range XXX-XXX (and XXX-XXX for HST galaxies). The well-defined peak at $D<3$ for HST
+galaxies implies that some HST galaxies appear truly unresolved in Rubin images. Only a lower
+limit on their fraction/number can be estimated by extrapolation of the observed distribution
+at $D>3$ to smaller $D$ values. For this reason, we do not pursue detailed fits to the observed
+$D$ distributions and instead focus on estimating the completeness and contamination of
+selected candidate unresolved objects using HST truth labels, described next. 
 
 
 
-
-\subsection{The Performance of the $D$ Mixture Model} 
-
-Here we again use HST labels to evaluate completeness and contamination for the stellar multi-band $D$-based
-samples and compare them with the single-band performance. As before, we focus on the ``transition'' magnitude
-range, $24\leq r<25$, in two intervals, $24\leq r<24.5$ and
-$24.5\leq r<25$.
-
-Figure~\ref{fig:multiband_performance} compares the empirical performance of the
-different band combinations in these two magnitude intervals.
- 
+\subsection{The Performance of the $D$ Metric-based Classificationl} 
 
 \begin{figure*}[t]
   \centering
@@ -348,16 +333,21 @@ different band combinations in these two magnitude intervals.
 \end{figure*}
 
 
+Here we again use HST labels to evaluate completeness and contamination for the stellar multi-band $D$-selected
+samples and compare them to the single-band performance. As before, we focus on the ``transition'' magnitude
+range, $24\leq r<25$, in two intervals, $24\leq r<24.5$ and $24.5\leq r<25$.
+
+Figure~\ref{fig:multiband_performance} compares the empirical performance of the $ri$, $riz$ and $griz$
+band combinations to the $r$-band case, for a grid of $D$ thresholds (for example, in the $griz$ case
+and $24\leq r<24.5$, a sample completeness in the range 20-50\% can be obtained using $D$ thresholds
+in the range 3.5 to 1.4). As more bands are added, the sample contamination decreases at $D$
+thresholds that correspond to completeness levels below 50\%. For example, at a completeness level
+of 20\%, contamination decreases from 40\% to 30\% between the $r$ and $griz$ cases. In the fainter bin,
+improvement is smaller though still clearly present. In practice, detailed optimization of the
+tradeoff between sample completeness and contamination depends on science case. 
+
 
 \subsection{Improved Stellar Classification Using Color Selection}
-
-Colors can help: Figure~\ref{fig:color-ccdiags} 
-
-Performance: Figure~\ref{fig:color-preformance} 
-For $24\leq r<24.5$: at stellar completeness of 50\%, $D_{griz}$ and $g-r>0.3$ decrease
-contamination from 45\% to 25\%; at stellar completeness of 20\%, the contamination level
-is decreased from 40\% to 12\%. Corresponding values for $24.5\leq r<25$ are 78\% to
-63\%, and 72\% to 54\%. 
 
 
 
@@ -376,7 +366,7 @@ is decreased from 40\% to 12\%. Corresponding values for $24.5\leq r<25$ are 78\
 \begin{figure*}[t]
   \centering
   \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{figures/colorselection-performance.png}
-  \caption{{\it XXX PLACE HOLDER: will have 3 rows for different colors cuts.}
+  \caption{{\it XXX PLACE HOLDER: it will have 3 rows for different colors cuts.}
     The performance of color-aided multi-band $D$ classificators for stellar subsamples in two magnitude bins:
     $24\leq r<24.5$ (left) and $24.5\leq r<25$ (right), and for three color cuts: $g-r>0.3$ (top), $g-r>1.0$ (middle)
     and $r-i>0.8$ (bottom). In each panel, empirical contamination-completeness curves based on objects with HST
@@ -388,4 +378,47 @@ is decreased from 40\% to 12\%. Corresponding values for $24.5\leq r<25$ are 78\
 
 
 
+As shown in preceeding sections, the performance of morphological separation of unresolved and
+resolved sources starts to rapidly deteriorate about 2 magnitudes brighter than the $5\sigma$
+limiting magnitude for point sources. Selection of unresolved objects is especially problematic
+because the sample is highly imbalanced at the faint end. At the same time, samples of faint stars
+are valuable for studying the Milky Way structure (e.g. stellar streams in the halo). Here we 
+investigate if color selection can be used to decrease contamination without significant decrease
+in completeness of such samples. 
+ 
+Figure~\ref{fig:color-ccdiags} compares color distributions of morphologically selected samples
+analyzed in preceeding sections. As evident, HST galaxies (misclassified as stars) appear
+systematically bluer than stars, except for the $z-y$ color. Therefore, selection based on bluer
+colors can result in improved classification.
 
+Motivated by color distributions shown in
+Figure~\ref{fig:color-ccdiags}, we investigate simple $g-r$ and $r-i$ selection criteria in
+Figure~\ref{fig:color-performance}. The $g-r>0.3$ cut was chosen as appropriate for
+selecting blue stars near the turn-off point on the principal stellar locus (composed of main
+sequence and red giant stars; see e.g., \citealt{2026A&A...707A.333P}). The cut $g-r>1.0$ 
+selects red (M type) stars and excludes almost all galaxies. The cut $r-i > 0.8$ is similar
+but more effective at excluding galaxies.
+
+The top panel in Figure~\ref{fig:color-performance} shows substantial decrease of unresolved
+sample contamination when $g-r>0.3$ condition is added, both in single-band and multiband
+cases.  For example, for $24\leq r<24.5$ bin at fiducial stellar completeness of 50\%,
+$D_{griz}$ and $g-r>0.3$ selection decrease contamination to 25\% from 45\% in the $r$ band case
+without a color cut; at stellar completeness of 20\%, the contamination level is even more
+dramatically decreased from 40\% to 12\%. Corresponding values for $24.5\leq r<25$ are 78\% to
+63\%, and 72\% to 54\%. 
+
+Decrease of contamination is much more substantial in case of red stars. For example, even in
+the fainter bin, $24.5\leq r<25$, the addition of $g-r>1.0$ criterion results in contamination
+as low as 20\% with substantial completeness of 45\%. When completeness of ~20\% is
+acceptable (relative to all stars, not just the red subsample), contamination levels as low as ~10\%
+can be achieved. 
+
+
+
+\subsection{Comparison of Multiband $D$ Metric to {\it griz\_model\_extendedness} Parameter}
+
+ \texttt{griz\_model\_extendedness} is well correlated with $\Delta m$. We need to compare how
+ $D_{griz}$ performance compares to  \texttt{griz\_model\_extendedness} performance...
+But first ZI need to download data (\texttt{griz\_model\_extendedness})
+
+ 
