@@ -368,13 +368,17 @@ tradeoff between sample completeness and contamination depends on science case.
 \begin{figure*}[t]
   \centering
   \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{figures/colorselection-performance.png}
-  \caption{{\it XXX PLACE HOLDER: it will have 3 rows for different colors cuts.}
-    The performance of color-aided multi-band $D$ classificators for stellar subsamples in two magnitude bins:
+  \caption{The performance of color-aided multi-band $D$ classificators for stellar subsamples in two magnitude bins:
     $24\leq r<24.5$ (left) and $24.5\leq r<25$ (right), and for three color cuts: $g-r>0.3$ (top), $g-r>1.0$ (middle)
     and $r-i>0.8$ (bottom). In each panel, empirical contamination-completeness curves based on objects with HST
     classification labels are shown for the following band combinations: $r$, $ri$, $riz$ and $griz$. A curve corresponding
     to the $griz$ case without color cut is also shown for reference. Note the marked decrease of
-    sample contamination when morphological classification is aided with color selection.}
+    sample contamination when morphological classification is aided with color selection.
+    Both axes show fractions from 0 to 1. Completeness is relative to all eligible HST reference stars before the
+    color cut; contamination is the galaxy fraction among selected objects. Colors use extinction-corrected CModel
+    magnitudes; the $r$ bins use uncorrected magnitudes. Diamonds, circles and squares mark fixed $griz$ $D$ limits
+    of 1.4/1.6, 3.0/3.0 and 3.5/4.0 in the left/right columns, respectively; open gray diamonds show the
+    selection without a color cut at 1.4 (left) and 1.6 (right).}
   \label{fig:color-performance}
 \end{figure*}
 
