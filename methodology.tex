@@ -354,11 +354,15 @@ tradeoff between sample completeness and contamination depends on science case.
 \begin{figure*}[t]
   \centering
   \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{figures/colorselection-ccdiags.png}
-  \caption{The color distribution of objects morphologically classified as unresolved using Rubin DP2 measurements
-    (with $D$ thresholds selected to ensure 20\% completeness), and then separated into stars (blue dots) and galaxies
-    (red crosses) using HST classification labels, in two magnitude bins: $24\leq r<24.5$ (top) and $24.5\leq r<25$ (bottom).
-    The fraction of HST-classified galaxies in these two subsamples is 33\% and 76\%, respectively. Note that galaxies appear
-    systematically bluer than stars, except for the $z-y$ color, which allows for improved color-based classification.}
+  \caption{Color distributions of morphology-selected sources before any additional color cut, in
+    $24\leq r<24.5$ (top) and $24.5\leq r<25$ (bottom). The selections use $D_{griz}<1.4$ and
+    $D_{griz}<1.6$, respectively, retaining 19.1\% and 20.3\% of the eligible HST reference stars.
+    Blue circles denote stars in the cleaned HST reference sample; orange crosses denote HST galaxies.
+    The galaxy fractions in the selected samples are 28.8\% and 70.3\%, respectively.
+    Colors are calculated from Galactic-extinction-corrected CModel magnitudes; the $r$ intervals use
+    uncorrected CModel magnitudes. Each projection includes selected objects with finite values for
+    both plotted colors. Galaxies appear systematically bluer than stars, except in $z-y$,
+    motivating the color cuts examined below.}
   \label{fig:color-ccdiags}
 \end{figure*}
 
