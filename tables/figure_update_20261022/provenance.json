@@ -3,7 +3,6 @@
   "current_r_source_commit": "db7dbeeeaebe8b49cc4257e8718a87cd3ad1caf2",
   "current_r_model_sha256": "e1a22fc683878ace64e5539c2bd83c6eb1b2f84fd7270e6b1a7cbf2b0528f043",
   "D_calibration": "historical COSMOS V9; mean subtracted; widths unchanged",
-  "professor_prose_outside_figure_environments_and_Daniel_insertion_unchanged": true,
   "figures": [
     {
       "label": "fig:star_galaxy_ratio_v8v9",
@@ -41,5 +40,6 @@
       "caption_updated": true
     }
   ],
-  "new_figure_label": "fig:single-band-dm-performance"
+  "professor_prose_outside_updated_figure_captions_unchanged": true,
+  "section33_restored_to_commit": "8696089b60f67c944c45cdbf13567bce7cfd95e7"
 }

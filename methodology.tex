@@ -130,21 +130,21 @@ and Bayes factor will be important later when combining multiple sources of clas
 \begin{figure*} 
   \centering
   \includegraphics[width=\textwidth,height=0.62\textheight,keepaspectratio]{figures/fig06_star_galaxy_ratio_vs_rmag_v8v9.pdf}
-   \caption{Galaxy-to-star count ratio $\log_{10}(N_{\rm gal}/N_{\rm star})$ versus r-band CModel magnitude. Faded V8 curves and dotted extendedness curves are historical comparisons. Bold curves show constrained fits. The COSMOS constrained curve uses the current r-band signed-$\Delta m$ model evaluated in Section~3.3; the ECDFS constrained curve is retained from the historical V9 results. The green curve shows matched COSMOS2020 labels. The COSMOS curve is evaluated at the original magnitude-bin centers. A zero predicted galaxy fraction has no finite logarithmic ratio and is not plotted.}
+   \caption{Galaxy-to-star count ratio $\log_{10}(N_{\rm gal}/N_{\rm star})$ versus r-band CModel magnitude. Faded V8 curves and dotted extendedness curves are historical comparisons. Bold curves show constrained fits. The COSMOS constrained curve uses the current r-band signed-$\Delta m$ model recomputed from the pinned fitting and scoring code; the ECDFS constrained curve is retained from the historical V9 results. The green curve shows matched COSMOS2020 labels. The COSMOS curve is evaluated at the original magnitude-bin centers. A zero predicted galaxy fraction has no finite logarithmic ratio and is not plotted.}
   \label{fig:star_galaxy_ratio_v8v9}
 \end{figure*}
 
 \begin{figure*}
   \centering
   \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{figures/section2_bayesian_method/fig2_2_cosmos_r_slice_fits_v9fit.pdf}
-  \caption{Observed r-band $\Delta m$ histograms (black) and the current signed-$\Delta m$ mixture model (orange), using the same numerical model as Section~3.3. The unresolved Gaussian is shown by blue dashed curves and the resolved skew-normal mixture by green dotted curves. Expected counts are obtained by integrating component densities over each $\Delta m$ bin and averaging over the observed magnitude distribution. Model counts use all finite r-band measurements in each magnitude slice and are not rescaled to match the displayed counts. No HST labels are used in fitting.}
+  \caption{Observed r-band $\Delta m$ histograms (black) and the current signed-$\Delta m$ mixture model (orange), recomputed from the pinned current fitting and scoring code. The unresolved Gaussian is shown by blue dashed curves and the resolved skew-normal mixture by green dotted curves. Expected counts are obtained by integrating component densities over each $\Delta m$ bin and averaging over the observed magnitude distribution. Model counts use all finite r-band measurements in each magnitude slice and are not rescaled to match the displayed counts. No HST labels are used in fitting.}
   \label{fig:slice_fits}
 \end{figure*}
 
 \begin{figure*}
   \centering
   \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{figures/section2_bayesian_method/fig2_3_cosmos_ury_model2d_residuals_v9fit.pdf}
-  \caption{Observed counts (left), model counts (center), and fractional residuals (right) in the $\Delta m$ versus CModel-magnitude plane for $u$, $r$, and $y$ from top to bottom. The r row uses the current signed-$\Delta m$ model from Section~3.3, with expected counts integrated over the plotted pixels. The u and y rows retain their historical V9 models. Counts use linear scales shared by the first two panels in each row, without a square-root transformation. Residuals are $(N_{\rm data}-N_{\rm model})/N_{\rm data}$; cells with no data are masked. Residual limits are symmetric about zero and are set separately for each band.}
+  \caption{Observed counts (left), model counts (center), and fractional residuals (right) in the $\Delta m$ versus CModel-magnitude plane for $u$, $r$, and $y$ from top to bottom. The r row uses the recomputed current signed-$\Delta m$ model, with expected counts integrated over the plotted pixels. The u and y rows retain their historical V9 models. Counts use linear scales shared by the first two panels in each row, without a square-root transformation. Residuals are $(N_{\rm data}-N_{\rm model})/N_{\rm data}$; cells with no data are masked. Residual limits are symmetric about zero and are set separately for each band.}
   \label{fig:model2d_residuals}
 \end{figure*}
 
@@ -210,51 +210,7 @@ $24.5\leq r<25$. Brighter than this range, population mixing is much smaller and
 more accurate, leading to more accurate star-galaxy separation, whereas at fainter
 magnitudes the performance deteriorates rapidly (especially for the stellar subsample).
 
-% BEGIN DANIEL SECTION33 20261022
-Figure~\ref{fig:single-band-dm-performance} compares selections based on the signed
-r-band $\Delta m$ and the posterior $p_S$. Both use identical objects with finite
-r-band PSF and CModel magnitudes and cleaned HST reference labels, without an
-additional color or D cut. The two magnitude bins contain 1284 stars and 36029
-galaxies, and 1584 stars and 48815 galaxies, respectively. For this comparison,
-we recomputed the COSMOS r-band model using the current signed-$\Delta m$ code.
-The unresolved component is evaluated at each object's magnitude, while adjacent
-resolved-component densities are blended. The historical V9 calibration is
-retained for the multiband D analysis below.
-
-The top panels show that the two selection curves can differ. The posterior
-depends on magnitude as well as $\Delta m$, and sufficiently negative $\Delta m$
-can favor the broader resolved component. A posterior threshold therefore need
-not be equivalent to a single upper threshold on signed $\Delta m$.
-
-The bottom panels compare HST measurements with predictions from the same
-posterior model, retaining its fitted class weights and averaging over the
-observed magnitude distribution. At $p_S>0.5$, measured completeness and
-contamination are 60.7\% and 46.3\% in the brighter bin, versus model predictions
-of 96.6\% and 7.8\%. In the fainter bin the corresponding values are 35.7\% and
-72.6\% measured, versus 61.2\% and 33.7\% predicted. Thus the model overpredicts
-the retention of HST stars and underpredicts HST-galaxy contamination at this
-threshold. These comparisons alone do not isolate the source of the discrepancy.
-HST labels were not used in fitting or parameter selection; because the
-photometry is from the same field, this is a model check rather than a held-out
-validation.
-
-\begin{figure*}[t]
-  \centering
-  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{figures/single_band_dm_performance.pdf}
-  \caption{Single-band r selection performance in $24\leq r<24.5$ (left) and
-  $24.5\leq r<25$ (right). Top: HST-measured completeness and contamination for
-  signed-$\Delta m$ upper thresholds (solid blue) and posterior lower thresholds
-  (dashed purple). Bottom: HST measurements (solid blue) and mixture-model
-  predictions (dashed orange) for the posterior selections. Circles mark
-  $p_S>0.5$; dotted connectors join measurements and predictions for that same
-  threshold. Both rows use the same cleaned HST reference objects. Completeness
-  uses all reference stars in each bin as its denominator; contamination is the
-  fraction of HST galaxies among selected objects. Model predictions retain
-  the fitted priors. Both axes show fractions. Curves are point estimates;
-  sampling and model-systematic uncertainties are not shown.}
-  \label{fig:single-band-dm-performance}
-\end{figure*}
-% END DANIEL SECTION33 20261022
+HERE DANIEL WILL ADD FIGURES AND TEXT... 
 
 % Bayes factor: BF(dm) = fG(dm) / fS(dm) 
 % pS = fS(dm) / [fS(dm) + fG(dm)]
