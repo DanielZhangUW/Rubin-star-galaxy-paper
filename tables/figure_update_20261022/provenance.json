@@ -1,0 +1,45 @@
+{
+  "paper_base_commit": "8696089b60f67c944c45cdbf13567bce7cfd95e7",
+  "current_r_source_commit": "db7dbeeeaebe8b49cc4257e8718a87cd3ad1caf2",
+  "current_r_model_sha256": "e1a22fc683878ace64e5539c2bd83c6eb1b2f84fd7270e6b1a7cbf2b0528f043",
+  "D_calibration": "historical COSMOS V9; mean subtracted; widths unchanged",
+  "professor_prose_outside_figure_environments_and_Daniel_insertion_unchanged": true,
+  "figures": [
+    {
+      "label": "fig:star_galaxy_ratio_v8v9",
+      "image": "figures/fig06_star_galaxy_ratio_vs_rmag_v8v9.pdf",
+      "caption_updated": true
+    },
+    {
+      "label": "fig:slice_fits",
+      "image": "figures/section2_bayesian_method/fig2_2_cosmos_r_slice_fits_v9fit.pdf",
+      "caption_updated": true
+    },
+    {
+      "label": "fig:model2d_residuals",
+      "image": "figures/section2_bayesian_method/fig2_3_cosmos_ury_model2d_residuals_v9fit.pdf",
+      "caption_updated": true
+    },
+    {
+      "label": "fig:D-observed-distributions",
+      "image": "figures/multiband_Ddistributions.pdf",
+      "caption_updated": true
+    },
+    {
+      "label": "fig:multiband_performance",
+      "image": "figures/multiband_performance.pdf",
+      "caption_updated": true
+    },
+    {
+      "label": "fig:color-ccdiags",
+      "image": "figures/colorselection-ccdiags.pdf",
+      "caption_updated": true
+    },
+    {
+      "label": "fig:color-performance",
+      "image": "figures/colorselection-performance.pdf",
+      "caption_updated": true
+    }
+  ],
+  "new_figure_label": "fig:single-band-dm-performance"
+}

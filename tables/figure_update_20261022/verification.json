@@ -1,0 +1,34 @@
+{
+  "professor_prose_unchanged": true,
+  "centered_D_verified_from_photometry": true,
+  "independently_recounted_color_curve_states": 1226040,
+  "D_and_color_marker_counts_agree": true,
+  "finite_two_color_denominators_verified": true,
+  "theoretical95_counts_verified": true,
+  "Fig9_historical_controls_unchanged": true,
+  "Fig9_current_r_prior_verified": true,
+  "Fig11_observed_counts_unchanged": true,
+  "Fig11_residuals_verified": true,
+  "methodology_sha256": "7dd8a4013a8765866e1ef205485233b6c25ecb8341addeac18557a66450f0cae",
+  "fresh_master": {
+    "fresh_kernel": true,
+    "code_cells": 30,
+    "errors": 0,
+    "elapsed_seconds": 684.6564831733704
+  },
+  "fresh_run_id": "5bc6595bc01142f9ba49dcd50fcd28b9",
+  "paper_PNGs_match_fresh_master": {
+    "figures/fig06_star_galaxy_ratio_vs_rmag_v8v9.png": true,
+    "figures/section2_bayesian_method/fig2_2_cosmos_r_slice_fits_v9fit.png": true,
+    "figures/section2_bayesian_method/fig2_3_cosmos_ury_model2d_residuals_v9fit.png": true,
+    "figures/single_band_dm_performance.png": true,
+    "figures/multiband_Ddistributions.png": true,
+    "figures/multiband_performance.png": true,
+    "figures/colorselection-ccdiags.png": true,
+    "figures/colorselection-performance.png": true
+  },
+  "analysis_catalog_exactly_unchanged": true,
+  "combined_section33_embedded_images": 1,
+  "paper_pdf_pages": 22,
+  "paper_pdf_sha256": "1f4dc01571c5ca663b903b1d4e8ae13dce56709cdf564f68061de27466894deb"
+}

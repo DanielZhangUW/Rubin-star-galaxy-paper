@@ -1,0 +1,35 @@
+Figure update checks (2026-10-22)
+
+The Section 3.3 figure combines the two requested comparisons into four panels.
+The current r signed-dm model was recomputed from source commit
+db7dbeeeaebe8b49cc4257e8718a87cd3ad1caf2 with upstream defaults on the
+same 865287-row COSMOS photometry. It corresponds to pSs_r, not D-based pS_r.
+The r diagnostics use this same numerical archive; ECDFS and u/y controls
+remain historical. D figures retain historical V9 widths and now subtract muU.
+
+Adding the Section 3.3 figure shifts the later figure numbers by one;
+the existing semantic LaTeX labels are retained.
+
+Professor-owned prose outside figure environments and the Daniel Section 3.3
+insertion is unchanged. The following text checks are intentionally left for
+the author responsible for those sections:
+1. Section 3.2 calls the resolved density log-normal; the implemented density
+   is skew-normal, as the updated captions indicate.
+2. Section 3.2 describes a linear fit to wU; the current code fits log10(wU).
+3. Section 3.2 describes bin-selected parameters; the current signed-dm scorer
+   evaluates continuous star functions and blends neighboring galaxy densities.
+4. Section 3.3's existing introduction says 24<r<24.5 while listing bins through
+   r=25. The pre-existing introduction has been preserved.
+5. Later performance prose still contains examples based on earlier curves,
+   including D=3.5 and rounded contamination values. The figure captions and
+   accompanying count tables contain the updated thresholds and measurements.
+6. Section 3.2 describes two resolved components at bright magnitudes; the
+   current r archive records a three-component configuration. Its binning and
+   component choices should be reconciled with that description by the author.
+
+D griz theoretical95 counts after centering:
+24-24.5: 630/1284 stars, 457/36021 galaxies, selected stars:galaxies=630:457.
+24.5-25: 715/1583 stars, 2299/48795 galaxies, selected ratio=715:2299.
+All bands and both bins are recorded in the accompanying CSV table.
+The 20/50 percent D markers are calibrated before adding a color cut.
+Color-selected markers therefore need not retain 20/50 percent completeness.
