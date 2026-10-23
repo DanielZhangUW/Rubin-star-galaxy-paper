@@ -1,0 +1,16 @@
+{
+  "source_run": "16de96a81b3b4b7da133044fa1e35677",
+  "source_commit": "db7dbeeeaebe8b49cc4257e8718a87cd3ad1caf2",
+  "section33_preserved": true,
+  "professor_prose_preserved": true,
+  "figures": {
+    "fig:star_galaxy_ratio_v8v9": "figures/fig09_star_galaxy_ratio_v8v10.pdf",
+    "fig:slice_fits": "figures/section2_bayesian_method/fig2_2_cosmos_r_slice_fits_v10fit.pdf",
+    "fig:model2d_residuals": "figures/section2_bayesian_method/fig2_3_cosmos_ury_model2d_residuals_v10fit.pdf",
+    "fig:D-observed-distributions": "figures/multiband_Ddistributions.pdf",
+    "fig:multiband_performance": "figures/multiband_performance.pdf",
+    "fig:color-ccdiags": "figures/colorselection-ccdiags.pdf",
+    "fig:color-performance": "figures/colorselection-performance.pdf"
+  },
+  "methodology_sha256": "02a590993fcf3748cf7727ff8b485f954ef1c2da1df6333c7871820fc2557923"
+}

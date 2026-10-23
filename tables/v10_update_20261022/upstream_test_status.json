@@ -1,0 +1,6 @@
+{
+  "upstream_unchanged_checks_passed": 98,
+  "upstream_test_fixture_issue": "The expected default subset set omitted izy, which is present in upstream chi_dm.BAND_SUBSETS.",
+  "local_test_only_adjustment": "Added izy to the expected set; no production source was changed.",
+  "corrected_enum_check_passed": true
+}

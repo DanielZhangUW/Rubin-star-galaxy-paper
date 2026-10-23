@@ -1,3 +1,5 @@
+Historical pre-complete-v10 notes; superseded by v10_update_checks_20261022.txt.
+
 Figure update checks (2026-10-22)
 
 Section 3.3 is restored to the original text and placeholder at commit 8696089.

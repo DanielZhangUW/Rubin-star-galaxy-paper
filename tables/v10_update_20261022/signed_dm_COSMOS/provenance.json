@@ -1,0 +1,120 @@
+{
+  "version": "nirav-v10-paper-centered-20261022-1",
+  "input_photometry_sha256": "6207c27c0d87e95591b3816a09dd07d3abe9c9a68a6d67e0784699837af6c85f",
+  "source": {
+    "repository": "https://github.com/DanielZhangUW/End-to-end-morphology-star-probability",
+    "commit": "db7dbeeeaebe8b49cc4257e8718a87cd3ad1caf2",
+    "files_sha256": {
+      "D_catalog.py": "99ffc0e98ab4cd3efa0a5057dbd96bd46488bfdf41894944ce25de9171b67066",
+      "ZIplotting.py": "68e5e97051411b5c03e205caa375f5e0b293d5c7d2adc852bfb6fd7d95263e87",
+      "chi_dm.py": "4bc06e045cbf35d5fe7e441c14237b68f42eb638af7013122719d6bd4fdbdc5e",
+      "chi_dm_report.py": "a3f3d52a523660231361cbb16fd132adc365c7dde477d5fdf486cd2b3af0cd37",
+      "color_rf_validation.py": "f71a7b72424b44dea8fffc4d330f6bdbda90178b1c308be23ac0ccb6eb144f92",
+      "combined_dm.py": "0b43672c4e615ca29783bafe50a2ad764e80ae471dcb51b1d20ba9cc87bbf741",
+      "component_metric_validation.py": "fe7f314bb22f4a15942fff985c5c442f4e0c20c192f06c4d012ebb0d85a053a5",
+      "config.py": "67dec37aebfd6a644fa8aede08282f1e1d5546f206b7927fc5c1079625133042",
+      "d_score_validation.py": "042ca824a7d24450fbf93eb194f7e2ffd40e78ee79f6026d05663c38309cd30f",
+      "full_catalog_validation.py": "f1dcb7d3726eb353edfdfad4047bcc6b50d8f115566c75674921293c7660d5ad",
+      "model_quality_metrics.py": "f5245ae3b09096315e82d48343e28bf0a73dca64fbfccd8f8526db2f33e1dd0a",
+      "ps_end_to_end.py": "23b4c6550f49560cd0bafe1c5505858c78ffeddfc435ce23f7fbfb02cca6dfe3",
+      "ps_map_plot.py": "80b7afe13463957a6aafe05b50147058cc0c2af6b71c7cacfabff2522b1f99c5",
+      "ps_validation.py": "ac32d39e31b287fc5f46d3597dde1d82c1b8ebe39a1ece74590404f0908abab2",
+      "psf_cmodel_fit.py": "0724da64785233c65ad20a0e89c739c8db4ff1a25eec9c349de9aca0a66c14fd",
+      "selection_diagnostics.py": "8ad27a0d2cb1a200f4fc8693a1ed7a4ad70213f279993f1514671995766a22fc",
+      "star_shape_comparison.py": "68a8e0ea815ab959b4501ff8f37ae8f23988e655ba0e340dd47c01ed3ac08d40",
+      "stellar_locus.py": "63f8bd33d5bf8e3f5c5f623be37f072ff1106eca2df0a3e6cfa38e5941f26027",
+      "v4_D_hst_comparison.py": "a784453e69d22a24fdb6d39229aea332e292f698b5f02446e76e71c7329117e9",
+      "v4_cc_diagnostics.py": "ff1bddfc81e45dec18e81767b5cd041d4897bb04bfc6fc965a80e50268a3ab1c",
+      "v4_color_rejection.py": "ef5225631543881a0cab49450a0344009606340c43ca39cfb06d77b152d748f7",
+      "v4_fiducial_cc.py": "cecedcdb685fab28240748d26eca76659b8b1249b025d38c73a0d7612a646265"
+    },
+    "upstream_source_modified": false,
+    "local_adaptation": "subtract fitted muU before D construction as confirmed for paper; signed-dm model uses unmodified dm"
+  },
+  "bands": [
+    "u",
+    "g",
+    "r",
+    "i",
+    "z",
+    "y"
+  ],
+  "config": {
+    "bright_bins": [
+      [
+        15.0,
+        18.0
+      ],
+      [
+        18.0,
+        19.0
+      ],
+      [
+        19.0,
+        20.0
+      ],
+      [
+        20.0,
+        21.0
+      ],
+      [
+        21.0,
+        22.0
+      ]
+    ],
+    "faint_bins": [
+      [
+        22.0,
+        23.0
+      ],
+      [
+        23.0,
+        24.0
+      ],
+      [
+        24.0,
+        24.5
+      ],
+      [
+        24.5,
+        25.0
+      ],
+      [
+        25.0,
+        25.5
+      ],
+      [
+        25.5,
+        26.0
+      ],
+      [
+        26.0,
+        26.5
+      ],
+      [
+        26.5,
+        27.0
+      ]
+    ],
+    "dm_range": [
+      -0.5,
+      1.5
+    ],
+    "n_hist_bins": 300,
+    "min_counts": 50,
+    "log_wu_poly_degree": 1,
+    "wu_fit_mag_cutoff": 24.0,
+    "bin_average_star": false,
+    "sigma_fit_min_wU": null,
+    "sigma_noise_exponent": null
+  },
+  "cache_key": "92ab35bf8d6937aca4b2469f32fd0b99c4a21a5ca4b4e30fceb6b2dde448d8e9",
+  "n_objects": 865287,
+  "fit_uses_HST_labels": false,
+  "fit_uses_color_cuts": false,
+  "archive_sha256": {
+    "fit_parameters.csv": "06a03775fa2486688bea233b0dc8d2fc970640c494177745906de2c0a8fce213",
+    "fit_metadata.json": "af20e567e282da4136ad445d4bb96aba476d763e2e6de461d27f04c0997188cf",
+    "fit_diagnostics.csv": "d732354e9d8b975b56aba7ea6b060c9a4880af23ea3f0b2880a5014b6c2c3ecf"
+  }
+}

@@ -129,22 +129,22 @@ and Bayes factor will be important later when combining multiple sources of clas
 
 \begin{figure*} 
   \centering
-  \includegraphics[width=\textwidth,height=0.62\textheight,keepaspectratio]{figures/fig06_star_galaxy_ratio_vs_rmag_v8v9.pdf}
-   \caption{Galaxy-to-star count ratio $\log_{10}(N_{\rm gal}/N_{\rm star})$ versus r-band CModel magnitude. Faded V8 curves and dotted extendedness curves are historical comparisons. Bold curves show constrained fits. The COSMOS constrained curve uses the current r-band signed-$\Delta m$ model recomputed from the pinned fitting and scoring code; the ECDFS constrained curve is retained from the historical V9 results. The green curve shows matched COSMOS2020 labels. The COSMOS curve is evaluated at the original magnitude-bin centers. A zero predicted galaxy fraction has no finite logarithmic ratio and is not plotted.}
+  \includegraphics[width=\textwidth,height=0.62\textheight,keepaspectratio]{figures/fig09_star_galaxy_ratio_v8v10.pdf}
+   \caption{Galaxy-to-star count ratio $\log_{10}(N_{\rm gal}/N_{\rm star})$ versus r-band CModel magnitude. Solid curves use the signed-$\Delta m$ models fitted with the pinned v10 code for both COSMOS and ECDFS. Faded V8 curves, dotted extendedness curves, and matched COSMOS2020 labels (green) are retained as historical or external controls. Ratios use the fitted star fraction at the original magnitude-bin centers. A zero predicted galaxy fraction has no finite logarithmic ratio and is not plotted.}
   \label{fig:star_galaxy_ratio_v8v9}
 \end{figure*}
 
 \begin{figure*}
   \centering
-  \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{figures/section2_bayesian_method/fig2_2_cosmos_r_slice_fits_v9fit.pdf}
-  \caption{Observed r-band $\Delta m$ histograms (black) and the current signed-$\Delta m$ mixture model (orange), recomputed from the pinned current fitting and scoring code. The unresolved Gaussian is shown by blue dashed curves and the resolved skew-normal mixture by green dotted curves. Expected counts are obtained by integrating component densities over each $\Delta m$ bin and averaging over the observed magnitude distribution. Model counts use all finite r-band measurements in each magnitude slice and are not rescaled to match the displayed counts. No HST labels are used in fitting.}
+  \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{figures/section2_bayesian_method/fig2_2_cosmos_r_slice_fits_v10fit.pdf}
+  \caption{Observed r-band $\Delta m$ histograms (black) and the v10 signed-$\Delta m$ mixture model (orange). The unresolved Gaussian is shown by blue dashed curves and the resolved skew-normal mixture by green dotted curves. Expected counts integrate component densities over each $\Delta m$ bin and average over the observed magnitude distribution. All finite r-band measurements in each magnitude slice define the model counts, without rescaling to match the displayed counts. HST labels and color cuts are not used in fitting.}
   \label{fig:slice_fits}
 \end{figure*}
 
 \begin{figure*}
   \centering
-  \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{figures/section2_bayesian_method/fig2_3_cosmos_ury_model2d_residuals_v9fit.pdf}
-  \caption{Observed counts (left), model counts (center), and fractional residuals (right) in the $\Delta m$ versus CModel-magnitude plane for $u$, $r$, and $y$ from top to bottom. The r row uses the recomputed current signed-$\Delta m$ model, with expected counts integrated over the plotted pixels. The u and y rows retain their historical V9 models. Counts use linear scales shared by the first two panels in each row, without a square-root transformation. Residuals are $(N_{\rm data}-N_{\rm model})/N_{\rm data}$; cells with no data are masked. Residual limits are symmetric about zero and are set separately for each band.}
+  \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{figures/section2_bayesian_method/fig2_3_cosmos_ury_model2d_residuals_v10fit.pdf}
+  \caption{Observed counts (left), v10 signed-$\Delta m$ model counts (center), and fractional residuals (right) for u, r, and y from top to bottom. All three model rows use the current v10 fits. Expected counts integrate densities over the plotted pixels and the observed magnitude distribution. Linear count scales are shared by the first two panels in each row. Residuals are $(N_{\rm data}-N_{\rm model})/N_{\rm data}$; cells with no data are masked. Residual limits are symmetric about zero and set separately for each band.}
   \label{fig:model2d_residuals}
 \end{figure*}
 
@@ -231,7 +231,7 @@ HERE DANIEL WILL ADD FIGURES AND TEXT...
 \begin{figure*}[t]
   \centering
   \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{figures/multiband_Ddistributions.pdf}
-  \caption{Observed D distributions of retained HST stars (blue) and galaxies (orange), using the historical V9 calibration and subtracting the per-band $\mu_U$ before division by $\sigma_U$. Rows show r, ri, riz, and griz; columns show $24\leq r<24.5$ and $24.5\leq r<25$. Counts use $\Delta D=0.25$ bins over $0\leq D\leq10$; objects beyond the display remain in statistical denominators. Half-height lines mark the theoretical $\chi_N$ 95\% cuts: $D=1.960$, 2.448, 2.795, and 3.080. For griz, the cut retains 49.07\%/45.17\% of HST stars and 1.27\%/4.71\% of HST galaxies in the left/right bins; selected star:galaxy counts are 630:457 and 715:2299. These empirical fractions need not equal the theoretical 95\% value.}
+  \caption{Observed D distributions of retained HST stars (blue) and galaxies (orange), using full-precision v10 single-band means and widths. The per-band $\mu_U$ is subtracted before division by $\sigma_U$, following the paper definition; v10 evaluator limits are retained. Rows show r, ri, riz, and griz; columns show $24\leq r<24.5$ and $24.5\leq r<25$. Counts use $\Delta D=0.25$ bins over $0\leq D\leq10$; objects beyond the display remain in statistical denominators. Half-height lines mark theoretical $\chi_N$ 95\% cuts: $D=1.960$, 2.448, 2.795, and 3.080. For griz, these retain 48.75\%/45.74\% of HST stars and 1.30\%/4.79\% of HST galaxies in the left/right bins. Selected star:galaxy counts are 626:469 and 724:2336.}
   \label{fig:D-observed-distributions}
 \end{figure*}
 
@@ -297,7 +297,7 @@ selected candidate unresolved objects using HST truth labels, described next.
 \begin{figure*}[t]
   \centering
   \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{figures/multiband_performance.pdf}
-  \caption{Completeness and contamination of D-selected stellar samples in $24\leq r<24.5$ (left) and $24.5\leq r<25$ (right), using r, ri, riz, and griz. All curves within a panel use the same cleaned HST reference sample with valid D in all required bands. D includes subtraction of $\mu_U$. Diamonds, circles, and squares on griz mark limits of 1.4, 3.0, and 3.3 (left), and 1.6, 3.0, and 3.9 (right). Diamonds and squares correspond to approximately 20\% and 50\% stellar completeness before any additional color cut. Both axes show fractions from 0 to 1. Objects beyond the display in Figure~\ref{fig:D-observed-distributions} remain in the denominators.}
+  \caption{Completeness and contamination of D-selected stellar samples in $24\leq r<24.5$ (left) and $24.5\leq r<25$ (right), using r, ri, riz, and griz with the v10 calibration and subtraction of $\mu_U$. All curves within a panel use the same cleaned HST reference objects with valid D in all required bands. Diamonds, circles, and squares mark griz limits of 1.3, 3.0, and 3.3 (left), and 1.5, 3.0, and 3.8 (right). Diamonds and squares are recalibrated to approximately 20\% and 50\% stellar completeness before color selection. Both axes are fractions from 0 to 1. Objects beyond Figure~\ref{fig:D-observed-distributions}'s display remain in the denominators. These are empirical hard-D curves; v10 D-based probabilities are scored separately.}
   \label{fig:multiband_performance}
 \end{figure*}
 
@@ -323,7 +323,7 @@ tradeoff between sample completeness and contamination depends on science case.
 \begin{figure*}[t]
   \centering
   \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{figures/colorselection-ccdiags.pdf}
-  \caption{Color distributions after morphological selection with $D_{griz}<1.4$ for $24\leq r<24.5$ (top) and $D_{griz}<1.6$ for $24.5\leq r<25$ (bottom), giving approximately 20\% completeness before an additional color cut. Blue dots and orange crosses denote stars and galaxies according to the cleaned HST reference labels. In the left column, which requires finite u-g and g-r, galaxy fractions are 35.90\% and 76.96\% (112 galaxies and 200 stars; 785 galaxies and 235 stars). Each projection requires both plotted colors to be finite. Colors use Galactic-extinction-corrected CModel magnitudes, while r-bin boundaries use uncorrected CModel magnitudes.}
+  \caption{Color distributions after v10 morphological selection with $D_{griz}<1.3$ for $24\leq r<24.5$ (top) and $D_{griz}<1.5$ for $24.5\leq r<25$ (bottom), giving approximately 20\% completeness before any additional color cut. Blue dots and orange crosses denote stars and galaxies according to the unchanged cleaned HST reference labels. In the left column, which requires finite u-g and g-r, galaxy fractions are 33.66\% and 75.96\% (104 galaxies and 205 stars; 730 galaxies and 231 stars). Each projection requires both plotted colors to be finite. Colors use Galactic-extinction-corrected CModel magnitudes; r-bin boundaries use uncorrected CModel magnitudes.}
   \label{fig:color-ccdiags}
 \end{figure*}
 
@@ -331,7 +331,7 @@ tradeoff between sample completeness and contamination depends on science case.
 \begin{figure*}[t]
   \centering
   \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{figures/colorselection-performance.pdf}
-  \caption{Completeness and contamination after three separate color selections: $g-r>0.3$ (top), $g-r>1.0$ (middle), and $r-i>0.8$ (bottom), in $24\leq r<24.5$ (left) and $24.5\leq r<25$ (right). Colored curves vary D for r, ri, riz, and griz; the gray dashed reference uses griz without a color cut. Completeness is relative to all eligible cleaned HST stars before the color cut; contamination is the galaxy fraction among selected objects. Both axes are fractions from 0 to 1. Colors use extinction-corrected CModel magnitudes. Diamonds, circles, and squares use the same griz D limits as Figure~\ref{fig:multiband_performance}: 1.4/1.6, 3.0/3.0, and 3.3/3.9 in the left/right bins. The 20\%/50\% calibration is before the color cut; colored-marker completeness can therefore be lower. Open gray diamonds show the corresponding selection without a color cut.}
+  \caption{Completeness and contamination after three separate color selections: $g-r>0.3$ (top), $g-r>1.0$ (middle), and $r-i>0.8$ (bottom), in $24\leq r<24.5$ (left) and $24.5\leq r<25$ (right). Colored curves vary D for r, ri, riz, and griz using the v10 calibration; the gray dashed reference uses griz without a color cut. Completeness uses all eligible cleaned HST stars before the color cut; contamination is the galaxy fraction among selected objects. Both axes are fractions from 0 to 1. Colors use extinction-corrected CModel magnitudes. Diamonds, circles, and squares use the same griz limits as Figure~\ref{fig:multiband_performance}: 1.3/1.5, 3.0/3.0, and 3.3/3.8 in the left/right bins. The 20\%/50\% calibration is before the color cut; colored-marker completeness can be lower. Open gray diamonds show the corresponding selection without a color cut.}
   \label{fig:color-performance}
 \end{figure*}
 

@@ -1,0 +1,33 @@
+Complete v10 update (2026-10-22)
+
+Active models: pinned Nirav commit db7dbeeeaebe8b49cc4257e8718a87cd3ad1caf2.
+COSMOS: six signed-dm fits and all 14 D-based fits/scores. ECDFS: r signed-dm fit
+for Fig.9. Fig.11 u, r and y all use current v10 models. Historical V9 tables
+are not used by the active calibration; older files remain labeled archives.
+Full-precision muU and Sesar coefficients come from the original fitter output.
+
+The paper uses its confirmed (dm-muU)/sigmaU definition. Upstream v10 still
+omits muU in D; this is the only D-construction adaptation. Native magnitude
+and sigma clipping are retained. Signed-dm pSs uses raw dm and includes muU
+inside its likelihood. D-based pS uses v10 scoring="blend" and the original
+fitted galaxy amplitudes. D_star_parameters width_sigU is dimensionless and
+must not be confused with the raw single-band sigmaU in magnitudes.
+
+Data, cleaned HST labels, color definitions and reference denominators are
+unchanged. Fig.13-15 recalibrate the original 20%/50% completeness targets on
+the same 0.1-spaced D grid before adding color cuts. No contamination target
+or color cut was optimized again. Fig.12 retains the theoretical chi_N cuts.
+
+Section 3.3 remains exactly at its earlier text/placeholder. Professor-owned
+prose outside figure captions is unchanged. Existing descriptions of the
+resolved distribution (log-normal versus signed-dm skew-normal), wU fitting,
+bin-based evaluation, and numerical examples need the responsible author's
+review against the current implementation and count tables.
+
+Validation: all 14 pS scorers use blend; 9434 independent probe objects match
+upstream evaluators; analytical signed-dm CDFs match the upstream densities;
+bin-center equivalence and bin-edge continuity pass. Both notebooks run from
+fresh kernels without execution errors. The upstream test suite has 98 checks
+passing unchanged; one expected subset list omitted izy. That test-only list
+was corrected locally and its single check passed. Production source is pinned
+and unchanged; details are in tables/v10_update_20261022/.

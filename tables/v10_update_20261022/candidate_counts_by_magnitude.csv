@@ -1,0 +1,17 @@
+version,r_lo,r_hi,n_objects,n_Dgriz_lt3
+V9_centered,-inf,20.0,7074,3177
+V10_centered,-inf,20.0,7074,3108
+V9_centered,20.0,23.5,89244,9043
+V10_centered,20.0,23.5,89244,8863
+V9_centered,23.5,24.0,48066,1469
+V10_centered,23.5,24.0,48066,1455
+V9_centered,24.0,24.5,71564,2143
+V10_centered,24.0,24.5,71564,2166
+V9_centered,24.5,25.0,96939,5402
+V10_centered,24.5,25.0,96939,5504
+V9_centered,25.0,26.0,275972,42952
+V10_centered,25.0,26.0,275972,40860
+V9_centered,26.0,27.0,203158,63442
+V10_centered,26.0,27.0,203158,50410
+V9_centered,27.0,inf,53709,13577
+V10_centered,27.0,inf,53709,6866

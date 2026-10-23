@@ -1,0 +1,37 @@
+{
+  "complete_v10": true,
+  "all_six_raw_band_models_and_14_D_models": true,
+  "ECDFS_r_model_v10": true,
+  "active_V9_parameter_table_used": false,
+  "notebooks": {
+    "master": {
+      "code_cells": 25,
+      "errors": 0,
+      "fresh_kernel": true
+    },
+    "public": {
+      "code_cells": 16,
+      "errors": 0,
+      "fresh_kernel": true
+    }
+  },
+  "master_public_numeric_results_identical": true,
+  "independent_color_curve_states_recounted": 1226040,
+  "unchanged_observed_histograms": [
+    "u",
+    "r",
+    "y"
+  ],
+  "portable_D_models_reproduce_scores": true,
+  "professor_prose_unchanged": true,
+  "section33_restored": true,
+  "paper_pdf_pages": 21,
+  "paper_pdf_sha256": "1523683ef2dcc22bcc5c947f485114c7782d9c4d8c6c936d77e83c214324d3ed",
+  "mean_centering": "paper-confirmed subtraction of fitted v10 muU; upstream v10 omission explicitly recorded",
+  "tests": {
+    "upstream_unchanged_checks_passed": 98,
+    "upstream_test_fixture_issue": "The expected default subset set omitted izy, which is present in upstream chi_dm.BAND_SUBSETS.",
+    "local_test_only_adjustment": "Added izy to the expected set; no production source was changed.",
+    "corrected_enum_check_passed": true
+  }
+}

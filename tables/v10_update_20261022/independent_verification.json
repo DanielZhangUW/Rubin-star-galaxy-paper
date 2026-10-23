@@ -1,0 +1,14 @@
+{
+  "pinned_source_commit": "db7dbeeeaebe8b49cc4257e8718a87cd3ad1caf2",
+  "all_14_subsets_use_blended_scoring": true,
+  "HST_labels_colors_and_photometry_exactly_unchanged": true,
+  "common_reference_IDs_exactly_unchanged": true,
+  "all_D_values_verified_from_photometry": true,
+  "v10_star_evaluator_verified": true,
+  "independent_score_probe_rows": 9434,
+  "D_pS_and_signed_dm_pSs_independently_verified": true,
+  "analytic_CDFs_match_upstream_densities": true,
+  "bin_centers_match_binned_scoring": true,
+  "max_bin_edge_change": 3.8966506799020806e-08,
+  "mean_centering_adaptation": "Upstream v10 omits muU; paper centering is the only D-construction adaptation."
+}
