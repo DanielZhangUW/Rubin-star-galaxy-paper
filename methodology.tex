@@ -95,17 +95,19 @@ Therefore, a good model for $p(\dm \,|\, m)$ (eq.~\ref{eq:mixpdf1}) is crucial. 
 $\dm$ distributions (see Figure~\ref{fig:magdmcomparison}),
 we model the unresolved component, $\funr$, as a single Gaussian with mean
 \(\mu_U\), width \(\sigma_U\) and weight \(w_U\).  The resolved component is modeled as a sum
-of \(K\) log-normal distributions with weight \(w_{R,k}\), location
+of \(K\) skew-normal distributions with weight \(w_{R,k}\), location
 \(\mu_{R,k}\), scale \(\sigma_{R,k}\), and shape parameter \(\alpha_{R,k}\). The full
 mixture probability density function is
 \begin{equation}
   p(\Delta m \,|\, m) = w_U \, \mathcal{N}(\Delta m | \, \mu_U,\, \sigma_U)
-    + \sum_{k=1}^{K} w_{R,k} \, \mathcal{LN}(\Delta m | \, \mu_{R,k},\, \sigma_{R,k},\, \alpha_{R,k}),
+    + \sum_{k=1}^{K} w_{R,k} \, \mathcal{SN}(\Delta m | \, \mu_{R,k},\, \sigma_{R,k},\, \alpha_{R,k}),
   \label{eq:mixture_pdf}
 \end{equation}
-where \(\mathcal{N}\) denotes the Gaussian and \(\mathcal{LN}\) the log-normal distribution,
+where \(\mathcal{N}\) denotes the Gaussian and \(\mathcal{SN}\) the skew-normal distribution,
 and the weights are constrained to sum to unity: \(w_U = 1 - \sum_k w_{R,k}\) (functions
-\(\mathcal{N}\) and \(\mathcal{LN}\) are properly normalized probability density functions).
+\(\mathcal{N}\) and \(\mathcal{SN}\) are properly normalized probability density functions).
+Here \(\mathcal{SN}(x\mid\mu,\sigma,\alpha)=2\phi(t)\Phi(\alpha t)/\sigma\),
+with \(t=(x-\mu)/\sigma\), where \(\phi\) and \(\Phi\) are the standard-normal density and cumulative distribution functions.
 The galaxy-to-star count ratio, which serves as Bayesian prior, is
 \begin{equation}
                    N_{GS} \equiv   {N_G \over N_S}  = {\sum_{k=1}^{K} w_{R,k}  \over  w_U}. 
@@ -196,12 +198,12 @@ from \citet{2007AJ....134.2236S} (their eq.~5),
   \sigma_U(m) = \sqrt{\sigma_0^2 + a^2 \cdot 10^{\,b\,(m - 25)}},
   \label{eq:sesar_sigma}
 \end{equation}
-where \(\sigma_0\), \(a\), and \(b\) are free parameters; and \(w_U(m)\) is modeled as a linear
-fit to \(w_U\) versus magnitude, using only bins brighter than
+where \(\sigma_0\), \(a\), and \(b\) are free parameters; and \(\log_{10} w_U(m)\) is modeled as a linear
+fit to \(\log_{10} w_U\) versus magnitude, using only bins brighter than
 \(m_{\mathrm{CModel}} = 24\) where the free fit is reliable. This smooth model is then
 extrapolated to fainter magnitude bins. In the third step, with the unresolved component
 (\(\mu_U\), \(\sigma_U\), \(w_U\)) fixed to the smooth curves from step~2, only the resolved
-log-normal parameters are re-fit in each magnitude bin. The resolved weights are rescaled to
+skew-normal parameters are re-fit in each magnitude bin. The resolved weights are rescaled to
 sum to \((1 - w_U)\) so that the total mixture remains a proper probability density.
 The effectiveness of this constrained fitting procedure is demonstrated in
 Figure~\ref{fig:star_galaxy_ratio_v8v9}, which compares the galaxy-to-star count ratio
