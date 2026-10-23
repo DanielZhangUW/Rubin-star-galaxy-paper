@@ -148,22 +148,16 @@ and Bayes factor will be important later when combining multiple sources of clas
   \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{figures/section2_bayesian_method/fig2_2_cosmos_r_slice_fits_v10fit.pdf}
   \caption{Observed \(\Delta m\) histograms (black) and fitted V10 mixture models (orange) for the
     r-band in each CModel magnitude bin. The unresolved Gaussian component is shown as a blue
-    dashed line and the resolved skew-normal components as green dotted lines. Model counts are integrated over the plotted bins and the observed magnitude distribution, without rescaling to the displayed counts.}
+    dashed line and the resolved skew-normal components as green dotted lines.}
   \label{fig:slice_fits}
 \end{figure*}
 
 \begin{figure*}
   \centering
   \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{figures/section2_bayesian_method/fig2_3_cosmos_ury_model2d_residuals_v10fit.pdf}
-  \caption{Two-dimensional comparison of observed source counts (left),
-    V10 mixture-model counts (center), and fractional residuals (right) in
-    the \(\Delta m\) vs.\ \(m_{\mathrm{CModel}}\) plane, for the $u$, $r$,
-    and $y$ bands from top to bottom. The first two columns show counts
-    without a square-root transformation and share the same linear color
-    scale within each row. The right column shows
-    $(N_{\rm data}-N_{\rm model})/N_{\rm data}$, with cells containing
-    $N_{\rm data}=0$ masked. Residual color limits are symmetric about zero
-    and set separately for each band, as shown by the individual colorbars.}
+  \caption{Two-dimensional comparison of the observed (left), modeled (center), and fractional residual
+    (right) source counts in the \(\Delta m\) vs.\ \(m_{\mathrm{CModel}}\) plane, for the $u$, $r$,
+    and $y$ bands from top to bottom. Residuals show $(N_{\rm data}-N_{\rm model})/N_{\rm data}$.}
   \label{fig:model2d_residuals}
 \end{figure*}
 
@@ -257,7 +251,7 @@ HERE DANIEL WILL ADD FIGURES AND TEXT...
     bins of width $\Delta D=0.25$, over $0\leq D\leq10$ (distributions for HST galaxies extend
     to much larger $D$ values of $\sim$100).
     Half-height vertical lines mark the theoretical $\chi_N$ 95\% thresholds:
-    $D=1.960$, $2.448$, $2.795$, and $3.080$ for the four rows, respectively. The $D$ values use V10 means and widths, subtracting $\mu_U$ before division by $\sigma_U$. For $griz$, the theoretical cut retains 48.75\% and 45.74\% of HST stars, and 1.30\% and 4.79\% of HST galaxies in the left and right bins, respectively; selected star:galaxy counts are 626:469 and 724:2336. These fractions include objects beyond the plotting window in their denominators.}
+    $D=1.960$, $2.448$, $2.795$, and $3.080$ for the four rows, respectively.}
   \label{fig:D-observed-distributions}
 \end{figure*}
 
@@ -323,13 +317,12 @@ selected candidate unresolved objects using HST truth labels, described next.
 \begin{figure*}[t]
   \centering
   \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{figures/multiband_performance.pdf}
-  \caption{The performance of multi-band $D$ classificators for stellar subsamples in two magnitude bins, using the V10 calibration:
+  \caption{The performance of multi-band $D$ classificators for stellar subsamples in two magnitude bins:
     $24\leq r<24.5$ (left) and $24.5\leq r<25$ (right). Empirical contamination-completeness curves based
     on objects with HST classification labels are shown for the following band combinations: $r$,
     $ri$, $riz$ and $griz$. All curves within a panel use the same cleaned HST reference sample with valid $D$ in all required bands.
-    The $D$ thresholds for $griz$ curves are marked by diamonds, circles and squares at
-    1.3, 3.0 and 3.3 (left), and 1.5, 3.0 and 3.8 (right), respectively. The diamonds and squares
-    correspond to approximately 20\% and 50\% stellar completeness. Both axes show fractions from 0 to 1.
+    Diamonds and squares mark approximately 20\% and 50\% stellar completeness on the $griz$ curves;
+    circles mark $D_{griz}<3$.
     Objects that are beyond the plotting window in Fig.~\ref{fig:D-observed-distributions} remain in the
     completeness and contamination denominators. Note that morphological
     information from additional bands improves performance.}
@@ -359,12 +352,10 @@ tradeoff between sample completeness and contamination depends on science case.
   \centering
   \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{figures/colorselection-ccdiags.pdf}
   \caption{The color distribution of objects morphologically classified as unresolved using Rubin DP2 measurements
-    (with V10 $D$ thresholds selected to give approximately 20\% completeness), and then separated into stars (blue dots) and galaxies
-    (orange crosses) using the cleaned HST reference labels, in two magnitude bins: $24\leq r<24.5$ (top) and $24.5\leq r<25$ (bottom).
-    The fraction of HST-classified galaxies in these two subsamples with finite $u-g$ and $g-r$
-    (left column) is 33.66\% and 75.96\%, respectively. Note that galaxies appear
-    systematically bluer than stars, except for the $z-y$ color, which allows for improved color-based classification.
-    Colors use Galactic-extinction-corrected CModel magnitudes; the $r$ bins use uncorrected CModel magnitudes.}
+    (with $D$ thresholds selected to ensure 20\% completeness), and then separated into stars (blue dots) and galaxies
+    (red crosses) using the cleaned HST reference labels, in two magnitude bins: $24\leq r<24.5$ (top) and $24.5\leq r<25$ (bottom).
+    The fraction of HST-classified galaxies in these two subsamples is 33\% and 76\%, respectively. Note that galaxies appear
+    systematically bluer than stars, except for the $z-y$ color, which allows for improved color-based classification.}
   \label{fig:color-ccdiags}
 \end{figure*}
 
@@ -372,17 +363,15 @@ tradeoff between sample completeness and contamination depends on science case.
 \begin{figure*}[t]
   \centering
   \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{figures/colorselection-performance.pdf}
-  \caption{The performance of color-aided multi-band $D$ classificators for stellar subsamples in two magnitude bins, using the V10 calibration:
+  \caption{The performance of color-aided multi-band $D$ classificators for stellar subsamples in two magnitude bins:
     $24\leq r<24.5$ (left) and $24.5\leq r<25$ (right), and for three color cuts: $g-r>0.3$ (top), $g-r>1.0$ (middle)
     and $r-i>0.8$ (bottom). In each panel, empirical contamination-completeness curves based on objects with HST
     classification labels are shown for the following band combinations: $r$, $ri$, $riz$ and $griz$. A curve corresponding
     to the $griz$ case without color cut is also shown for reference. Note the marked decrease of
     sample contamination when morphological classification is aided with color selection.
-    Both axes show fractions from 0 to 1. Completeness is relative to all eligible HST reference stars before the
-    color cut; contamination is the galaxy fraction among selected objects. Colors use extinction-corrected CModel
-    magnitudes; the $r$ bins use uncorrected magnitudes. Diamonds, circles and squares mark fixed $griz$ $D$ limits
-    of 1.3/1.5, 3.0/3.0 and 3.3/3.8 in the left/right columns, respectively; open gray diamonds show the
-    selection without a color cut at 1.3 (left) and 1.5 (right).}
+    Diamonds and squares mark the $griz$ thresholds corresponding to approximately 20\% and 50\%
+    completeness before the color cut, respectively; circles mark $D_{griz}<3$.
+    Open gray diamonds show the 20\% completeness selection without a color cut.}
   \label{fig:color-performance}
 \end{figure*}
 
