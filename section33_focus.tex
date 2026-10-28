@@ -1,0 +1,82 @@
+% Section 3.3 insertion; the existing introduction is retained.
+Using the mixture model in Equation~\ref{eq:mixpdf1}, we compare predicted
+completeness and contamination with direct counts from the cleaned HST sample
+for $24\leq r<24.5$ and $24.5\leq r<25$
+(Figure~\ref{fig:singleband-prediction-comparison}). At $p_S>0.2$, V10 predicts
+contamination of 11.1\% and 47.6\% in the two intervals, whereas HST measures
+48.1\% and 77.8\%, respectively.
+
+To investigate this discrepancy, we also test a core-plus-tail model for the
+unresolved component.
+\begin{equation}
+ U_{\rm cpt}(\Delta m_r\mid m)=A\left[(1-\epsilon)G(\Delta m_r\mid m)
+                 +\epsilon\,(G*E_\tau)(\Delta m_r\mid m)\right].
+ \label{eq:singleband-core-tail}
+\end{equation}
+Here $G$ is a Gaussian with center and magnitude-dependent width fixed by an
+earlier $r$-only calibration; $E_\tau$ is an exponential distribution of
+nonnegative offsets with mean $\tau$; and $*$ denotes convolution. The total
+unresolved fraction is $A$, of which $\epsilon$ belongs to the tail. We also
+refit the resolved density, which integrates to $1-A$ and can be nonzero near
+$\Delta m_r=0$ (Figure~\ref{fig:singleband-component-comparison}). In each interval,
+we minimize the mean negative log-likelihood of the $r$ photometry plus
+$0.001\,A\epsilon$.
+
+\begin{samepage}
+In both target intervals, the core-plus-tail model gives closer
+contamination predictions at $p_S>0.2$: it predicts 49.4\% and 64.8\%, and
+HST measures 53.9\% and 76.4\% for its selections. The absolute prediction
+differences fall from 37.0 to 4.5 percentage points in the brighter interval
+and from 30.2 to 11.6 percentage points in the fainter interval. Its predicted
+completeness is also closer to HST at this threshold.
+
+\end{samepage}
+
+XXXXXX:Could ZI add more work on 3.3?
+
+
+Closer prediction does not establish better stellar selection at all
+completeness levels. When the same model family is fitted separately at fainter magnitudes, the population ratio departs from the COSMOS2020 reference. For
+$25.5\leq r<26$, the fitted resolved-to-unresolved ratio is approximately
+2.4, compared with 33 from V10 and 49 in the COSMOS2020 reference.
+
+The core-plus-tail model is used here as an $r$-band comparison. For the
+subsequent multiband $D$ analysis, particularly $griz$, we retain the V10
+stellar width $\sigma_U(m)$. Further investigation of the population
+decomposition using independent information, for example from Gaia and Roman,
+is left to future work.
+
+XXXXXX:ZI can add more details about the future plan.
+
+XXXXXX: Could ZI check all the plots captions in the paper? I think some captions are too long...
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=\textwidth]{section33_revision_prediction.pdf}
+\caption{Model-predicted and HST-measured completeness--contamination relations for the $r$ band. Columns show $24\leq r<24.5$ and $24.5\leq r<25$; rows show V10 and the core-plus-tail model. Blue solid curves use direct HST counts; orange dashed curves use the weighted model-component integrals. Open circles and squares mark the HST and model results for $p_S>0.2$, respectively; dotted segments connect results at the same threshold. Both rows use the same cleaned reference sample: 1,284 stars and 36,029 galaxies in the brighter interval, and 1,584 stars and 48,815 galaxies in the fainter interval.}
+\label{fig:singleband-prediction-comparison}
+\end{figure*}
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=\textwidth]{section33_revision_components.pdf}
+\caption{Observed $r$-band $\Delta m$ distributions and model fits. The top and bottom rows show V10 and the core-plus-tail model; the left and right columns show $24\leq r<24.5$ and $24.5\leq r<25$. Black histograms show the observed counts, while blue, orange, and green curves show the unresolved, resolved, and total model components.}
+\label{fig:singleband-component-comparison}
+\end{figure*}
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=\textwidth]{section33_revision_selection.pdf}
+\caption{HST-measured selection performance for a continuous signed $\Delta m$ upper cut (gray dotted), V10 $p_S$ (blue solid), and core-plus-tail model $p_S$ (purple dashed). Both panels use the same cleaned HST objects as Figure~\ref{fig:singleband-prediction-comparison}. At approximately 80\% completeness, contamination is 84.1\% and 92.7\% for the core-plus-tail model, versus 71.1\% and 88.8\% for V10 in the brighter and fainter intervals.}
+\label{fig:singleband-selection-comparison}
+\end{figure*}
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=\textwidth]{section33_revision_probability.pdf}
+\caption{Assigned $p_S$ versus signed $r$-band $\Delta m$. Rows show V10 and the core-plus-tail model; columns show the two magnitude intervals. Gray points represent the full finite-$r$ catalog in the central displayed range; blue open circles and orange crosses identify cleaned HST stars and galaxies. Dashed and dotted lines mark $p_S=0.5$ and $p_S=0.2$. Probabilities also depend on $r$ CModel magnitude, producing a range of values at fixed $\Delta m$. No cleaned HST star in the fainter interval has core-plus-tail model $p_S>0.5$; four HST galaxies and 119 objects without HST labels pass this threshold.}
+\label{fig:singleband-probability-comparison}
+\end{figure*}
+
+% Keep the comparison figures before the next subsection in this preview.
+\clearpage
