@@ -50,33 +50,28 @@ XXXXXX:ZI can add more details about the future plan.
 
 XXXXXX: Could ZI check all the plots captions in the paper? I think some captions are too long...
 
-\begin{figure*}[!t]
+\begin{figure*}[!htbp]
 \centering
-\includegraphics[width=\textwidth]{section33_revision_prediction.pdf}
-\caption{Model-predicted and HST-measured completeness--contamination relations for the $r$ band. Columns show $24\leq r<24.5$ and $24.5\leq r<25$; rows show V10 and the core-plus-tail model. Blue solid curves use direct HST counts; orange dashed curves use the weighted model-component integrals. Open circles and squares mark the HST and model results for $p_S>0.2$, respectively; dotted segments connect results at the same threshold. Both rows use the same cleaned reference sample: 1,284 stars and 36,029 galaxies in the brighter interval, and 1,584 stars and 48,815 galaxies in the fainter interval.}
+\includegraphics[width=\textwidth]{posterior_prediction.pdf}
+\caption{Model-predicted and HST-measured completeness--contamination relations for the V12 $r$-band probability. Columns show $24\leq r<24.5$ and $24.5\leq r<25$. Blue curves use HST counts; orange dashed curves integrate the weighted V12 components over the full $p_S$ selection at each magnitude. Circles and squares mark $p_S>0.2$ in the HST and model results. The samples contain 1,319 stars and 36,129 galaxies, and 1,636 stars and 50,780 galaxies, respectively; both use $-0.5<\Delta m_r<1.5$.}
 \label{fig:singleband-prediction-comparison}
 \end{figure*}
 
-\begin{figure*}[!t]
+\begin{figure*}[!htbp]
 \centering
-\includegraphics[width=\textwidth]{section33_revision_components.pdf}
-\caption{Observed $r$-band $\Delta m$ distributions and model fits. The top and bottom rows show V10 and the core-plus-tail model; the left and right columns show $24\leq r<24.5$ and $24.5\leq r<25$. Black histograms show the observed counts, while blue, orange, and green curves show the unresolved, resolved, and total model components.}
+\includegraphics[width=\textwidth]{posterior_components.pdf}
+\caption{Observed $r$-band $\Delta m$ counts of the accepted reference cohort (black) and the V12 U, R, and total expected counts (blue dashed, orange dotted, and green dash-dotted). Columns show $24\leq r<24.5$ and $24.5\leq r<25$. Expectations integrate the densities within each histogram bin and average over the measured magnitudes; their full normalization uses $-0.5<\Delta m_r<1.5$. The positive U wing is distinct from the narrow core used to define $D$.}
 \label{fig:singleband-component-comparison}
 \end{figure*}
 
-\begin{figure*}[!t]
+\begin{figure*}
 \centering
-\includegraphics[width=\textwidth]{section33_revision_selection.pdf}
-\caption{HST-measured selection performance for a continuous signed $\Delta m$ upper cut (gray dotted), V10 $p_S$ (blue solid), and core-plus-tail model $p_S$ (purple dashed). Both panels use the same cleaned HST objects as Figure~\ref{fig:singleband-prediction-comparison}. At approximately 80\% completeness, contamination is 84.1\% and 92.7\% for the core-plus-tail model, versus 71.1\% and 88.8\% for V10 in the brighter and fainter intervals.}
+\includegraphics[width=\textwidth]{posterior_selection.pdf}
+\caption{HST-measured selection performance for a signed $\Delta m_r$ upper cut (gray dotted) and V12 $p_S$ (blue solid), on the same finite-support reference objects as Figure~\ref{fig:singleband-prediction-comparison}. Every attainable score threshold is retained in the calculation. The two rankings use different information: $p_S$ includes both fitted densities and their magnitude-dependent fractions.}
 \label{fig:singleband-selection-comparison}
 \end{figure*}
 
-\begin{figure*}[!t]
-\centering
-\includegraphics[width=\textwidth]{section33_revision_probability.pdf}
-\caption{Assigned $p_S$ versus signed $r$-band $\Delta m$. Rows show V10 and the core-plus-tail model; columns show the two magnitude intervals. Gray points represent the full finite-$r$ catalog in the central displayed range; blue open circles and orange crosses identify cleaned HST stars and galaxies. Dashed and dotted lines mark $p_S=0.5$ and $p_S=0.2$. Probabilities also depend on $r$ CModel magnitude, producing a range of values at fixed $\Delta m$. No cleaned HST star in the fainter interval has core-plus-tail model $p_S>0.5$; four HST galaxies and 119 objects without HST labels pass this threshold.}
-\label{fig:singleband-probability-comparison}
-\end{figure*}
+
 
 % Keep the comparison figures before the next subsection in this preview.
 \clearpage
