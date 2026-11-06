@@ -1,0 +1,82 @@
+First V12-family fit to the unchanged D_griz distribution, 2026-11-06
+
+Purpose
+Fit a probability mixture to the existing D_griz measurements and predict the
+completeness/contamination of the ORIGINAL D_griz < threshold selection.
+
+Data and boundary
+The original D_griz = sqrt(sum_b ((Delta_m_b-mu_b)/sigma_b)^2) is loaded from
+the frozen V12 score table. It is never rescaled, replaced, or recomputed by
+the fitter. Population measurements are object_id, r_Sersic and D_griz.
+No HST class, Gaia class, per-object size, photometric error, or official
+extendedness column enters the fit or numerical model selection.
+The accepted reference IDs supply membership, as authorized previously.
+HST class values are opened only in evaluate.py, after model freezing.
+
+Model adaptation
+This is the V12 density family applied to a new nonnegative variable, D.
+It is a new D-distribution fit, not reuse of Delta-m parameters. The narrow U
+core is Johnson SU, parameterized by its D-space mode/local width. U also has
+a positive lognormal wing shifted from the core mode. R has two continuous
+skew-normal templates. All densities are normalized on [0, infinity).
+U and R weights are nonnegative and add to one. D-space core parameters have
+no role in recalculating the individual-band cores or the original D score.
+
+Fitting sequence
+1. Fit shared U-core curves and continuous R templates to Rubin parent D data.
+2. Hold template shapes fixed; fit reference population fractions from D and
+   r magnitude, without opening HST classes.
+3. Freeze the core and reference fraction; fit U-wing and R-shape parameters.
+Three numerical starts are compared by unlabeled held-out binned likelihood.
+The held-out split uses object-ID hash mod 5. Fit and evaluation magnitudes
+are 18 <= r_Sersic < 26; the displayed main panels span 23--26 in 0.5-mag bins.
+
+Numerical details
+The likelihood integrates component CDFs over D bins; it does not sample only
+bin centers. Magnitude cells are 0.125 mag wide. D bins are 0.1 wide below 10,
+then logarithmically spaced up to 8192 with an explicit infinite overflow bin.
+ALL finite D values are retained. Stable CDF/survival differences preserve
+small tail masses. Analytical gradients pass independent finite differences.
+PDF/CDF derivative checks and component normalization checks pass.
+Model expectations average over the actual magnitude distribution in each
+displayed slice, with a numerical resolution convergence check.
+
+Reading the plots
+01: black observed counts, blue U, orange R, green sum. Only D<=10 is shown;
+    the number of observed objects beyond D=10 is explicitly printed.
+02: blue CC is counted with HST labels; orange CC is predicted by the fitted
+    distribution. Gray shows the earlier core-template prediction before
+    the reference wing/R-shape refit. Circles mark D<3; squares mark D<5.
+    Blue and orange markers use exactly the same numerical D threshold.
+03: HST star/galaxy histograms are overlaid only after parameter freezing.
+04: full-range fit including large D; counts use equal logarithmic bins.
+
+Prediction definitions
+U_selected(t) = sum_i w_U(m_i) F_U(t | m_i).
+R_selected(t) = sum_i [1-w_U(m_i)] F_R(t | m_i).
+Predicted completeness = U_selected / sum_i w_U(m_i).
+Predicted contamination = R_selected / (U_selected + R_selected).
+Measured completeness and contamination use the corresponding HST counts.
+The model and HST denominators therefore test the inferred population and
+component shapes together; no HST star count is substituted into predictions.
+
+Initial finding
+The total D distribution and unlabeled held-out likelihood improve after
+the wing/R refit. However the predicted CC curves show systematic mismatch
+with HST, especially at high completeness and at faint magnitudes.
+For D<3 in 24--24.5, predicted C=44.7%, Q=4.2%; HST C=36.9%, Q=4.7%.
+For D<3 in 24.5--25, predicted C=39.0%, Q=19.8%; HST C=34.1%, Q=27.3%.
+For D<3 in 25.5--26, predicted C=28.6%, Q=67.7%; HST C=21.0%, Q=80.3%.
+The component check shows an overestimated U peak in the intermediate/faint
+bins and insufficient R near the low-D overlap. This first fit does not yet
+provide calibrated CC predictions. It is an experimental result for review,
+not a replacement for the adopted paper model or its measured D CC curves.
+
+Reproduction and audit
+python3 fit.py
+python3 evaluate.py
+FIT_FROZEN_BEFORE_LABELS.json records input/model hashes and fitting scope.
+fit_log.json records starts, convergence and fitting parameters.
+CC_at_fixed_D.csv contains directly matched-threshold comparisons.
+CC_curves.csv and component_counts.csv preserve plotted numerical values.
+EVALUATION_CHECKS.json records numerical checks and frozen-model verification.
