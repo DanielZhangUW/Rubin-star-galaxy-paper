@@ -91,7 +91,7 @@
  
 \begin{document}  
  
-\title{Improved Probabilistic Star-Galaxy Separation Method for Rubin LSST Catalogs}
+\title{New and Improved Probabilistic Star-Galaxy Separation Method for Rubin LSST Catalogs}
  
 \correspondingauthor{{\v Z}eljko Ivezi{\'c}}
 
@@ -130,34 +130,29 @@ The morphological classification of resolved and unresolved sources, commonly re
 separation'', is a fundamental step in the analysis of wide-field imaging surveys such as Rubin Observatory's
 Legacy Survey of Space and Time (LSST). Star-galaxy separation becomes increasingly challenging at
 the faint magnitudes probed by LSST because galaxy counts rise rapidly with magnitude while their angular sizes become
-progressively smaller. LSST photometric catalogs provide several classifiers, including a binary classifier
-\texttt{extendedness} in each band, based on the threshold difference between PSF, \(m_{\mathrm{PSF}}\), and CModel,
+progressively smaller. LSST photometric catalogs provide several classifiers, including a per-band binary classifier
+\texttt{extendedness} based on the threshold difference between PSF, \(m_{\mathrm{PSF}}\), and CModel,
 \(m_{\mathrm{CModel}}\), magnitudes that was pioneered by SDSS, and a novel method \texttt{griz\_model\_extendedness}
-that uses best-fit Sersic model parameters, augmented by a heuristic method to correct for noise and size effects.
-All provided classifiers suffer from several theoretical and practical shortcomings. The 
-\texttt{extendedness} 
-
-
-In this work, we implement
-the Bayesian star-galaxy classification method of Slater, Ivezi\'{c} \& Lupton (2020, SIL2020),
-which overcomes these shortcomings.
+that uses best-fit Sersic model parameters and also corrects for noise and size effects.
+All provided classifiers suffer from several theoretical and practical shortcomings. 
+In this work, we implement the Bayesian star-galaxy classification method of Slater, Ivezi\'{c} \& Lupton (2020, SIL2020),
+which overcomes these shortcomings. 
 In each band, we model the distribution of sources in the two-dimensional space defined by
 \(\Delta m = m_{\mathrm{PSF}} - m_{\mathrm{Sersic}}\) and magnitude \(m_{\mathrm{Sersic}}\).
 At a fixed magnitude, the distribution is modeled as a mixture of unresolved and resolved
 components which automatically accounts for the varying star-to-galaxy number ratio and
-allows us to compute the posterior probability that a source is resolved. 
+allows us to compute the posterior probability that a source is resolved, as well as sample
+completeness and contamination for arbitrary selection thresholds. 
 We apply this method to the Rubin Data Preview 2 object catalog and validate the resulting classifications using external HST
 labels in the COSMOS field with $5\sigma$ detection limit for point sources in the $r$ band of 26.4.
-Using these labels as the ground truth, we quantitatively compare the performance of the Bayesian classifier with that of the default Rubin \texttt{extendedness}
+Using these labels as the ground truth, we quantitatively compare the performance of the Bayesian
+classifier with that of the default Rubin \texttt{extendedness}
 parameter and find that the former consistently outperforms the latter, with the improvement
 increasing as additional bands are incorporated.  Approximately, the Bayesian classifier
-achieves the same classification performance for stellar subsamples at a magnitude limit about half a 
-magnitude fainter than the \texttt{extendedness} classifer, and approaches idealized statistical limit
+achieves the same classification performance for stellar subsamples at SNR limit {\it more than a 
+magnitude fainter} than the CModel-based \texttt{extendedness} classifier, and approaches idealized statistical limit
 discussed by SIL2020. Depending on scientific applications, this morphological classification can be
-further improved by incorporating complementary color-based classifiers. For example, the contamination of
-morphologically-selected faint blue stars with $24\leq r<24.5$ and $g-r>0.3$ can be decreased from 45\% to 25\% when
-the $g-r$ cut is explicitly added as selection criterion. This contamination level can be further
-decreased if a lower completeness level can be afforded in a particular science program.
+further improved by incorporating complementary color-based classifiers. 
 \end{abstract}
 
 %% Keywords should appear after the \end{abstract} command. 
@@ -272,17 +267,4 @@ decreased if a lower completeness level can be afforded in a particular science 
 
 
 
-
-
-
-	modified:   Figure19.pdf
-	modified:   appendix.tex
-	modified:   methodology.tex
-	modified:   paper.pdf
-	modified:   paper.tex
-	modified:   section33_focus.tex
-
-
-
-
-        
+ 
