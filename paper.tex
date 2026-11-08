@@ -139,19 +139,22 @@ In this work, we implement the Bayesian star-galaxy classification method of Sla
 which overcomes these shortcomings. 
 In each band, we model the distribution of sources in the two-dimensional space defined by
 \(\Delta m = m_{\mathrm{PSF}} - m_{\mathrm{Sersic}}\) and magnitude \(m_{\mathrm{Sersic}}\).
-At a fixed magnitude, the distribution is modeled as a mixture of unresolved and resolved
+Importantly, CModel magnitudes are replaced by S\'{e}rsic magnitudes because the latter result in superior
+performance.  At a fixed magnitude, the distribution is modeled as a mixture of unresolved and resolved
 components which automatically accounts for the varying star-to-galaxy number ratio and
 allows us to compute the posterior probability that a source is resolved, as well as sample
-completeness and contamination for arbitrary selection thresholds. 
+completeness and contamination for arbitrary selection thresholds. This approach also allows for
+a statistically sound combination of morphological information from multiple bands. 
 We apply this method to the Rubin Data Preview 2 object catalog and validate the resulting classifications using external HST
 labels in the COSMOS field with $5\sigma$ detection limit for point sources in the $r$ band of 26.4.
 Using these labels as the ground truth, we quantitatively compare the performance of the Bayesian
 classifier with that of the default Rubin \texttt{extendedness}
 parameter and find that the former consistently outperforms the latter, with the improvement
 increasing as additional bands are incorporated.  Approximately, the Bayesian classifier
-achieves the same classification performance for stellar subsamples at SNR limit {\it more than a 
+achieves the same classification performance for stellar subsamples at SNR limits {\it more than a 
 magnitude fainter} than the CModel-based \texttt{extendedness} classifier, and approaches idealized statistical limit
-discussed by SIL2020. Depending on scientific applications, this morphological classification can be
+discussed by SIL2020. In addition, it allows users to control sample completeness and/or
+contamination as a function of magnitude. Depending on scientific applications, this morphological classification can be
 further improved by incorporating complementary color-based classifiers. 
 \end{abstract}
 

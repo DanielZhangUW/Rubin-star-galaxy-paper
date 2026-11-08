@@ -11,14 +11,14 @@
 \section{Datasets}
 \label{sec:data-methods}
 
-Here we describe two principal datasets used in our analysis: Rubin Data Preview 2 catalogs and HST
+Here we describe two  datasets used in our analysis: Rubin Data Preview 2 catalogs and HST
 data with star-galaxy labels used for testing methods discussed in \S 3. 
 
 
 \subsection{Rubin Data Preview 2} 
 \label{sec:data}
 
-All data collected with the LSST Camera \cite{RTN-115} during the commissioning of the Rubin Observatory
+All data collected with the LSST Camera (\citealt{RTN-115}) during the commissioning of the Rubin Observatory
 will be released as Data Preview 2\footnote{See https://dp2.lsst.io/} (hereafter DP2). Coadded deep images and resulting catalogs have
 been released in July 2026 as Early Data Preview 2. These coadded images are based on about 24,000
 single-visit images and cover about 3,000 sq. deg. of sky. 
@@ -116,15 +116,16 @@ is perfect and thus we first examine the distribution of HST-classified ``stars`
 various informative color-color diagrams constructed with Rubin photometry. 
 
 The top left panel in Figure~\ref{fig:truth_morphology_color} shows the distribution of stars and galaxies classified
-using HST labels in the \(\Delta m = m_{\mathrm{PSF}} - m_{\mathrm{CModel}}\) vs. \(m_{\mathrm{CModel}}\)
-diagram. As we describe in detail in the next Section, modeling this distribution is a key ingredient of the
+using HST labels in the \(\Delta m = m_{\mathrm{PSF}} - m_{\mathrm{Sersic}}\) vs. \(m_{\mathrm{Sersic}}\)
+diagram (justification for replacing CModel magnitude by S\'{e}rsic magnitudes in \(\Delta m\) is discussed in
+\S3). As we describe in detail in the next Section, modeling this distribution is a key ingredient of the
 Bayesian star-galaxy separation method presented here. 
 
-
 The top right panel in Figure~\ref{fig:truth_morphology_color} shows that faint galaxies ($r>24$),
-in addition to outnumbering stars at faint magnitudes, have on average bluer $g-i$ colors than stars. 
-The clearly different distributions of stars and galaxies in color-color diagrams shown in the bottom
-two panels in Figure~\ref{fig:truth_morphology_color}
+in addition to outnumbering stars at faint magnitudes, have on average bluer $g-i$ colors (based on
+CModel magnitudes and corrected for ISM dust reddening using values provided in DP2 catalogs)
+than stars.  The clearly different distributions of stars and galaxies in color-color diagrams shown
+in the bottom two panels in Figure~\ref{fig:truth_morphology_color}
 demonstrate that colors can be used to enhance morphological star-galaxy separation. 
 Nevertheless, Figure~\ref{fig:truth_color_color} and the top left panel in
 Figure~\ref{fig:truth_morphology_color}  show that increased photometric noise close to the faint
@@ -132,7 +133,7 @@ magnitude limit will cause deteriorated performance for both morphological and c
 star-galaxy separation methods. Extending the start of this deterioration to a fainter magnitude
 limit is one of the primary goals of this work. It is notable that the top right panel in Figure~\ref{fig:truth_color_color} 
 implies that most unresolved faint blue sources have $u-g$ color more typical of low-redshift
-quasars than of main sequence stars (for a detailed discussion of the blue star counts see
+quasars ($u-g<0.6$) than of main sequence stars (for a detailed discussion of the blue star counts see
 \citealt{2026A&A...707A.333P}). 
 
 
@@ -162,7 +163,7 @@ Figure~\ref{fig:r_extendedness_confusion_cmd}, which compares subsamples classif
 using HST ground-truth labels and the default Rubin \texttt{extendedness} binary class in the $r$ band.
 As evident, a significant fraction of HST sources within about two magnitudes from the Rubin faint limit
 are misclassified when using default \texttt{extendedness} parameter. Misclassifications have
-a more severe impact on stellar sample: only 26\% of ``stars'' selected by \texttt{extendedness}=0
+a more severe impact on candidate stellar sample: only 26\% of ``stars'' selected by \texttt{extendedness}=0
 condition are unresolved in HST data. This high level of stellar sample contamination by faint
 galaxies increases towards the faint end (see the bottom left panel in
 Figure~\ref{fig:r_extendedness_confusion_cmd}).
@@ -221,8 +222,9 @@ Because we aim to test statistical performance of our star-galaxy separation met
 objects, we exclude objects with HST ``star'' label that both appear resolved in Rubin data and also
 have Rubin colors inconsistent with the main stellar locus. 
 
-We checked whether HST-labeled stars lie near the empirical COSMOS stellar
-locus. For each source, we calculated its shortest distance to the locus using
+We checked whether HST-labeled stars lie near the empirical main stellar
+locus in Rubin colors quantified using data for stars with $r<23$  from the COSMOS field.
+For each source, we calculated its shortest distance to the locus using
 five dereddened CModel colors: $(u-g,\,g-r,\,r-i,\,i-z,\,z-y)$. Because the
 scatter in these colors changes with magnitude, we set a separate distance
 threshold in each Rubin $r$-band CModel magnitude bin. Each threshold was set
@@ -233,7 +235,7 @@ We excluded an HST-labeled star from the performance sample only when it was
 both beyond the color threshold and classified as resolved by Rubin in the
 $r$ band ($\mathrm{extendedness}_r=1$). This removed 836 of the 15,760
 HST-labeled stars (5.30\%), leaving 14,924 (94.70\%). In the two magnitude
-ranges of interest, the exclusions were 104 of 1,388 stars (7.49\%) at
+ranges of primary interest for measuring performance, the exclusions were 104 of 1,388 stars (7.49\%) at
 $24<r<24.5$ and 116 of 1,700 stars (6.82\%) at $24.5<r<25$. Stars without the
 measurements needed to check both criteria were not excluded by this
 procedure.
