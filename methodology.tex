@@ -21,6 +21,7 @@ For pedagogical reasons, all plots presented here are based on S\'{e}rsic magnit
 produced both versions of the entire analysis.
 
 Both CModel and S\'{e}rsic magnitudes/fluxes are based on fits of the S\'{e}rsic brightness profile
+(e.g., \citealt{2005PASA...22..118G})
 \begin{equation}
           I(R)=I_e\exp\left\{ -b_n\left[ \left(\frac{R}{R_e}\right)^{1/n}-1 \right]\right\}.
 \end{equation}
@@ -28,7 +29,7 @@ to data.  Here $I(R)$ is the surface brightness at projected radius $R$; $R_e$ i
 radius enclosing half of the total light; $b_n$ is a normalization constant chosen so that $R_e$
 encloses half of the total flux; $I_e$ is the surface brightness at the effective radius, and 
 $n$ is the S\'ersic index. The S\'{e}rsic index controls the concentration and shape of the profile.
-An exponential profile with $n=1$ is often used to describe galaxy disks. The $n=4$, known
+An exponential profile with $n=1$ is often used to describe galaxy disks. A profile with $n=4$, known
 as de Vaucouleurs profile, is often used to describe elliptical galaxies and classical bulges.
 
 The main difference between  CModel vs. S\'{e}rsic fluxes is that the latter are based
@@ -38,7 +39,7 @@ stands for composite\footnote{For more details, see
    https://www.sdss3.org/dr8/algorithms/magnitudes.php}), 
 The code takes the best fit exponential and de Vaucouleurs profile fits in a given band and asks for
 the linear combination of the two that best fits the image. The weighting coefficient (clipped between zero
-and one) is defined as de Vaucouleurs term, fracDeV, defining CModel composite flux as 
+and one) is defined as de Vaucouleurs term, fracDeV, defining the CModel composite flux as 
 \begin{equation}
          F_{CModel}  = fracDeV \, F_{deV} + (1 - fracDeV) \, F_{exp}. 
 \end{equation}
@@ -54,14 +55,16 @@ than in case of CModel magnitudes. This behavior would result in worse star-gala
 separation performance with S\'{e}rsic magnitudes but only when a simple cut on \(\Delta m \)
 is used for classification. With explicit modeling of these distributions, described below,
 \(\Delta m \) based on S\'{e}rsic magnitudes is clearly superior to its alternative based
-on CModel magnitudes. 
+on CModel magnitudes, especially at the faint end of the sample. 
 
 \begin{figure*}
   \centering
      \includegraphics[width=\textwidth]{CCcurvesSersiCmodel.png}
-     \caption{A comparison of contamination vs. completeness curves for unresolved sources
-      using two versions of the r-band $\dm$ based on Sersic and CModel fluxes, in different magnitude bins, as
-      marked. Note much lower levels of contamination when Sersic fluxes are used, especially at the faint end. 
+     \caption{A comparison of contamination (see eq.~\ref{eq:complS} for definition) vs. completeness (see eq.~\ref{eq:contS})
+      curves for unresolved sources
+      using two versions of the $r$-band $\dm$ based on Sersic and CModel fluxes, in different magnitude bins, as
+      marked. Contamination and completeness are estimated using sources with HST labels. 
+      Note much lower levels of contamination when Sersic fluxes are used, especially at the faint end. 
   }
   \label{fig:magdmCCcomparison}
 \end{figure*}
@@ -94,13 +97,13 @@ The subsample of objects with HST labels can be used to quantify the $\Delta m$ 
 for unresolved and resolved objects (see Figure~\ref{fig:magdmcomparison}). However, such a ``training'' sample is currently available only
 for a very small fraction of the LSST footprint (less than 1\% of the area). Instead, we use the fact
 that very large numbers of objects remaining even after binning in both sky location and magnitude
-can robustly constrain the two components of the $\Delta m$ distribution even when such labels are not
+can robustly constrain the two components of the $\Delta m$ distribution  when such labels are not
 available a priori. We only use the subsample of objects with HST labels to independently assess the
 performance of our method. 
 
 
 
-\subsection{Mixture Model for \(\Delta m\) vs. \(m_{\mathrm{CModel}}\) diagram \label{sec:mixmodel}} 
+\subsection{Mixture Model for \(\Delta m\) vs. \(m_{\mathrm{Sersic}}\) diagram \label{sec:mixmodel}} 
 
 We assume that a sample is selected from a suitably chosen sky region over which the stellar and galaxy populations can be assumed to be statistically uniform. Over angular scales of
 several degrees, stellar counts vary much more rapidly than galaxy counts (large galaxy clusters are
@@ -116,18 +119,18 @@ with each tract in DP2 containing 81 patches. The patch size is about 12 arcmin 
 (approximately, one CCD).}  is sufficiently small for this purpose (and consistent with our choice of
 the COSMOS field for quantitative analysis). 
  
-Given a ``tract'' catalog, at a fixed CModel magnitude (see below for binning details), the
+Given a ``tract'' catalog, at a fixed S\'{e}rsic magnitude (see below for binning details), the
 distribution of \(\Delta m\) in a given band (with the band index suppressed for notational simplicity) is
 modeled as a mixture of an unresolved (star) component and a resolved (galaxy) component, 
 \begin{equation}
-                                p(\dm \,|\, m) = w_U \, \funr (\dm) +  w_R \, \fres (\dm),
+                                p(\dm \,|\, m) = w_U(m) \, \funr (\dm \,|\, m) +  w_R(m) \, \fres (\dm \,|\, m),
   \label{eq:mixpdf1}
 \end{equation}
 where $w_U + w_R = 1$, and $\funr$  and $\fres$  are properly normalized probability density
 functions. With this decomposition, the probability that an object is unresolved is given by
 Bayes' theorem as
 \begin{equation}
-        p_S(\dm) \equiv p({\rm unr}\mid\dm)= \frac{w_U \funr(\dm)}  {w_U \funr (\dm) + w_R \fres (\dm)}.
+        p_S(\dm) \equiv p({\rm unr}\mid\dm)= \frac{w_U(m) \funr(\dm \,|\, m)}  {w_U(m) \funr (\dm \,|\, m) + w_R(m) \fres (\dm \,|\, m)}.
   \label{eq:pSdm} 
 \end{equation}
 and the probability that it is resolved is $p_G = 1 - p_S$ (note that we use indices $S$ and
@@ -151,23 +154,58 @@ We test these predictions below using HST-based labels.
 %  binary stars) and some HST galaxies are cannot be resolved using Rubin images obtained with
 %  ground-based seeing.
 
+
+
 Therefore, a good model for $p(\dm \,|\, m)$ (eq.~\ref{eq:mixpdf1}) is crucial. Informed by observed
-$\dm$ distributions (see Figure~\ref{fig:magdmcomparison}),
-we model the unresolved component, $\funr$, as a single Gaussian with mean
-\(\mu_U\), width \(\sigma_U\) and weight \(w_U\).  The resolved component is modeled as a sum
-of \(K\) skew-normal distributions with weight \(w_{R,k}\), location
-\(\mu_{R,k}\), scale \(\sigma_{R,k}\), and shape parameter \(\alpha_{R,k}\). The full
-mixture probability density function is
+$\dm$ distributions (see Figure~\ref{fig:magdmcomparison}), we model the unresolved component
+as a weighted sum of a ``core''  distribution $J$ and a ``tail'' distribution $T$. 
 \begin{equation}
-  p(\Delta m \,|\, m) = w_U \, \mathcal{N}(\Delta m | \, \mu_U,\, \sigma_U)
-    + \sum_{k=1}^{K} w_{R,k} \, \mathcal{SN}(\Delta m | \, \mu_{R,k},\, \sigma_{R,k},\, \alpha_{R,k}),
+          \funr (\dm) = [1-f(m)] \, J (\Delta m) + f(m) \, T(\Delta m), 
+  \label{eq:mixpdf2}
+\end{equation}
+where function $f(m)$ quantifies observed strentgth of the tail component. The core component
+is modeled as
+\begin{equation}
+       J(\Delta m) = {\delta \over \sigma_c(m) \sqrt{2\pi} \sqrt{1+z^2}} \,  {\rm e}^{-\eta^2/2},
+\end{equation}
+where $z = [\Delta m - \mu_c(m)]/\sigma_c(m)$ and $\eta = \gamma + \delta \,\ asinh(z)$ ($\delta>0$). 
+This is a normal density in the transformed coordinate multiplied by $|d\eta / d \Delta m|= \delta /[\sigma_c \sqrt{1 +  z^2}]$.
+Increasing $\sigma_c(m)$ generally broadens the curve; $\gamma$ and $\delta$ change its shape. 
+ 
+The tail component is modeled as
+\begin{equation}
+             T(\Delta m)  = {1 \over h y  \sqrt{2\pi} } {\rm exp}\left[-{ (\ln[y / a(m)])^2  \over  2h^2} \right]
+\label{eq:mixpd4}
+\end{equation}
+where $y = \Delta m - \mu_c(m)$ and $a(m) = k \sigma_c(m)$, with $h$ and $k$ free model parameters
+(with $\gamma$ and $\delta$,  unresolved component is modeled with four free parameters).
+ 
+Based on data exploration and trial-and-error attempts, we assume the following functions to model
+variations with magnitude
+\begin{equation}
+        w_U(m) = w_{floor} +   {1 - w_{floor}\over 1 + {\rm e}^{-c - d(m-22)}} 
+\end{equation}
+and       
+\begin{equation}
+        f(m) =     {1 \over 1 + {\rm e}^{-f_0 - f_1(m-22)}} . 
+\end{equation}
+Here $w_{floor}$, $c$, $d$, $f_0$, $f_1$ are additional five free model parameters that describe
+the variation of the tail-to-core and unresolved-to-resolved ratios with magnitude.
+
+The resolved component is modeled as a sum
+of \(K=2\) skew-normal distributions with weight \(w_{R,k}\), location
+\(\mu_{R,k}\), scale \(\sigma_{R,k}\), and shape parameter \(\alpha_{R,k}\),  
+\begin{equation}
+  \funr (\dm) =  \sum_{k=1}^{K} w_{R,k} \, \mathcal{SN}(\Delta m | \, \mu_{R,k},\, \sigma_{R,k},\, \alpha_{R,k}),
   \label{eq:mixture_pdf}
 \end{equation}
-where \(\mathcal{N}\) denotes the Gaussian and \(\mathcal{SN}\) the skew-normal distribution,
-and the weights are constrained to sum to unity: \(w_U = 1 - \sum_k w_{R,k}\) (functions
-\(\mathcal{N}\) and \(\mathcal{SN}\) are properly normalized probability density functions).
-Here \(\mathcal{SN}(x\mid\mu,\sigma,\alpha)=2\phi(t)\Phi(\alpha t)/\sigma\),
-with \(t=(x-\mu)/\sigma\), where \(\phi\) and \(\Phi\) are the standard-normal density and cumulative distribution functions.
+where \(\mathcal{N}\) denotes the Gaussian distribution  and \(\mathcal{SN}\) the skew-normal
+distribution. Here \(\mathcal{SN}(x\mid\mu,\sigma,\alpha)=2\phi(t)\Phi(\alpha t)/\sigma\),
+with \(t=(x-\mu)/\sigma\), where \(\phi\) and \(\Phi\) are the standard-normal density and
+cumulative distribution functions. Therefore, the resolved component model includes 7 additional free
+parameters (note the normalization constraint $w_U = \sum_{k=1}^{K} w_{R,k}$), for a total of 
+16 free model parameters. Details of the fitting algorithm are described in the next section. 
+
 The galaxy-to-star count ratio, which serves as Bayesian prior, is
 \begin{equation}
                    N_{GS} \equiv   {N_G \over N_S}  = {\sum_{k=1}^{K} w_{R,k}  \over  w_U}. 
@@ -188,8 +226,19 @@ and Bayes factor is important later when combining multiple sources of classific
 (with the overall Bayes factor equal to the product of individual Bayes factors). 
 
 
-\subsubsection{Fitting Details}
 
+\subsection{Fitting Details}
+
+The 2-dimensional $\Delta m$ vs. magnitude distribution is modeled with 16 free model parameters.
+
+These best-fit parameters might be degenerate and the fitting step unstable. In order to handle
+these challenges, we have implemented DANIEL's BLACK MAGIC FITTER...
+
+DANIEL, help! 
+
+%### THIS IS WHERE GORY DETAILS COME, SUCH AS ITERATIONS LOGIC if it becomes too complex, it can go to Appendix... 
+
+FIX THE REMAINDER OF THIS SECTION (and refer to Figure~\ref{fig:V12fitting}), 
 
 
 
@@ -200,7 +249,6 @@ and Bayes factor is important later when combining multiple sources of classific
   }
   \label{fig:V12fitting}
 \end{figure*}
-
 
 
 
@@ -301,14 +349,22 @@ at faint magnitudes, while the constrained model recovers the expected monotonic
 ratio in agreement with the COSMOS2020 external truth labels (note that in this sample at the faint
 end galaxies outnumber stars by more than a factor of 30). 
 
-The model parameters are selected according to the CModel magnitude bin in which each source falls.
+
+
+The model parameters are selected according to the S\'{e}rsic magnitude bin in which each source falls.
 The quality of the fits is illustrated in Figure~\ref{fig:slice_fits}, which shows the
 mixture model overlaid on the observed \(\Delta m\) histograms in each magnitude bin, and in
 Figure~\ref{fig:model2d_residuals}, which shows the 2D data, model, and residual maps in the
 \(\Delta m\) vs.\ \(m_{\mathrm{CModel}}\) plane.
 
+XXXXXXXXXXX  DANIEL, FIX ABOVE
 
-\subsection{The Performance of the \(\Delta m\) Mixture Model} 
+
+
+\subsection{The Performance of the Single-band \(\Delta m\) Mixture Model}
+
+XXXX  ZI stopped here 
+
 
 Here we use HST labels to evaluate completeness and contamination for the stellar sample
 and compare them with the mixture-model predictions. We focus on the stellar subsample and
@@ -317,19 +373,33 @@ $24.5\leq r<25$. Brighter than this range, population mixing is much smaller and
 more accurate, leading to more accurate star-galaxy separation, whereas at fainter
 magnitudes the performance deteriorates rapidly (especially for the stellar subsample).
 
-\input{section33_focus}
-
-% Bayes factor: BF(dm) = fG(dm) / fS(dm) 
-% pS = fS(dm) / [fS(dm) + fG(dm)]
-
-% pS = 1 / (1 + priorNGS * BF) 
-
-% so 1/pS = 1 + prior * BF = 1 + prior * fG / fS
-%    and   pS = 1 / (1 + prior NGS * fG / fS) 
+Using the mixture model from eq.~\ref{eq:mixpdf1}, we compare 
+completeness and contamination for the stellar subsample predicted by
+eqs.~\ref{eq:complS} and \ref{eq:contS} with direct counts from the cleaned HST sample
+for $24\leq r<24.5$ and $24.5\leq r<25$ in Figure~\ref{fig:singleband-prediction-comparison}.
+As the two top panels show, the model underpredicts observed contamination levels
+at every completeness level, and in both magnitude bins. For example, at the 50\% completeness
+level, the model predicts negligible contamination while the observed contamination exceeds 40\%.
 
 
 
 
+
+%\input{section33_focus}
+ 
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=\textwidth]{Figure12.pdf}
+\caption{Model-predicted (red dashed lines) and HST-observed (solid blue lines) $r$-band completeness--contamination relations in
+  different magnitude bins, as marked.  Observed curves are based on direct HST counts of unresolved
+  and resolved sources. The model-predicted curves are based on integrals given by
+  eqs.~\ref{eq:complS} and \ref{eq:contS}. Open circles and squares mark the HST and model results
+  for $p_S>0.2$, respectively; dotted segments connect results at the same threshold. Selected
+  samples are highly imbalanced and dominated by galaxies.}
+\label{fig:singleband-prediction-comparison}
+\end{figure*}
+
+ 
 \subsection{The Multi-band Case}
 
 
