@@ -203,8 +203,8 @@ where \(\mathcal{N}\) denotes the Gaussian distribution  and \(\mathcal{SN}\) th
 distribution. Here \(\mathcal{SN}(x\mid\mu,\sigma,\alpha)=2\phi(t)\Phi(\alpha t)/\sigma\),
 with \(t=(x-\mu)/\sigma\), where \(\phi\) and \(\Phi\) are the standard-normal density and
 cumulative distribution functions. Therefore, the resolved component model includes 7 additional free
-parameters (note the normalization constraint $w_U = \sum_{k=1}^{K} w_{R,k}$), for a total of 
-16 free model parameters. Details of the fitting algorithm are described in the next section. 
+parameters (note the normalization constraint $w_U = \sum_{k=1}^{K} w_{R,k}$). Details of the
+fitting algorithm are described in the next section. 
 
 The galaxy-to-star count ratio, which serves as Bayesian prior, is
 \begin{equation}
@@ -229,7 +229,8 @@ and Bayes factor is important later when combining multiple sources of classific
 
 \subsection{Fitting Details}
 
-The 2-dimensional $\Delta m$ vs. magnitude distribution is modeled with 16 free model parameters.
+The 2-dimensional $\Delta m$ vs. magnitude distribution is modeled with 11 free model parameters
+for each magnitude bin, and additional 5 parameters that describe magnitude variations. 
 
 These best-fit parameters might be degenerate and the fitting step unstable. In order to handle
 these challenges, we have implemented DANIEL's BLACK MAGIC FITTER...
