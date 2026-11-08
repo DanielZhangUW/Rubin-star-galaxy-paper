@@ -3,8 +3,8 @@
 
 We first briefly review the Bayesian star-galaxy separation method proposed in SIL2020 and then
 apply it to single-band Rubin data, followed by its extension to the multi-band case. Our principal
-measured object property in the V12 analysis is the difference between the PSF and S\'{e}rsic magnitudes,
-\(\Delta m = m_{\mathrm{PSF}} - m_{\mathrm{S\acute{e}rsic}}\). For unresolved sources, this \(\Delta m\) is consistent with zero within the measurement noise, while for resolved objects \(\Delta m > 0\) (see the top left panel in Figure~\ref{fig:truth_morphology_color}).
+measured object property is the difference between PSF, \(m_{\mathrm{PSF}}\), and CModel, \(m_{\mathrm{CModel}}\),
+magnitudes, \(\Delta m = m_{\mathrm{PSF}} - m_{\mathrm{CModel}}\). For unresolved sources, this \(\Delta m\) is consistent with zero within the measurement noise, while for resolved objects \(\Delta m > 0\) (see the top left panel in Figure~\ref{fig:truth_morphology_color}).
 A detailed comparison and statistical discussion of this quantity and several other quantities proposed for
 star-galaxy separation in the literature is available in SIL2020. 
 
@@ -16,12 +16,14 @@ star-galaxy separation in the literature is available in SIL2020.
 \begin{figure*}
   \centering
   \includegraphics[width=\textwidth]{Figure8.pdf}
-  \caption{The panels show the \(\Delta m \) vs. \(m_{\mathrm{CModel}}\) distributions for
+  \caption{The panels compare the \(\Delta m \) vs. \(m_{\mathrm{CModel}}\) (top row) and
+    the \(\Delta m \) vs. \(m_{\mathrm{Sersic}}\) (bottom row)  distributions for
     unresolved (left) and resolved (right) objects classified using HST labels. Note that some
-    objects in the left panel appear clearly resolved by Rubin ($\dm > 0.05$), even for $r<24$
-    (see \S \ref{sec:suspectHST}), and that galaxies (right panel) 
-    dominate the region around $\dm \sim 0$ at the faint end ($r > 24$). Quantitative modeling
-    of these two-dimensional distributions is at the core of the star-galaxy separation method
+    objects in the left panels appear clearly resolved by Rubin ($\dm > 0.05$), even for $r<24$
+    (see \S \ref{sec:suspectHST}). Galaxies 
+    dominate the region around $\dm \sim 0$ at the faint end ($r > 24$) much more strongly
+    in the top right panel than in the bottom right panel.  Quantitative modeling
+    of the two-dimensional distributions in the bottom row is at the core of the star-galaxy separation method
     discussed here. 
   }
   \label{fig:magdmcomparison}
@@ -35,11 +37,23 @@ for unresolved and resolved objects (see Figure~\ref{fig:magdmcomparison}). Howe
 for a very small fraction of the LSST footprint (less than 1\% of the area). Instead, we use the fact
 that very large numbers of objects remaining even after binning in both sky location and magnitude
 can robustly constrain the two components of the $\Delta m$ distribution even when such labels are not
-available a priori. We use cleaned HST-associated reference membership for the reference-sample calibration, while withholding the HST class values during numerical fitting. The HST classes are subsequently used to evaluate and select methods, so these comparisons are not an independent blind test. 
+available a priori. We only use the subsample of objects with HST labels to independently assess the
+performance of our method. 
 
 
 
-\subsection{Mixture Model for \(\Delta m\) vs. S\'{e}rsic Magnitude \label{sec:mixmodel}} 
+\begin{figure*}
+  \centering
+     \includegraphics[width=\textwidth]{CCcurvesSersiCmodel.png}
+     \caption{A comparison of contamination vs. completeness curves for unresolved sources
+      using two versions of the r-band $\dm$ based on Sersic and CModel fluxes, in different magnitude bins, as
+      marked. Note much lower levels of contamination when Sersic fluxes are used, especially at the faint end. 
+  }
+  \label{fig:magdmCCcomparison}
+\end{figure*}
+
+
+\subsection{Mixture Model for \(\Delta m\) vs. \(m_{\mathrm{CModel}}\) diagram \label{sec:mixmodel}} 
 
 We assume that a sample is selected from a suitably chosen sky region over which the stellar and galaxy populations can be assumed to be statistically uniform. Over angular scales of
 several degrees, stellar counts vary much more rapidly than galaxy counts (large galaxy clusters are
@@ -55,7 +69,7 @@ with each tract in DP2 containing 81 patches. The patch size is about 12 arcmin 
 (approximately, one CCD).}  is sufficiently small for this purpose (and consistent with our choice of
 the COSMOS field for quantitative analysis). 
  
-Given a ``tract'' catalog, at a fixed S\'{e}rsic magnitude (see below for fitting details), the
+Given a ``tract'' catalog, at a fixed CModel magnitude (see below for binning details), the
 distribution of \(\Delta m\) in a given band (with the band index suppressed for notational simplicity) is
 modeled as a mixture of an unresolved (star) component and a resolved (galaxy) component, 
 \begin{equation}
@@ -70,7 +84,7 @@ Bayes' theorem as
   \label{eq:pSdm} 
 \end{equation}
 and the probability that it is resolved is $p_G = 1 - p_S$ (note that we use indices $S$ and
-$unr$, or $G$ and $res$ as classification proxies; these model components do not exactly coincide with HST classes). 
+$unr$, or $G$ and $res$ interchangeably). 
 
 The same model predicts the performance, completeness and contamination, for each class
 as a function of a hard $\dm$ threshold. If $\dm<\dm_{\rm cut}$ is classified as unresolved (S),
@@ -90,37 +104,26 @@ We test these predictions below using HST-based labels.
 %  binary stars) and some HST galaxies are cannot be resolved using Rubin images obtained with
 %  ground-based seeing.
 
-The adopted V12 model describes the unresolved density as a narrow Johnson $S_U$ core $J$ plus a positive lognormal wing $T$,
+Therefore, a good model for $p(\dm \,|\, m)$ (eq.~\ref{eq:mixpdf1}) is crucial. Informed by observed
+$\dm$ distributions (see Figure~\ref{fig:magdmcomparison}),
+we model the unresolved component, $\funr$, as a single Gaussian with mean
+\(\mu_U\), width \(\sigma_U\) and weight \(w_U\).  The resolved component is modeled as a sum
+of \(K\) skew-normal distributions with weight \(w_{R,k}\), location
+\(\mu_{R,k}\), scale \(\sigma_{R,k}\), and shape parameter \(\alpha_{R,k}\). The full
+mixture probability density function is
 \begin{equation}
- \funr(x\mid m)=[1-f(m)]J^W(x\mid m)+f(m)T^W(x\mid m),
- \qquad f(m)=[1+\exp\{-f_0-f_1(m-22)\}]^{-1},
- \label{eq:mixture_pdf}
+  p(\Delta m \,|\, m) = w_U \, \mathcal{N}(\Delta m | \, \mu_U,\, \sigma_U)
+    + \sum_{k=1}^{K} w_{R,k} \, \mathcal{SN}(\Delta m | \, \mu_{R,k},\, \sigma_{R,k},\, \alpha_{R,k}),
+  \label{eq:mixture_pdf}
 \end{equation}
-where $x=\Delta m$, $W=(-0.5,1.5)$ mag, and each component is normalized separately over $W$. The resolved density is a mixture of two skew-normal distributions, interpolated between magnitude knots. The core mode and its local curvature width define $\mu_{U,i}$ and $\sigma_{U,i}$ used below for $D_i$; they are not the mean and standard deviation of the full U distribution. The reference-cohort U fraction is fitted separately and the core remains fixed when the U wing and R shapes are adjusted. Appendix A gives the fitting sequence and the roles of its parameters.
-
-% Previous CModel/V10 model description retained for comparison:
-% Therefore, a good model for $p(\dm \,|\, m)$ (eq.~\ref{eq:mixpdf1}) is crucial. Informed by observed
-% $\dm$ distributions (see Figure~\ref{fig:magdmcomparison}),
-% we model the unresolved component, $\funr$, as a single Gaussian with mean
-% \(\mu_U\), width \(\sigma_U\) and weight \(w_U\).  The resolved component is modeled as a sum
-% of \(K\) skew-normal distributions with weight \(w_{R,k}\), location
-% \(\mu_{R,k}\), scale \(\sigma_{R,k}\), and shape parameter \(\alpha_{R,k}\). The full
-% mixture probability density function is
-% \begin{equation}
-%   p(\Delta m \,|\, m) = w_U \, \mathcal{N}(\Delta m | \, \mu_U,\, \sigma_U)
-%     + \sum_{k=1}^{K} w_{R,k} \, \mathcal{SN}(\Delta m | \, \mu_{R,k},\, \sigma_{R,k},\, \alpha_{R,k}),
-%   \label{eq:mixture_pdf}
-% \end{equation}
-% where \(\mathcal{N}\) denotes the Gaussian and \(\mathcal{SN}\) the skew-normal distribution,
-% and the weights are constrained to sum to unity: \(w_U = 1 - \sum_k w_{R,k}\) (functions
-% \(\mathcal{N}\) and \(\mathcal{SN}\) are properly normalized probability density functions).
-% Here \(\mathcal{SN}(x\mid\mu,\sigma,\alpha)=2\phi(t)\Phi(\alpha t)/\sigma\),
-% with \(t=(x-\mu)/\sigma\), where \(\phi\) and \(\Phi\) are the standard-normal density and cumulative distribution functions.
-% 
-
-The model's resolved-to-unresolved ratio, used as a proxy for the galaxy-to-star prior, is
+where \(\mathcal{N}\) denotes the Gaussian and \(\mathcal{SN}\) the skew-normal distribution,
+and the weights are constrained to sum to unity: \(w_U = 1 - \sum_k w_{R,k}\) (functions
+\(\mathcal{N}\) and \(\mathcal{SN}\) are properly normalized probability density functions).
+Here \(\mathcal{SN}(x\mid\mu,\sigma,\alpha)=2\phi(t)\Phi(\alpha t)/\sigma\),
+with \(t=(x-\mu)/\sigma\), where \(\phi\) and \(\Phi\) are the standard-normal density and cumulative distribution functions.
+The galaxy-to-star count ratio, which serves as Bayesian prior, is
 \begin{equation}
- N_{GS}(m) \simeq \frac{w_R(m)}{w_U(m)}=\frac{1-w_U(m)}{w_U(m)}.
+                   N_{GS} \equiv   {N_G \over N_S}  = {\sum_{k=1}^{K} w_{R,k}  \over  w_U}. 
 \end{equation}
 The expression in eq.~\ref{eq:pSdm} can be recast as
 \begin{equation}
@@ -132,7 +135,7 @@ where the Bayes factor (the likelihood ratio for the galaxy and star hypotheses)
               BF = \frac{\fres} {\funr}. 
   \label{eq:bfdef} 
 \end{equation}
-With $N_{GS} \sim 30$ (see Figure~\ref{fig:star_galaxy_ratio_v8v9}), it is sufficient to have $BF \sim 0.033$
+With $N_{GS} \sim 30$ (see Figure~\ref{fig:star_galaxy_ratio}), it is sufficient to have $BF \sim 0.033$
 for $p_S$ to drop below 0.5 (because the sample is highly imbalanced).  This decomposition in terms of prior
 and Bayes factor is important later when combining multiple sources of classification information
 (with the overall Bayes factor equal to the product of individual Bayes factors). 
@@ -140,19 +143,26 @@ and Bayes factor is important later when combining multiple sources of classific
 
 \subsubsection{Fitting Details}
 
+
+
+
 \begin{figure*} 
   \centering
-  \includegraphics[width=\textwidth,height=0.62\textheight,keepaspectratio]{fig09_ratio.pdf}
-   \caption{Galaxy-to-star count ratio $\log_{10}(N_{\rm gal}/N_{\rm star})$ versus $r$-band S\'{e}rsic magnitude. The V12 model estimate, binary $r$-band extendedness classification, and cleaned HST reference counts are shown for the reference cohort. The V12 fraction is fitted from Rubin photometry with HST class values withheld; HST labels are used later for evaluation and method selection.}
-  \label{fig:star_galaxy_ratio_v8v9}
+  \includegraphics[width=\textwidth,height=0.62\textheight,keepaspectratio]{figV12details.png}
+   \caption{V12 fitting details. DANIEL ADD CAPTION! 
+  }
+  \label{fig:V12fitting}
 \end{figure*}
+
 
 
 
 \begin{figure*}
   \centering
-  \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{fig10_histogram_fits.pdf}
-  \caption{Observed $r$-band $\Delta m$ histograms for the reference cohort (black) and the V12 model contributions: U (blue dashed), R (orange dotted), and their sum (green dash-dotted). Model counts are integrated over histogram bins and averaged over the objects' S\'{e}rsic magnitudes; the model is normalized on $-0.5<\Delta m<1.5$.}
+  \includegraphics[width=\textwidth,height=0.85\textheight,keepaspectratio]{fig10_histogram_fits.pdf}
+  \caption{Observed r-band S\'{e}rsic-based \(\Delta m\) histograms (black) and the best-fit two-component
+    mixture models (dashed: unresolved component; dotted: resolved component) in magnitude bins, as
+    marked. }
   \label{fig:slice_fits}
 \end{figure*}
 
@@ -160,8 +170,11 @@ and Bayes factor is important later when combining multiple sources of classific
 
 \begin{figure*}
   \centering
-  \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{fig11_residuals_ury.pdf}
-  \caption{Observed (left), V12 modeled (center), and fractional residual (right) reference-object counts in the $\Delta m$--S\'{e}rsic magnitude plane, for $u$, $r$, and $y$ from top to bottom. Residuals are $(N_{\rm data}-N_{\rm model})/N_{\rm data}$; empty observed cells are masked.}
+  \includegraphics[width=\textwidth,height=0.85\textheight,keepaspectratio]{fig11_residuals_ury.pdf}
+  \caption{Two-dimensional comparison of the observed (left), modeled (center), and fractional residual
+    (right) source counts in the \(\Delta m\) vs.\ \(m_{\mathrm{Sersic}}\) plane, for the $u$, $r$,
+    and $y$ bands from top to bottom. Residuals show $(N_{\rm data}-N_{\rm model})/N_{\rm data}$.
+    Results are similar other bands.}
   \label{fig:model2d_residuals}
 \end{figure*}
 
@@ -170,72 +183,83 @@ and Bayes factor is important later when combining multiple sources of classific
 
 \begin{figure*}[!t]
 \centering
-\includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{Figure12_with_HST_histograms.pdf}
-\caption{Observed $r$-band $\Delta m$ distributions and model fits. The top and bottom rows show V10
-  and the core-plus-tail model (see text); the left and right columns show $24\leq r<24.5$ and $24.5\leq r<25$. Black histograms show the observed counts, while blue, orange, and green curves show the unresolved, resolved, and total model components.}
+\includegraphics[width=\textwidth,height=0.85\textheight,keepaspectratio]{Figure12_with_HST_histograms.pdf}
+\caption{The top four rows show zoomed-in comparison of observed $r$-band $\Delta m$ distributions
+  and their best-fit two-component models, in  magnitude bins, as marked.  Black histograms show the
+  observed counts, while dashed blue, dotted orange, and dot-dashed green curves show the
+  unresolved and resolved components and their sum, respectively. The bottom row compares the two
+  best-fit model components (dashed and dotted smooth lines) to observed distributions for two
+  subsets of source classified using HST labels, in the $24\le r \le 24.5$ and $24.5\le r \le 25$
+  magnitude bins. Note the excellent agreement between observed and modeled distributions.}
 \label{fig:singleband-component-comparison}
 \end{figure*}
 
 
 
+\begin{figure*} 
+\centering
+\includegraphics[width=\textwidth,height=0.62\textheight,keepaspectratio]{fig09_ratio.pdf}
+\caption{A comparison of model-predicted (solid red line) and HST-observed (green dot-dashed line)
+   galaxy-to-star count ratio as a function of the  $r$-band Sersic magnitude. 
+       The counts of sources classified using the $r$ band \texttt{extendedness} (dotted line) 
+      shows a spurious turnover at $r > 24$ due to a large number of galaxies misclassified as
+      stars.} 
+  \label{fig:star_galaxy_ratio}
+\end{figure*}
+  
 
-The adopted V12 model is fitted in stages to Rubin PSF and S\'{e}rsic photometry. Parent-sample U and R templates are fitted first; their shapes are then held fixed while the magnitude-dependent U fraction is calibrated on the cleaned reference cohort. Finally, the U core and reference fraction are held fixed while a positive U wing and the R shapes are fitted together. The reference fraction is estimated using individual photometric measurements, whereas the final shape fit uses model probabilities integrated over histogram bins. Appendix A describes the sequence, sample selection, and validation boundaries. The reference-cohort histograms and model components are shown in Figure~\ref{fig:slice_fits}, and the $u$, $r$, and $y$ residual maps in Figure~\ref{fig:model2d_residuals}.
+The fitting is performed independently in bins of CModel magnitude. At bright magnitudes
+(\(m_{\mathrm{CModel}} < 22\)), where the resolved population is relatively simple, we use
+\(K = 2\) resolved components in bins of width 1--3~mag spanning
+\(15 < m_{\mathrm{CModel}} < 22\). At faint magnitudes (\(m_{\mathrm{CModel}} \geq 22\)),
+where the galaxy morphology distribution is more complex, we use \(K = 3\) resolved components
+in finer bins of width 0.5--1~mag spanning \(22 \leq m_{\mathrm{CModel}} < 26\). Within each
+magnitude bin, \(\Delta m\) values in the range \((-0.5, 1.5)\) are binned into 300 bins
+and normalized to unity. The mixture model is fit to these histograms using
+bounded least-squares optimization with Poisson-like uncertainties
+\(\sigma_i = \sqrt{N_i + 1} \,/\, (N \, \delta)\), where \(N_i\) is the count in bin \(i\),
+\(N\) is the total number of sources in the magnitude slice, and \(\delta\) is the histogram
+bin width.
 
-% Historical CModel/V10 fitting description retained below:
-% The fitting is performed independently in bins of CModel magnitude. At bright magnitudes
-% (\(m_{\mathrm{CModel}} < 22\)), where the resolved population is relatively simple, we use
-% \(K = 2\) resolved components in bins of width 1--3~mag spanning
-% \(15 < m_{\mathrm{CModel}} < 22\). At faint magnitudes (\(m_{\mathrm{CModel}} \geq 22\)),
-% where the galaxy morphology distribution is more complex, we use \(K = 3\) resolved components
-% in finer bins of width 0.5--1~mag spanning \(22 \leq m_{\mathrm{CModel}} < 26\). Within each
-% magnitude bin, \(\Delta m\) values in the range \((-0.5, 1.5)\) are binned into 300 bins
-% and normalized to unity. The mixture model is fit to these histograms using
-% bounded least-squares optimization with Poisson-like uncertainties
-% \(\sigma_i = \sqrt{N_i + 1} \,/\, (N \, \delta)\), where \(N_i\) is the count in bin \(i\),
-% \(N\) is the total number of sources in the magnitude slice, and \(\delta\) is the histogram
-% bin width.
-% 
-% This fitting procedure is carried out in three steps. In the first step, all mixture parameters
-% are fit independently in each magnitude bin. This free fit works well at bright magnitudes,
-% where unresolved and resolved sources are clearly separated in \(\Delta m\). However, at faint
-% magnitudes (\(m_{\mathrm{CModel}} \gtrsim 24\)), photometric noise broadens the unresolved
-% Gaussian until it becomes degenerate with the resolved components. The fitter can no longer
-% reliably distinguish the two populations, causing the unresolved Gaussian to absorb flux from
-% the galaxy distribution. This inflates the inferred star fraction at faint magnitudes and the
-% turn-over of the galaxy-to-star count ratio at the faint end, see Figure~\ref{fig:star_galaxy_ratio_v8v9}. 
-% 
-% To prevent this degeneracy, we impose smooth constraints on the unresolved component.
-% In the second step, the per-bin star parameters from step~1 are replaced with smooth
-% functions of magnitude: \(\mu_U\) is fixed to a single value (the median across all bins,
-% typically \(\approx 0\) in each band); \(\sigma_U(m)\) is fit with the photometric error model
-% from \citet{2007AJ....134.2236S} (their eq.~5),
-% \begin{equation}
-%   \sigma_U(m) = \sqrt{\sigma_0^2 + a^2 \cdot 10^{\,b\,(m - 25)}},
-%   \label{eq:sesar_sigma}
-% \end{equation}
-% where \(\sigma_0\), \(a\), and \(b\) are free parameters; and \(\log_{10} w_U(m)\) is modeled as a linear
-% function of magnitude, using only bins brighter than
-% \(m_{\mathrm{CModel}} = 24\) where the free fit is reliable. This smooth model is then
-% extrapolated to fainter magnitude bins. In the third step, with the unresolved component
-% (\(\mu_U\), \(\sigma_U\), \(w_U\)) fixed to the smooth curves from step~2, only the resolved
-% skew-normal parameters are re-fit in each magnitude bin. The resolved weights are rescaled to
-% sum to \((1 - w_U)\) so that the total mixture remains a proper probability density.
-% The effectiveness of this constrained fitting procedure is demonstrated in
-% Figure~\ref{fig:star_galaxy_ratio_v8v9}, which compares the galaxy-to-star count ratio
-% \(N_{\mathrm{gal}}/N_{\mathrm{star}}\) as a function of magnitude for models
-% with and without the smooth constraints. The unconstrained model exhibits a spurious turnover
-% at faint magnitudes, while the constrained model recovers the expected monotonically increasing
-% ratio in agreement with the COSMOS2020 external truth labels (note that in this sample at the faint
-% end galaxies outnumber stars by more than a factor of 30). 
-% 
-% The model parameters are selected according to the CModel magnitude bin in which each source falls.
-% The quality of the fits is illustrated in Figure~\ref{fig:slice_fits}, which shows the
-% mixture model overlaid on the observed \(\Delta m\) histograms in each magnitude bin, and in
-% Figure~\ref{fig:model2d_residuals}, which shows the 2D data, model, and residual maps in the
-% \(\Delta m\) vs.\ \(m_{\mathrm{CModel}}\) plane.
-% 
-% 
-% 
+This fitting procedure is carried out in three steps. In the first step, all mixture parameters
+are fit independently in each magnitude bin. This free fit works well at bright magnitudes,
+where unresolved and resolved sources are clearly separated in \(\Delta m\). However, at faint
+magnitudes (\(m_{\mathrm{CModel}} \gtrsim 24\)), photometric noise broadens the unresolved
+Gaussian until it becomes degenerate with the resolved components. The fitter can no longer
+reliably distinguish the two populations, causing the unresolved Gaussian to absorb flux from
+the galaxy distribution. This inflates the inferred star fraction at faint magnitudes and the
+turn-over of the galaxy-to-star count ratio at the faint end, see Figure~\ref{fig:star_galaxy_ratio}. 
+
+To prevent this degeneracy, we impose smooth constraints on the unresolved component.
+In the second step, the per-bin star parameters from step~1 are replaced with smooth
+functions of magnitude: \(\mu_U\) is fixed to a single value (the median across all bins,
+typically \(\approx 0\) in each band); \(\sigma_U(m)\) is fit with the photometric error model
+from \citet{2007AJ....134.2236S} (their eq.~5),
+\begin{equation}
+  \sigma_U(m) = \sqrt{\sigma_0^2 + a^2 \cdot 10^{\,b\,(m - 25)}},
+  \label{eq:sesar_sigma}
+\end{equation}
+where \(\sigma_0\), \(a\), and \(b\) are free parameters; and \(\log_{10} w_U(m)\) is modeled as a linear
+function of magnitude, using only bins brighter than
+\(m_{\mathrm{CModel}} = 24\) where the free fit is reliable. This smooth model is then
+extrapolated to fainter magnitude bins. In the third step, with the unresolved component
+(\(\mu_U\), \(\sigma_U\), \(w_U\)) fixed to the smooth curves from step~2, only the resolved
+skew-normal parameters are re-fit in each magnitude bin. The resolved weights are rescaled to
+sum to \((1 - w_U)\) so that the total mixture remains a proper probability density.
+The effectiveness of this constrained fitting procedure is demonstrated in
+Figure~\ref{fig:star_galaxy_ratio_v8v9}, which compares the galaxy-to-star count ratio
+\(N_{\mathrm{gal}}/N_{\mathrm{star}}\) as a function of magnitude for models
+with and without the smooth constraints. The unconstrained model exhibits a spurious turnover
+at faint magnitudes, while the constrained model recovers the expected monotonically increasing
+ratio in agreement with the COSMOS2020 external truth labels (note that in this sample at the faint
+end galaxies outnumber stars by more than a factor of 30). 
+
+The model parameters are selected according to the CModel magnitude bin in which each source falls.
+The quality of the fits is illustrated in Figure~\ref{fig:slice_fits}, which shows the
+mixture model overlaid on the observed \(\Delta m\) histograms in each magnitude bin, and in
+Figure~\ref{fig:model2d_residuals}, which shows the 2D data, model, and residual maps in the
+\(\Delta m\) vs.\ \(m_{\mathrm{CModel}}\) plane.
+
 
 \subsection{The Performance of the \(\Delta m\) Mixture Model} 
 
@@ -267,8 +291,8 @@ magnitudes the performance deteriorates rapidly (especially for the stellar subs
 \begin{figure*}[t]
   \centering
   \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{fig15_D_distributions.pdf}
-  \caption{Observed $D$ distributions of retained HST stars (blue) and HST
-    galaxies (orange). Rows show $r$, $ri$, $riz$, and $griz$ band combinations used to compute the
+  \caption{Observed $D$ distributions of HST stars (blue) and HST
+    galaxies (red). Rows show $r$, $ri$, $riz$, and $griz$ band combinations of the
     $D$ metric; columns show
     $24\leq r<24.5$ (left) and $24.5\leq r<25$ (right). Histograms show object counts in
     bins of width $\Delta D=0.25$, over $0\leq D\leq10$ (distributions for HST galaxies extend
@@ -302,18 +326,29 @@ but it did not provide a satisfactory description of the desired behavior. We th
 different approach: first combine the measured $\dm$ values across bands into a single statistic
 and then derive classification criteria from its distribution, analogously to the single-band case. 
 
-Using the fitted narrow-core center and local width in each band, we define a standardized
-variable
+Motivated by the fact that the multi-band $\dm$ distribution for the unresolved component can
+be described as a multivariate Gaussian with diagonal covariance matrix, we define a standardized
+variable in each band
 \begin{equation} 
                              D_i = \frac{\dm_i - \mu_{U,i}}{\sigma_{U,i}},
 \end{equation}
-where $i$ is the band index and $\mu_{U,i}$ and $\sigma_{U,i}$ are the V12 narrow-core mode and local curvature width, denoted $\mu_c$ and $\sigma_c$ in Appendix A. They are calibrated separately in each band. The utilized bands may be all of
+where $i$ is the band index and $\mu_U$ and $\sigma_U$ are the best-fit parameter values for
+the Gaussian fit to the unresolved component (recall that $\mu_U \sim 0$). The utilized bands may be all of
 $ugrizy$ or any subset of $N$ usable (depending on data depth and spectral energy distribution of
 objects of interest) bands, $B$. We then define a radial metric
 \begin{equation} 
                                D = \left( \sum_B  D^2_i  \right)^{1/2}. 
 \end{equation}
-If the standardized residuals were independent standard normal variables, $D$ would follow a $\chi_N$ distribution. V12 uses non-Gaussian fitted core shapes and real band measurements can be correlated, so this distribution and its thresholds are idealized references rather than guaranteed completeness values. The U tail affects the probability model but does not change the core center and width used for $D$.
+When $N=1$, $D \sim |\dm/\sigma_U|$, and it measures the distance from the origin in units of
+$\sigma_U$. For the unresolved component, $D$ follows a $\chi$-distribution with one degree of
+freedom, $\chi_1$ (which is also the half-normal distribution). If $\mu_U$ cannot be ignored,
+$D$ follows a noncentral $\chi$ distribution. When $N>1$, for the unresolved component
+$D \sim \chi_N$, with an expectation value approximately equal to $\langle D\rangle = \sqrt{N-1/2}$.
+Depending on the desired completeness for the unresolved component, a hard $D$ threshold of
+several times $\sqrt{N}$ can be used for sample classification (this is a standard case of
+hypothesis testing in frequentist statistics). However, without a quantitative
+description of the resolved component as well, the resulting sample contamination cannot be
+estimated.
 
 Figure~\ref{fig:D-observed-distributions} shows $D$ distributions for HST stars and HST galaxies,
 and their dependence on the $r$-band magnitude and band combination. The behavior of $D$
@@ -327,15 +362,57 @@ $D$ distributions and instead focus on estimating the completeness and contamina
 selected candidate unresolved objects using HST truth labels, described next. 
 
 
+
+\subsection{Two-component Mixture Fit to $D_{griz}$ Distributions} 
+
+
+Describe V12 fits, and completeness/contamination predictions
+
+
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{04_Dgriz_full_range_fit.pdf}
+  \caption{The best-fit two-component models (smooth lines) to observed (histograms) $D_{griz}$ distributions in different
+    magnitude bins, as marked. Note that x axis is shown on logarithmic scale. The large peak
+    corresponds to resolved component; unresolved component peaks at $D_{griz} \sim 2$. }
+  \label{fig:multiband04}
+\end{figure*}
+ 
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{figures/fixed_completeness_and_comparisons/02_Dgriz_combined_12panels.pdf}
+  \caption{The panels in the first column are zoomed-in versions of Fig.~\ref{fig:multiband04}, in four
+    selected magnitude bins, as marked. Unresolved and resolved model components are shown with
+     blue dashed and red dotted lines, respectively. The middle column is analogous to the left
+     column, except that sources are separated by their HST labels (which were not used in model
+     fitting). The right panels compare model-predicted and HST-observed contamination--completeness
+     curves. The two symbols mark the locations of $D_{griz} = 3$ (circles) and $D_{griz} = 5$ thresholds.} 
+  \label{fig:multiband18}
+\end{figure*}
+
+
+
 \subsection{The Performance of the $D$ Metric-based Classification} 
 
 \begin{figure*}[t]
   \centering
   \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{D_bands_CC_23_26.pdf}
-  \caption{Empirical contamination--completeness curves for stellar samples selected using $D$ in $r$, $ri$, $riz$, and $griz$. The six panels show 0.5-mag S\'{e}rsic $r$ intervals from 23 to 26. In each panel, all curves use the same cleaned HST reference objects with valid measurements for the required band combinations. Diamonds and squares mark approximately 20\% and 50\% stellar completeness on the $griz$ curves; circles mark $D_{griz}<3$. Objects beyond the plotting window in Figure~\ref{fig:D-observed-distributions} remain in the completeness and contamination denominators.}
+  \caption{The performance of multi-band $D$ classificators for stellar subsamples in different
+    magnitude bins, as marked. 
+    Empirical contamination--completeness curves based
+    on objects with HST classification labels are shown for the following band combinations: $r$,
+    $ri$, $riz$ and $griz$. All curves within a panel use the same cleaned HST reference sample with valid $D$ in all required bands.
+    Diamonds and squares mark approximately 20\% and 50\% stellar completeness on the $griz$ curves;
+    circles mark $D_{griz}=3$ threshold.
+    Objects that are beyond the plotting window in Fig.~\ref{fig:D-observed-distributions} remain in the
+    completeness and contamination denominators. Note that morphological
+    information from additional bands improves performance.}
   \label{fig:multiband_performance}
 \end{figure*}
 
+% $24\leq r<24.5$ (left) and $24.5\leq r<25$ (right).
 
 Here we again use HST labels to evaluate completeness and contamination for the stellar multi-band $D$-selected
 samples and compare them to the single-band performance. As before, we focus on the ``transition'' magnitude
@@ -349,54 +426,31 @@ thresholds that correspond to completeness levels below 50\%. For example, at a 
 of 20\%, contamination decreases from 40\% to 30\% between the $r$ and $griz$ cases. In the fainter bin,
 improvement is smaller though still clearly present. In practice, detailed optimization of the
 tradeoff between sample completeness and contamination depends on science case. 
+ 
 
 
+\subsection{Using $D$ Metric-based Classification with Target Completeness or Contamination} 
 
 
-\begin{figure*}[t]
-  \centering
-  % this figure copied from End-to-end-morphology-star-probability/v12/outputs/notebook 
-  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{01_Dgriz_versus_magnitude.pdf}
-  \caption{Performance vs. magnitude for a fixed threshold of $D_{griz}$}
-  \label{fig:CCgrizCompareDgriz}
-\end{figure*}
-
-
-
-
-
-
-\subsection{Two-component Mixture Fit to $D_{griz}$ Distributions} 
-
-
-Describe V12 fits, and completeness/contamination predictions
-
-
-
-\begin{figure*}[t]
-  \centering
-  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{04_Dgriz_full_range_fit.pdf}
-  \caption{New V12 fits}
-  \label{fig:multiband04}
-\end{figure*}
-
-
-\begin{figure*}[t]
-  \centering
-  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{figures/fixed_completeness_and_comparisons/02_Dgriz_combined_12panels.pdf}
-  \caption{Detailed analysis of new V12 fits}
-  \label{fig:multiband18}
-\end{figure*}
 
 \begin{figure*}[t]
   \centering
   \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{figures/fixed_completeness_and_comparisons/01_D_targets_comparison.pdf}
-  \caption{}
+  \caption{Target completeness application. We will fix caption after this figure is finalized. }
   \label{fig:fixed-target-completeness}
 \end{figure*}
 
 
 
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{figures/fixed_completeness_and_comparisons/01_D_thresholds_vs_magnitude.pdf}
+  \caption{D values for target completeness application.  We will fix caption after this figure is finalized. }
+  \label{fig:fixed-target-Dvalues}
+\end{figure*}
+
+
+ 
 
 
 \subsection{Comparison with \texttt{griz\_model\_extendedness}}
@@ -409,7 +463,9 @@ Comment that \texttt{griz\_model\_extendedness} adds fluxes directly, which is c
   \centering
   % this figure copied from End-to-end-morphology-star-probability/v12/outputs/notebook 
   \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{official_CC_23_26.pdf }
-  \caption{Caption...}
+  \caption{A comparison of completeness--contamination curves for two different classification
+    methods based on $D_{griz}$ developed here and \texttt{griz\_model\_extendedness} computed by
+    Rubin Science Pipelines.}
   \label{fig:CCgrizCompare}
 \end{figure*}
 
@@ -419,7 +475,7 @@ Comment that \texttt{griz\_model\_extendedness} adds fluxes directly, which is c
   \centering
   % this figure copied from End-to-end-morphology-star-probability/v12/outputs/notebook 
   \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{01_extendedness_versus_magnitude.pdf}
-  \caption{Performance vs. magnitude for a fixed threshold}
+  \caption{Performance vs. magnitude for a fixed threshold. IF we keep this figure, we will fix caption after this figure is finalized. }
   \label{fig:CCgrizCompareGrizmodel}
 \end{figure*}
 
@@ -437,8 +493,8 @@ Comment that \texttt{griz\_model\_extendedness} adds fluxes directly, which is c
   \centering
   \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{Figure18.pdf}
   \caption{The color distribution of objects morphologically classified as unresolved using Rubin DP2 measurements
-    (with $D$ thresholds selected to ensure 20\% completeness), and then separated into stars (blue dots) and galaxies
-    (red crosses) using the cleaned HST reference labels, in two magnitude bins: $24\leq r<24.5$ (top) and $24.5\leq r<25$ (bottom).
+    (with $D_{griz}$ thresholds selected to ensure 20\% completeness), and then separated into stars (blue dots) and galaxies
+    (red crosses) using HST labels, in two magnitude bins: $24\leq r<24.5$ (top) and $24.5\leq r<25$ (bottom).
     The fraction of HST-classified galaxies in these two subsamples is 33\% and 76\%, respectively. Note that galaxies appear
     systematically bluer than stars, except for the $z-y$ color, which allows for improved color-based classification.}
   \label{fig:color-ccdiags}
