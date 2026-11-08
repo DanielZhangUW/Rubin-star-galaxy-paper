@@ -178,10 +178,10 @@ The tail component is modeled as
 \label{eq:mixpd4}
 \end{equation}
 where $y = \Delta m - \mu_c(m)$ and $a(m) = k \sigma_c(m)$, with $h$ and $k$ free model parameters
-(with $\gamma$ and $\delta$,  unresolved component is modeled with four free parameters).
+(with $\gamma$ and $\delta$,  the shape of unresolved component is modeled with four free parameters).
  
 Based on data exploration and trial-and-error attempts, we assume the following functions to model
-variations with magnitude
+variations of normalization functions with magnitude
 \begin{equation}
         w_U(m) = w_{floor} +   {1 - w_{floor}\over 1 + {\rm e}^{-c - d(m-22)}} 
 \end{equation}
@@ -202,7 +202,7 @@ of \(K=2\) skew-normal distributions with weight \(w_{R,k}\), location
 where \(\mathcal{N}\) denotes the Gaussian distribution  and \(\mathcal{SN}\) the skew-normal
 distribution. Here \(\mathcal{SN}(x\mid\mu,\sigma,\alpha)=2\phi(t)\Phi(\alpha t)/\sigma\),
 with \(t=(x-\mu)/\sigma\), where \(\phi\) and \(\Phi\) are the standard-normal density and
-cumulative distribution functions. Therefore, the resolved component model includes 7 additional free
+cumulative distribution functions. Therefore, the resolved component shape model includes 7 additional free
 parameters (note the normalization constraint $w_U = \sum_{k=1}^{K} w_{R,k}$). Details of the
 fitting algorithm are described in the next section. 
 
