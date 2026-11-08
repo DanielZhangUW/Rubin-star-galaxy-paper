@@ -3,14 +3,69 @@
 
 We first briefly review the Bayesian star-galaxy separation method proposed in SIL2020 and then
 apply it to single-band Rubin data, followed by its extension to the multi-band case. Our principal
-measured object property is the difference between PSF, \(m_{\mathrm{PSF}}\), and CModel, \(m_{\mathrm{CModel}}\),
-magnitudes, \(\Delta m = m_{\mathrm{PSF}} - m_{\mathrm{CModel}}\). For unresolved sources, this \(\Delta m\) is consistent with zero within the measurement noise, while for resolved objects \(\Delta m > 0\) (see the top left panel in Figure~\ref{fig:truth_morphology_color}).
+measured object property is the difference between PSF, \(m_{\mathrm{PSF}}\), and model  \(m_{\mathrm{model}}\),
+magnitudes, \(\Delta m = m_{\mathrm{PSF}} - m_{\mathrm{model}}\). For unresolved sources, this \(\Delta m\) is consistent with zero within the measurement noise, while for resolved objects \(\Delta m > 0\) (see the top left panel in Figure~\ref{fig:truth_morphology_color}).
 A detailed comparison and statistical discussion of this quantity and several other quantities proposed for
 star-galaxy separation in the literature is available in SIL2020. 
 
 
 
-\subsection{Bayesian Star-Galaxy Separation Method from SIL2020}
+\subsection{Which model magnitudes to use: CModel or  S\'{e}rsic?} 
+
+Motivated by successful use of \(\Delta m \) based on CModel magnitudes in thousands to SDSS papers,
+and the fact that \texttt{extendedness} listed in Rubin catalogs is also based on this type of model
+magnitudes, we initially considered this option, too. A performance comparison with 
+\texttt{griz\_model\_extendedness} parameter revealed that replacing CModel magnitudes by S\'{e}rsic
+magnitudes results in much improved star-galaxy separation (see Figure~\ref{fig:magdmCCcomparison}). 
+For pedagogical reasons, all plots presented here are based on S\'{e}rsic magnitudes but we have
+produced both versions of the entire analysis.
+
+Both CModel and S\'{e}rsic magnitudes/fluxes are based on fits of the S\'{e}rsic brightness profile
+\begin{equation}
+          I(R)=I_e\exp\left\{ -b_n\left[ \left(\frac{R}{R_e}\right)^{1/n}-1 \right]\right\}.
+\end{equation}
+to data.  Here $I(R)$ is the surface brightness at projected radius $R$; $R_e$ is the effective
+radius enclosing half of the total light; $b_n$ is a normalization constant chosen so that $R_e$
+encloses half of the total flux; $I_e$ is the surface brightness at the effective radius, and 
+$n$ is the S\'ersic index. The S\'{e}rsic index controls the concentration and shape of the profile.
+An exponential profile with $n=1$ is often used to describe galaxy disks. The $n=4$, known
+as de Vaucouleurs profile, is often used to describe elliptical galaxies and classical bulges.
+
+The main difference between  CModel vs. S\'{e}rsic fluxes is that the latter are based
+on best-fit profile where $n$ is a free model parameter, while CModel fluxes are based
+on a linear combination of two best-fit S\'{e}rsic profiles where $n$ is fixed to 1 and 4 (``C''
+stands for composite\footnote{For more details, see
+   https://www.sdss3.org/dr8/algorithms/magnitudes.php}), 
+The code takes the best fit exponential and de Vaucouleurs profile fits in a given band and asks for
+the linear combination of the two that best fits the image. The weighting coefficient (clipped between zero
+and one) is defined as de Vaucouleurs term, fracDeV, defining CModel composite flux as 
+\begin{equation}
+         F_{CModel}  = fracDeV \, F_{deV} + (1 - fracDeV) \, F_{exp}. 
+\end{equation}
+
+Figure~\ref{fig:magdmcomparison} shows \(\Delta m \) vs. \(m_{\mathrm{CModel}}\) and
+\(\Delta m \) vs. \(m_{\mathrm{Sersic}}\) distributions, separately for unresolved and resolved
+objects classified using HST labels.  Two features are noteworthy. First, HST galaxies 
+dominate the region around $\dm \sim 0$ at the faint end ($r > 24$) much more strongly
+in case of CModel magnitudes and are likely explanation for its inferior performance at
+the faint end. Nevertheless, the distribution of \(\Delta m \) for unresolved sources based
+on S\'{e}rsic magnitudes is much broader and with a median that deviates more from zero
+than in case of CModel magnitudes. This behavior would result in worse star-galaxy
+separation performance with S\'{e}rsic magnitudes but only when a simple cut on \(\Delta m \)
+is used for classification. With explicit modeling of these distributions, described below,
+\(\Delta m \) based on S\'{e}rsic magnitudes is clearly superior to its alternative based
+on CModel magnitudes. 
+
+\begin{figure*}
+  \centering
+     \includegraphics[width=\textwidth]{CCcurvesSersiCmodel.png}
+     \caption{A comparison of contamination vs. completeness curves for unresolved sources
+      using two versions of the r-band $\dm$ based on Sersic and CModel fluxes, in different magnitude bins, as
+      marked. Note much lower levels of contamination when Sersic fluxes are used, especially at the faint end. 
+  }
+  \label{fig:magdmCCcomparison}
+\end{figure*}
+
 
 
 \begin{figure*}
@@ -29,6 +84,9 @@ star-galaxy separation in the literature is available in SIL2020.
   \label{fig:magdmcomparison}
 \end{figure*}
 
+
+\subsection{Bayesian Star-Galaxy Separation Method from SIL2020}
+
 We first focus on the single-band case and then extend our discussion to the multi-band case.
 Using realistic simulations, SIL2020 showed that adopting a fixed, predefined threshold for $\Delta m$ to select resolved objects is not optimal. The threshold should depend on magnitude because of variations in the object populations and signal-to-noise ratio, as well as on sky location because the galaxy-to-star count ratio varies across the sky. Moreover, for an optimal combination of information from different bands or from other classification methods (e.g., based on colors), the observed $\Delta m$ distribution needs to be transformed into a proper probability density function. 
 
@@ -40,17 +98,6 @@ can robustly constrain the two components of the $\Delta m$ distribution even wh
 available a priori. We only use the subsample of objects with HST labels to independently assess the
 performance of our method. 
 
-
-
-\begin{figure*}
-  \centering
-     \includegraphics[width=\textwidth]{CCcurvesSersiCmodel.png}
-     \caption{A comparison of contamination vs. completeness curves for unresolved sources
-      using two versions of the r-band $\dm$ based on Sersic and CModel fluxes, in different magnitude bins, as
-      marked. Note much lower levels of contamination when Sersic fluxes are used, especially at the faint end. 
-  }
-  \label{fig:magdmCCcomparison}
-\end{figure*}
 
 
 \subsection{Mixture Model for \(\Delta m\) vs. \(m_{\mathrm{CModel}}\) diagram \label{sec:mixmodel}} 
@@ -486,8 +533,6 @@ Comment that \texttt{griz\_model\_extendedness} adds fluxes directly, which is c
 
 
 \subsection{Improved Stellar Classification Using Color Selection}
-
-
 
 \begin{figure*}[t]
   \centering
