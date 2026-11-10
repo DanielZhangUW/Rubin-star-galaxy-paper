@@ -303,7 +303,7 @@ and Bayes factor is important later when combining multiple sources of classific
 
 Given the best-fit model for the data distribution in the $\Delta m$ vs. $m_{\mathrm{Sersic}}$
 plane, each object is assigned a probability that it is unresolved, $p_S$ (or resolved, with
-$p_G = 1 - p_S$. Given a chosen threshold for $p_S$, the sample can classified into two
+$p_G = 1 - p_S$). Given a chosen threshold for $p_S$, the sample can classified into two
 classes, unresolved and resolved. Importantly, the best-fit model also predicts the class
 completeness and contamination for the chosen $p_S$ threshold. 
 
@@ -380,20 +380,20 @@ different approach: first combine the measured $\dm$ values across bands into a 
 and then derive classification criteria from its distribution, analogously to the single-band case. 
 
 Motivated by the fact that the multi-band $\dm$ distribution for the unresolved component can
-be described as a multivariate Gaussian with diagonal covariance matrix, we define a standardized
+be described as a multivariate nearly-Gaussian with diagonal covariance matrix, we define a standardized
 variable in each band
 \begin{equation} 
-                             D_i = \frac{\dm_i - \mu_{U,i}}{\sigma_{U,i}},
+                             D_i = \frac{\dm_i - \mu_{c}(m_i)}{\sigma_{c}(m_i)},
 \end{equation}
-where $i$ is the band index and $\mu_U$ and $\sigma_U$ are the best-fit parameter values for
-the Gaussian fit to the unresolved component (recall that $\mu_U \sim 0$). The utilized bands may be all of
+where $i$ is the band index and $\mu_c$ and $\sigma_c$ come from the best-fit function for
+unresolved component ($\mu_c \sim 0$). The utilized bands may be all of
 $ugrizy$ or any subset of $N$ usable (depending on data depth and spectral energy distribution of
 objects of interest) bands, $B$. We then define a radial metric
 \begin{equation} 
                                D = \left( \sum_B  D^2_i  \right)^{1/2}. 
 \end{equation}
-When $N=1$, $D \sim |\dm/\sigma_U|$, and it measures the distance from the origin in units of
-$\sigma_U$. For the unresolved component, $D$ follows a $\chi$-distribution with one degree of
+When $N=1$, $D \sim |\dm/\sigma_c|$, and it measures the distance from the origin in units of
+$\sigma_c$. For  the unresolved component, $D$ follows a $\chi$-distribution with one degree of
 freedom, $\chi_1$ (which is also the half-normal distribution). If $\mu_U$ cannot be ignored,
 $D$ follows a noncentral $\chi$ distribution. When $N>1$, for the unresolved component
 $D \sim \chi_N$, with an expectation value approximately equal to $\langle D\rangle = \sqrt{N-1/2}$.
@@ -403,24 +403,19 @@ hypothesis testing in frequentist statistics). However, without a quantitative
 description of the resolved component as well, the resulting sample contamination cannot be
 estimated.
 
+\subsection{Two-component Mixture Model for $D$ Distributions} 
+
+
 Figure~\ref{fig:D-observed-distributions} shows $D$ distributions for HST stars and HST galaxies,
 and their dependence on the $r$-band magnitude and band combination. The behavior of $D$
-distributions for HST stars is approximately consistent with expectation ($D \sim \chi_N$);
-for example, the fraction of HST stars selected by theoretical 95\% $D$ threshold is in the
-range XXX-XXX (and XXX-XXX for HST galaxies). The well-defined peak at $D<3$ for HST
-galaxies implies that some HST galaxies appear truly unresolved in Rubin images. Only a lower
-limit on their fraction/number can be estimated by extrapolation of the observed distribution
-at $D>3$ to smaller $D$ values. For this reason, we do not pursue detailed fits to the observed
-$D$ distributions and instead focus on estimating the completeness and contamination of
-selected candidate unresolved objects using HST truth labels, described next. 
+distributions for HST stars is approximately consistent with expectation ($D \sim \chi_N$).
+We purse fits to the overall $D$ distributions (that is, without using HST labels to define classes)
+using an analogous two-component mixture model and the same fitting algorithm as we used for
+$\Delta m$ distributions.
 
-
-
-\subsection{Two-component Mixture Fit to $D_{griz}$ Distributions} 
-
-
-Describe V12 fits, and completeness/contamination predictions
-
+The model performs well, as illustrated in Figures~\ref{fig:multiband04} and \ref{fig:multiband18}.  
+In particular,  the middle column in  Figure~\ref{fig:multiband18} shows good agreement of implied
+model components with subsets of data classified using HST labels. 
 
 
 \begin{figure*}[t]
@@ -469,47 +464,90 @@ Describe V12 fits, and completeness/contamination predictions
 
 Here we again use HST labels to evaluate completeness and contamination for the stellar multi-band $D$-selected
 samples and compare them to the single-band performance. As before, we focus on the ``transition'' magnitude
-range, $24\leq r<25$, in two intervals, $24\leq r<24.5$ and $24.5\leq r<25$.
-
-Figure~\ref{fig:multiband_performance} compares the empirical performance of the $ri$, $riz$ and $griz$
-band combinations to the $r$-band case, for a grid of $D$ thresholds (for example, in the $griz$ case
-and $24\leq r<24.5$, a sample completeness in the range 20-50\% can be obtained using $D$ thresholds
-in the range 3.5 to 1.4). As more bands are added, the sample contamination decreases at $D$
-thresholds that correspond to completeness levels below 50\%. For example, at a completeness level
-of 20\%, contamination decreases from 40\% to 30\% between the $r$ and $griz$ cases. In the fainter bin,
-improvement is smaller though still clearly present. In practice, detailed optimization of the
-tradeoff between sample completeness and contamination depends on science case. 
+range, $23\leq r<26$, with six 0.5 mag wide magnitude bins.
  
+Figure~\ref{fig:multiband_performance} compares the empirical performance of the $ri$, $riz$ and $griz$
+band combinations to the $r$-band case, for a grid of $D$ thresholds. As more bands are added, the
+sample contamination decreases at a given completeness level. For example, at a completeness level
+of 40\% in the magnitude $24.5\leq r<25$, contamination decreases from 50\% to 30\% between the
+$r$ and $griz$ cases. At a completness level of 20\%, the contamination decreases by more than a
+factor two. In practice, detailed optimization of the tradeoff between sample completeness and
+contamination depends on science case. 
+
+
+
+
 
 
 \subsection{Using $D$ Metric-based Classification with Target Completeness or Contamination} 
 \label{sec:userCC} 
 
+Given a two-component mixture model for a $D$ distribution, we cannot not only predict class completeness
+and contamination but can choose one of them to be, for exampke, independent of magnitude. 
+We focus on stellar class and $D_{griz}$ because it gives the best performance.
+
+Figure~\ref{fig:fixed-target-completeness} shows variation of sample completeness and contamination
+measured using HST labels when model-based thresholds are selected to correspond to completeness
+levels of 20\%, 50\% and 90\%, and contamination level of 20\%. The agreement is remarkable. The
+values of $D_{griz}$ as functions of magnitude required to achieve these target performance levels
+are shown in Figure~\ref{fig:fixed-target-Dvalues}. The values required for specified completeness
+levels are expected to vary little over the sky. On the other hands, given that we analyzed the
+high-latitude COSMOS field, the implied contamination levels are an upper limit (closer to the
+Galactic plane the stellar counts will go up and thus the stellar sample contamination will go down). 
+
 
 \begin{figure*}[t]
   \centering
   \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{figures/fixed_completeness_and_comparisons/01_D_targets_comparison.pdf}
-  \caption{Target completeness application. We will fix caption after this figure is finalized. }
+  \caption{Target completeness application. We will fix caption after this figure is finalized. WE
+    NEED TO ADD CURVES FOR MODEL-BASED CONTAMINATION. ALSO, WE NEED 4th PANEL THAT
+    WOULD SHOW WHAT HAPPENS FOR TARGET CONTAMINATION OF 20\%}
   \label{fig:fixed-target-completeness}
 \end{figure*}
-
 
 
 \begin{figure*}[t]
   \centering
   \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{figures/fixed_completeness_and_comparisons/01_D_thresholds_vs_magnitude.pdf}
-  \caption{D values for target completeness application.  We will fix caption after this figure is finalized. }
+  \caption{D values for target completeness application.  We will fix caption after this figure is
+    finalized. IT WOULD BE GOOD TO SHOW Y AXIS ON LOG SCALE.}
   \label{fig:fixed-target-Dvalues}
 \end{figure*}
 
 
  
 
+\subsection{Comparison of Multiband $D_{griz}$ Metric to \texttt{griz\_model\_extendedness} Parameter}
+ 
+Rubin (\citealt{2026arXiv261022613O}) introduced a novel star-galaxy separation metric
+named \texttt{griz\_model\_extendedness}. The score is clipped to the interval [0, 1] but
+it is not a calibrated probability that an object is a star or galaxy and should be 
+be interpreted as a morphology ranking statistic. Given a subsets of bands, the algorithm
+separately adds PSF and S\'{e}rsic fluxes and then utilizes these total fluxes to define
+PSF a magnitude difference between PSF and S\'{e}rsic, as used here. In addition,
+the algorithm applies an empirical calibration and an uncertainty correction, and then
+modifies the result using a characteristic source size (for more details see Appendix B).
+The last two modifications do not have a theoretical underpinning. Adding fluxes
+from different bands is also not optimal (for example, in case of a barely resolved galaxy
+in red bands with a strong blue AGN component this addition could mask the fact that
+the source is a galaxy). 
 
-\subsection{Comparison with \texttt{griz\_model\_extendedness}}
+We tested \texttt{griz\_model\_extendedness} using HST labels and it shows a
+remarkable performance. Indeed, when trying to understand why its performance
+is so superior to Rubin's default \texttt{extendedness} parameter, we realized that
+the dominant reason is the use of  S\'{e}rsic flux instead of CModel magnitudes. 
+We compare the contamination--completeness curves for our $D_{griz}$ classifier
+and \texttt{griz\_model\_extendedness} classifier in Figure~\ref{fig:CCgrizCompare}.
+As evident, their performance is comparable, with \texttt{griz\_model\_extendedness}
+slighly better than $D_{griz}$. We show in Appendix B that we can reproduce
+\texttt{griz\_model\_extendedness} using cataloged parameters to apply uncertainty
+and source size corrections.
 
-
-Comment that \texttt{griz\_model\_extendedness} adds fluxes directly, which is clearly wrong 
+We reiterate that \texttt{griz\_model\_extendedness} is not a calibrated probability that
+an object is a star or galaxy, and by itself does not allow user to estimate completeness
+and contamination for a selected threshold. Figure~\ref{fig:CCgrizCompareGrizmodel}
+shows the variation of completeness and contamination for stellar selection using
+three different values of \texttt{griz\_model\_extendedness} threshold. 
 
 
 \begin{figure*}[t]
@@ -531,9 +569,6 @@ Comment that \texttt{griz\_model\_extendedness} adds fluxes directly, which is c
   \caption{Performance vs. magnitude for a fixed threshold. IF we keep this figure, we will fix caption after this figure is finalized. }
   \label{fig:CCgrizCompareGrizmodel}
 \end{figure*}
-
-
-
 
 
 
@@ -606,12 +641,3 @@ as low as 20\% with substantial completeness of 45\%. When completeness of ~20\%
 acceptable (relative to all stars, not just the red subsample), contamination levels as low as ~10\%
 can be achieved. 
 
-
-
-\subsection{Comparison of Multiband $D$ Metric to {\it griz\_model\_extendedness} Parameter}
-
- \texttt{griz\_model\_extendedness} is well correlated with $\Delta m$. We need to compare how
- $D_{griz}$ performance compares to  \texttt{griz\_model\_extendedness} performance...
-But first ZI need to download data (\texttt{griz\_model\_extendedness})
-
- 
