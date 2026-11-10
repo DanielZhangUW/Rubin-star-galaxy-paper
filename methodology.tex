@@ -301,29 +301,29 @@ and Bayes factor is important later when combining multiple sources of classific
 
 \subsection{The Classification Performance of the Single-band \(\Delta m\) Mixture Model}
 
-XXXX  ZI stopped here 
-
+Given the best-fit model for the data distribution in the $\Delta m$ vs. $m_{\mathrm{Sersic}}$
+plane, each object is assigned a probability that it is unresolved, $p_S$ (or resolved, with
+$p_G = 1 - p_S$. Given a chosen threshold for $p_S$, the sample can classified into two
+classes, unresolved and resolved. Importantly, the best-fit model also predicts the class
+completeness and contamination for the chosen $p_S$ threshold. 
 
 Here we use HST labels to evaluate completeness and contamination for the stellar sample
 and compare them with the mixture-model predictions. We focus on the stellar subsample and
-the ``transition'' magnitude range, $24 < r < 25$, in two intervals: $24\leq r<24.5$ and
-$24.5\leq r<25$. Brighter than this range, population mixing is much smaller and measurements
-more accurate, leading to more accurate star-galaxy separation, whereas at fainter
+the magnitude range, $22 < r < 26$. Brighter than this range, population mixing is much smaller and
+measurements more accurate, leading to more accurate star-galaxy separation, whereas at fainter
 magnitudes the performance deteriorates rapidly (especially for the stellar subsample).
 
 Using the mixture model from eq.~\ref{eq:mixpdf1}, we compare 
 completeness and contamination for the stellar subsample predicted by
 eqs.~\ref{eq:complS} and \ref{eq:contS} with direct counts from the cleaned HST sample
-for $24\leq r<24.5$ and $24.5\leq r<25$ in Figure~\ref{fig:singleband-prediction-comparison}.
-As the two top panels show, the model underpredicts observed contamination levels
-at every completeness level, and in both magnitude bins. For example, at the 50\% completeness
-level, the model predicts negligible contamination while the observed contamination exceeds 40\%.
+in Figure~\ref{fig:singleband-prediction-comparison}.
+As the figure shows, the agreement betweem the model and data is remarkable, given that
+HST labels were not used to constrain the model.
 
-
-
-
-
-%\input{section33_focus}
+Depending on particular science case, a user can control completeness or contamination
+by choosing $p_S$ threshold. This optimization is discussed in more detail using better-performing
+multiband classification parameter in \S\ref{sec:userCC}. 
+ 
  
 \begin{figure*}[!t]
 \centering
@@ -339,8 +339,6 @@ level, the model predicts negligible contamination while the observed contaminat
 
  
 \subsection{The Multi-band Case}
-
-
 
 
 \begin{figure*}[t]
@@ -485,7 +483,7 @@ tradeoff between sample completeness and contamination depends on science case.
 
 
 \subsection{Using $D$ Metric-based Classification with Target Completeness or Contamination} 
-
+\label{sec:userCC} 
 
 
 \begin{figure*}[t]
