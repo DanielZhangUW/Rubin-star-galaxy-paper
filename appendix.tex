@@ -1,13 +1,59 @@
 \clearpage
-
-
-
+ 
 \appendix{} 
 
 \vskip -0.3in
 \leftline{\bf A. Iterative fitting procedure}
 
-Here Daniel describes V12 fitting method. 
+The data distribution in the $x \equiv \Delta m$ vs. $m \equiv m_{\mathrm{Sersic}}$ plane is fit with a model
+given by eq.~\ref{eq:mixpdf1}. The basic idea of the iterative fitting algorithm is to constrain
+$\funr(x)$ and $\fres(x)$ templates first (see eqs.~\ref{eq:mixpdf2}--\ref{eq:mixpd4} and
+eq.~\ref{eq:mixpd5}), and then constrain their relative normalization as a function of magnitude,
+while allowing for template shifts and constrained changes of their initially estimated shapes. 
+
+We first estimate $\funr(x)$ by selecting input data with $20 < m<22.5$ and $|x| < 0.05$ and fit a model
+with 7 free parameters: $f$, $\mu_c$, $\sigma_c$, $\gamma$, $\delta$, $h$, and $k$. In the final
+fitting step, we keep $\gamma$, $\delta$, $h$, and $k$ fixed to their best-fit values and allow
+the location and scale of $\funr(x)$, $\mu_c$ and $\sigma_c$, and its tail-to-core normalization,
+$f$, to vary by fitting them as smooth functions of magnitude (see below).  
+
+We estimate the shape of $\fres(x)$ using a subset of data with $23 < m < 24$ and $0.05 < x < 1.5$. 
+We model it with $K=2$ skew-normal distributions (see eq.~\ref{eq:mixpd5}) and obtain 7 best-fit
+parameters (the sum of the two $w_R$ parameters must be unity by definition). In the final fitting
+step, we keep $\alpha_R$ parameters fixed to their best-fit values and allow $w_R$,  $\mu_R$ and
+$\sigma_R$ to vary as smooth functions of magnitude. 
+
+In the final step, we fit full two-dimensional data distribution $f(x,m)$,
+\begin{equation}
+           f(x, m) = w_U(m) \,  [1 - f(m)] \, J(x,m)  + w_U(m) \, f(m) \, T(x,m) + [1 - w_U(m)] \, R(x,m),
+   \label{eq:templates}         
+\end{equation}
+where $R(x,m)$ corresponds to eq.~\ref{eq:mixpd5}, using maximum likelihood method. We
+minimize function
+\begin{equation}
+           \mathcal{L} = - {1 \over N} \sum_{i=1}^{N} {\rm ln} (p_i),
+\end{equation}
+where $p_i =  f(x_i, m_i)$ and $x_i$ and $m_i$ are data for $N$ objects. 
+
+The key aspect of this final step is to fit normalization functions $w_U(m)$ and $f(m)$ as smooth
+functions of magnitude, as described by eqs.~\ref{eq:wUmag} and \ref{eq:fmag}, respectively.
+We allow for the shift of the location and scale of each template component in
+eq.~\ref{eq:templates} ($J$, $T$, and $R$) with magnitude, as well as for their shape changes,
+constrained by keeping a subset of model parameters fixed to their best-fit values determined
+in the initial fitting steps described above.
+
+We assume a linear variation of $\mu_c$ with magnitude, and for
+$\sigma_c$ adopt a photometric error model from \citet{2007AJ....134.2236S} (their eq.~5),
+\begin{equation}
+            \sigma_c(m) = \sqrt{\sigma_0^2 + a^2 \cdot 10^{\,b\,(m - 22)}},
+  \label{eq:sesar_sigma}
+\end{equation}
+where \(\sigma_0\), \(a\), and \(b\) are free model parameters. For $w_R$,  $\mu_R$ and $\sigma_R$,
+free parameters that describe $R(x,m)$, we assume a linear variation with magnitude. This final
+fitting step includes 19 free parameters. With the five parameters determined in the initial steps,
+our full 2D model includes 24 free parameters.
+      
+{\bf XXX: we might keep $R$ fixed to its best-fit for HST galaxies, we'll see how it goes...}
 
 
 
@@ -15,59 +61,8 @@ Here Daniel describes V12 fitting method.
 \leftline{\bf B. Reproducing \texttt{griz\_model\_extendedness} parameter} 
 
 
-Here Daniel describes corrections for uncertainties and size... 
+Here Daniel describes corrections for uncertainties and size, and shows a plot
+that compares CC curves for our basic $D_{griz}$, corrected $D_{griz}$, and
+for \texttt{griz\_model\_extendedness}. 
 
-
-% OLD toy models
-%Figures~\ref{fig:toymodel1} and~\ref{fig:toymodel2} illustrate simulated
-%unresolved and resolved populations and comparisons with model predictions.
-
-%\begin{figure*}
-% \centering
-%  \includegraphics[width=\textwidth]{simulate_and_plot.png}
-%  \caption{Illustrative simulated unresolved and resolved populations
-%  (left), with comparisons of simulated histograms, component predictions,
-%  and total predictions (middle and right).}
-%  \label{fig:toymodel1}
-%\end{figure*}
-
-
-%\begin{figure*}
-%  \centering
-%  \includegraphics[width=\textwidth]{simulation_vs_theory.png}
-%  \caption{Second figure...}
-%  \label{fig:toymodel2}
-%\end{figure*}
-
-\clearpage
-\begin{figure*}[p]
-  \centering
-  \includegraphics[width=0.9\textwidth,height=0.43\textheight,keepaspectratio]{figures/fixed_completeness_and_comparisons/03_Fig5_Dgriz_1.pdf}
-  \caption{}
-  \label{fig:appendix-dgriz-cut-1}
-\end{figure*}
-\begin{figure*}[p]
-  \centering
-  \includegraphics[width=0.9\textwidth,height=0.43\textheight,keepaspectratio]{figures/fixed_completeness_and_comparisons/03_Fig5_Dgriz_2.pdf}
-  \caption{}
-  \label{fig:appendix-dgriz-cut-2}
-\end{figure*}
-\begin{figure*}[p]
-  \centering
-  \includegraphics[width=0.9\textwidth,height=0.80\textheight,keepaspectratio]{figures/fixed_completeness_and_comparisons/04_01_Logodds_single_to_multi.pdf}
-  \caption{}
-  \label{fig:appendix-logodds-bands}
-\end{figure*}
-\begin{figure*}[p]
-  \centering
-  \includegraphics[width=0.9\textwidth,height=0.80\textheight,keepaspectratio]{figures/fixed_completeness_and_comparisons/04_02_Logodds_vs_original_D_and_extendedness.pdf}
-  \caption{}
-  \label{fig:appendix-logodds-comparison}
-\end{figure*}
-\begin{figure*}[p]
-  \centering
-  \includegraphics[width=0.9\textwidth,height=0.80\textheight,keepaspectratio]{figures/fixed_completeness_and_comparisons/04_03_Logodds_predicted_CC_vs_HST.pdf}
-  \caption{}
-  \label{fig:appendix-logodds-prediction}
-\end{figure*}
-\clearpage
+ 
