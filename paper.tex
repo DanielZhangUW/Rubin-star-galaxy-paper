@@ -107,6 +107,10 @@
 \affiliation{Department of Astronomy, University of Washington, Box 351580, Seattle, WA 98195, USA}
 \email{niravn6@uw.edu}
 
+\author{Karlo Mrakov\v{c}i\'{c}}
+\affiliation{Faculty of Physics, University of Rijeka, Radmile Matej\v{c}i\'{c} 2, 51000 Rijeka, Croatia}
+\email{}
+
 \author{Colin T. Slater}
 \affiliation{Department of Astronomy, University of Washington, Box 351580, Seattle, WA 98195, USA}
 \email{ctslater@uw.edu} 
@@ -119,8 +123,12 @@
 \affiliation{Department of Astrophysical Sciences, Princeton University, Princeton, NJ 08544, USA}
 \email{rhl@astro.princeton.edu} 
 
-\author{other Rubin coauthors}
-\affiliation{Rubin Observatory}
+\author{Yumi Choi}
+\affiliation{NSF-DOE Vera C. Rubin Observatory / NSF NOIRLab, 950 N. Cherry Ave., Tucson, AZ 85719, USA}
+\email{ccamzzichyuk@gmail.com}
+
+\author{Rubin Builders coauthors}
+\affiliation{Rubin Observatory} 
 \email{verarubin@noirlab.edu} 
 
 
@@ -139,8 +147,8 @@ In this work, we implement the Bayesian star-galaxy classification method of Sla
 which overcomes these shortcomings. 
 In each band, we model the distribution of sources in the two-dimensional space defined by
 \(\Delta m = m_{\mathrm{PSF}} - m_{\mathrm{Sersic}}\) and magnitude \(m_{\mathrm{Sersic}}\).
-Importantly, CModel magnitudes are replaced by S\'{e}rsic magnitudes because the latter result in superior
-performance.  At a fixed magnitude, the distribution is modeled as a mixture of unresolved and resolved
+Importantly, CModel magnitudes are replaced by S\'{e}rsic magnitudes because {\it the latter result in superior
+performance}.  At a fixed magnitude, the distribution is modeled as a mixture of unresolved and resolved
 components which automatically accounts for the varying star-to-galaxy number ratio and
 allows us to compute the posterior probability that a source is resolved, as well as sample
 completeness and contamination for arbitrary selection thresholds. This approach also allows for
@@ -173,7 +181,7 @@ further improved by incorporating complementary color-based classifiers.
 
 \input{methodology}
 
-%\input{discussion}
+\input{discussion}
 
 \input{appendix}
 

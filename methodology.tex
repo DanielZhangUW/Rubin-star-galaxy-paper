@@ -12,7 +12,7 @@ star-galaxy separation in the literature is available in SIL2020.
 
 \subsection{Which model magnitudes to use: CModel or  S\'{e}rsic?} 
 
-Motivated by successful use of \(\Delta m \) based on CModel magnitudes in thousands to SDSS papers,
+Motivated by the successful use of \(\Delta m \) based on CModel magnitudes in thousands to SDSS papers,
 and the fact that \texttt{extendedness} listed in Rubin catalogs is also based on this type of model
 magnitudes, we initially considered this option, too. A performance comparison with 
 \texttt{griz\_model\_extendedness} parameter revealed that replacing CModel magnitudes by S\'{e}rsic
@@ -35,8 +35,7 @@ as de Vaucouleurs profile, is often used to describe elliptical galaxies and cla
 The main difference between  CModel vs. S\'{e}rsic fluxes is that the latter are based
 on best-fit profile where $n$ is a free model parameter, while CModel fluxes are based
 on a linear combination of two best-fit S\'{e}rsic profiles where $n$ is fixed to 1 and 4 (``C''
-stands for composite\footnote{For more details, see
-   https://www.sdss3.org/dr8/algorithms/magnitudes.php}), 
+stands for composite\footnote{For more details, see https://www.sdss3.org/dr8/algorithms/magnitudes.php}), 
 The code takes the best fit exponential and de Vaucouleurs profile fits in a given band and asks for
 the linear combination of the two that best fits the image. The weighting coefficient (clipped between zero
 and one) is defined as de Vaucouleurs term, fracDeV, defining the CModel composite flux as 
@@ -518,7 +517,8 @@ Galactic plane the stellar counts will go up and thus the stellar sample contami
  
 
 \subsection{Comparison of Multiband $D_{griz}$ Metric to \texttt{griz\_model\_extendedness} Parameter}
- 
+\label{sec:comparegriz}
+
 Rubin (\citealt{2026arXiv261022613O}) introduced a novel star-galaxy separation metric
 named \texttt{griz\_model\_extendedness}. The score is clipped to the interval [0, 1] but
 it is not a calibrated probability that an object is a star or galaxy and should be 
@@ -530,7 +530,7 @@ modifies the result using a characteristic source size (for more details see App
 The last two modifications do not have a theoretical underpinning. Adding fluxes
 from different bands is also not optimal (for example, in case of a barely resolved galaxy
 in red bands with a strong blue AGN component this addition could mask the fact that
-the source is a galaxy). 
+the source is a galaxy) unless galaxy morphology is strongly correlated between bands. 
 
 We tested \texttt{griz\_model\_extendedness} using HST labels and it shows a
 remarkable performance. Indeed, when trying to understand why its performance

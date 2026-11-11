@@ -1,148 +1,95 @@
-\FloatBarrier
+% \FloatBarrier
 
 \section{Discussion and Conclusions}
 \label{sec:discussion}
 
-Don't forget to talk about blind application of ML methods... Mention Random Forest tests...
-Mention GP classifier with 5,000 simulated training observations
-Muyskens et al. 2022: averaged over 100 simulation iterations: area under the curve is 0.985
- %    2022AJ....163..148M 
-
-Don't forget: \ref{2021PASP..133e4502M} who modeled  dmag vs. mag using KDE
-
-Mention griz\_model\_extendedness (Karlo's analysis)
-
-
-Mention that if it works for stars at high Galactic latitude ($b \sim 50^\circ$), it should
-work even better at lower latitudes. However, we may want to select a lower-latitude
-field (say 15 deg or so) and rerun all notebooks with those data, too... 
-
-Mention that both $\dm$ and $D$ fits are NOT universal: they depend on the sky location
-and the depth of images! 
+Reliable separation of unresolved and resolved sources is important for a wide range of Rubin
+science applications. Stellar population studies require samples with controlled galaxy
+contamination and quantified completeness, while extragalactic analyses require the complementary
+suppression of foreground stars. These requirements become increasingly difficult to satisfy at
+faint magnitudes, where the stellar and galaxy morphology distributions overlap and galaxies
+outnumber stars by more than an order of magnitude. A continuous probabilistic description is
+therefore more informative than a binary morphology flag because it retains the uncertainty
+associated with each classification and allows independent measurements to be combined before a
+catalog assignment is made \citep[][SIL2020]{Henrion2011BayesianSG}.
 
 
+LSST photometric catalogs provide several classifiers, including a per-band binary classifier,
+\texttt{extendedness}, based on a threshold in the magnitude difference, $\Delta m$, between PSF
+($m_{\mathrm{PSF}}$) and CModel ($m_{\mathrm{CModel}}$) magnitudes, an approach pioneered by
+SDSS. The theoretical reasons why this morphological classifier should be at least as effective as
+any other proposed in the literature are discussed at length in SIL2020. Despite the widespread use
+of $\Delta m$ based on CModel magnitudes in thousands of SDSS papers, we demonstrated that {\it
+  superior classification performance can be achieved by simply replacing CModel magnitudes with
+  S\'{e}rsic magnitudes} in the definition of $\Delta m$. A detailed investigation of why S\'{e}rsic
+magnitudes are better suited than CModel magnitudes for star-galaxy separation is beyond the scope
+of this work. One possible clue is the ``pile-up'' of galaxies around $\Delta m \sim 0$ at the faint
+end when CModel magnitudes are used (see Figure~\ref{fig:magdmcomparison}). We note that the SDSS pipelines
+\citep{2002SPIE.4836..350L} did not fit S\'{e}rsic models with a free S\'{e}rsic index $n$, but
+instead used a linear combination of exponential and de Vaucouleurs profiles with fixed $n=1$ and
+$n=4$. Perhaps S\'{e}rsic magnitudes would also have performed better than CModel magnitudes in SDSS
+had they been available.
 
-Reliable separation of unresolved and resolved sources is important for a
-wide range of Rubin science applications.  Stellar-population studies require
-samples with controlled galaxy contamination, while extragalactic analyses
-require the complementary suppression of foreground stars.  These demands
-become increasingly difficult to satisfy at faint magnitudes, where the
-stellar and galaxy morphology distributions overlap and galaxies dominate the
-source counts.  A continuous probabilistic description is therefore more
-informative than a binary morphology flag because it retains the uncertainty
-of each classification and allows independent measurements to be combined
-before a catalog assignment is made
-\citep{Henrion2011BayesianSG,Slater2020}.
 
-XXXXXThe results in Section~\ref{sec:single-band-performance} show that most of the
-improvement in the $r$-band ranking is obtained by modeling the full
-magnitude-dependent morphology distributions.  For the 193,516 objects with a
-finite $r$-band morphology measurement, the AUC increases from 0.871 for a
-threshold sweep over the raw
-$\Delta m_r=m_{{\rm PSF},r}-m_{{\rm CModel},r}$ measurement to 0.899 for the
-morphology-only probabilistic score.  Including the source-count prior changes
-the AUC to 0.901.  The comparatively small change in AUC does not make the
-prior unimportant: AUC measures only the ordering of sources, whereas the
-prior supplies the population odds required to interpret the morphology
-likelihoods as posterior probabilities.  Its influence is greatest where the
-morphology measurement is ambiguous and the two classes have very different
-abundances \citep{Fawcett2006ROC}.
+Nevertheless, a magnitude-independent threshold for $\Delta m$ is not an optimal approach to
+star-galaxy separation, even when S\'{e}rsic magnitudes are used. The main shortcomings of this
+approach are its inability to combine morphological information from different bands in a
+theoretically sound way and the lack of information about the resulting sample contamination and
+completeness. To address these shortcomings, we implemented the Bayesian star-galaxy classification
+method of SIL2020.
 
-The fixed catalog assignment exposes the corresponding completeness--purity
-trade-off.  At $16\leq r<24$, the probabilistic star-candidate sample has a
-completeness of 0.878 and a purity of 0.975.  At $24\leq r<25$, its purity is
-0.558, compared with 0.318 for the default Rubin
-\texttt{extendedness} selection, while its completeness is 0.268, compared
-with 0.582 for \texttt{extendedness}.  The probabilistic selection is thus
-cleaner but less complete in this interval; it is not uniformly superior for
-all scientific uses.  Analyses that prioritize rare-object discovery may
-prefer higher completeness, whereas studies that are sensitive to galaxy
-contamination may prefer the cleaner selection.  Reporting the continuous
-$p_{\rm S}$ value preserves classification uncertainty in addition to the
-adopted catalog assignment.  This class-specific reporting is particularly
-important for the strongly imbalanced faint sample
-\citep{SaitoRehmsmeier2015}.
 
-At $25\leq r<26$, the adopted catalog assignment selects no star-like objects
-in the evaluated sample.  The stellar completeness is consequently zero and
-the purity of the empty star-candidate sample is undefined.  This result does
-not imply that the field contains no stars.  Rather, the available morphology
-information and the strongly galaxy-dominated source-count prior do not
-produce posterior probabilities above the adopted assignment boundary.  The
-continuous score still contains ranking information, but the present catalog
-assignment is too conservative to define a useful faint stellar sample.  This
-faint-end behavior is an important limitation rather than an improvement over
-the Rubin baseline.
+In each band, we model the distribution of sources in the two-dimensional space defined by $\Delta m
+= m_{\mathrm{PSF}} - m_{\mathrm{Sersic}}$ and magnitude $m_{\mathrm{Sersic}}$ as a two-component
+mixture model. Given the large number of objects, the two components, corresponding to unresolved
+and resolved sources, can be constrained without using external information such as HST-based
+labels. Once the best-fit model is available, sample contamination and completeness can be readily
+computed, and their variation with magnitude can be controlled by tuning the sample selection
+criteria (see \S\ref{sec:userCC}). Our results can be extended to fields closer to the Galactic
+plane. However, the contamination levels for stellar samples discussed here for the high-latitude COSMOS field can
+already be interpreted as upper limits for fields closer to the plane.
 
-XXXXXThe multiband comparison leads to a similarly qualified conclusion.
-Combining morphology measurements from additional bands improves the ranking
-in the bright and intermediate intervals, but the gain is not monotonic with
-the number of bands.  In the faintest interval, the $r$-only morphology score
-slightly outperforms the six-band morphology score.  The color-augmented score
-shown in Figure~\ref{fig:multiband-color-roc} improves the ranking relative to
-the morphology-only curves within the evaluated sample, with its largest
-displayed gain at the faint end.  Because the combined morphology-plus-color
-quantity is used as a discriminative score rather than as a calibrated
-likelihood ratio, it should be interpreted as a ranking statistic and not as
-a posterior probability.  Likewise, the color distributions in
-Figure~\ref{fig:color-distributions} describe the samples produced by the
-classifier; because those colors contribute to the classification, that
-figure is not an independent validation.  Previous work has similarly found
-that multiband photometry can complement morphology, while also emphasizing
-the dependence of performance on depth, labels, and survey conditions
-\citep{Fadely2012MultiBandSG,Kim2015HybridSG,SevillaNoarbe2018DESY1}.
 
-Several limitations determine how broadly the present measurements can be
-generalized.  First, the validation is confined to the COSMOS field.  The
-star-to-galaxy number ratio varies with Galactic coordinates, extinction,
-depth, and catalog selection, so a prior inferred in COSMOS should not be
-transferred unchanged across the Rubin footprint.  A spatially portable
-version of the classifier could use a line-of-sight stellar-count prediction,
-for example from TRILEGAL, together with an independently specified galaxy
-count model \citep{Girardi2005TRILEGAL,DalTio2022TRILEGAL}.  TRILEGAL predicts
-stellar counts rather than the galaxy-to-star ratio itself, and the stellar
-and galaxy terms must be evaluated with consistent filters, extinction
-conventions, magnitude bins, effective area, and catalog selections.
+Thanks to the switch from CModel to S\'{e}rsic magnitudes and the probabilistic combination of
+morphological information from multiple ($griz$) bands, the resulting classifier significantly
+outperforms the default Rubin \texttt{extendedness} parameter. The improvement is especially notable
+for stellar selection at the faint end (``galaxies are easy'': 97\% accuracy is achieved simply by
+declaring all objects to be resolved). At the same level of stellar-sample contamination, the
+stellar sample extends {\it more than a magnitude fainter} and approaches the idealized statistical
+limit discussed by SIL2020. We also showed how stellar classification performance can be improved
+using judiciously chosen color cuts designed to exclude contaminating galaxies.
 
-XXXXXSecond, 193,586 of the 269,606 selected Rubin sources are matched to the
-COSMOS2020/FARMER reference catalog, a Rubin-side matching fraction of 0.718.
-The reported metrics therefore characterize the matched validation sample,
-not every selected Rubin source \citep{Weaver2022}.  The multiband comparisons
-are further restricted to objects with finite values for every score included
-in a given panel.  If matching failures or missing measurements depend on
-class, magnitude, color, blending, or surface brightness, the evaluated sample
-need not be representative of the full catalog.
 
-Third, the external classifications are reference labels rather than
-error-free physical truth.  High-resolution HST/ACS studies of COSMOS
-demonstrate both the value and the magnitude dependence of morphology-based
-reference samples \citep{Leauthaud2007COSMOSACS,Robin2007COSMOSStars}; we do
-not assume that the COSMOS2020/FARMER labels used here are error free.
-Independent checks with spectroscopic classifications and additional
-high-resolution fields would help separate classifier errors from
-reference-label errors and cosmic variance.
+This improved performance provides a strong argument for modifying and augmenting the star-galaxy
+classification parameters provided to users in Rubin/LSST catalogs. At the very least,
+\texttt{extendedness} should be based on $\Delta m$ computed using S\'{e}rsic magnitudes (see
+Figure~\ref{fig:magdmCCcomparison} for a performance comparison). A more substantial, but highly valuable, addition
+would be to compute $D_{griz}$ for every object and provide the expected stellar-sample completeness
+and contamination if that value is used as the selection threshold. These parameters
+could also be made available through post-processing as a value-added catalog because they are based
+entirely on cataloged PSF and S\'{e}rsic fluxes.
 
-XXXXXFinally, the faint-end unresolved fraction is obtained by extrapolating a
-smooth model from magnitude intervals in which the mixture components are
-better separated.  The uncertainty of that extrapolation is not propagated
-into the reported $p_{\rm S}$ values.  Future applications should propagate
-uncertainties in the mixture parameters and population prior, and should test
-sensitivity to depth, seeing, PSF modeling, blending, and crowding.  It is also
-important to preserve the distinction between morphology and astrophysical
-identity: $p_{\rm S}$ is formally the probability that a source belongs to the
-unresolved morphological component.  Unresolved quasars and compact galaxies,
-as well as resolved stellar systems, prevent this probability from being
-universally identical to the probability that an object is physically a star.
 
-XXXXXIn summary, modeling the full $\Delta m$ distribution extracts more ranking
-information from the $r$-band morphology measurement than the binary Rubin
-\texttt{extendedness} field and provides a continuous output that can be
-combined with additional measurements.  In the matched COSMOS sample, the
-probabilistic assignment produces a purer but less complete star-candidate
-sample at $24\leq r<25$, while it becomes too conservative to select a useful
-stellar sample at $25\leq r<26$.  Multiband morphology provides useful but
-non-monotonic gains, and the color-augmented result is best regarded as a
-ranking until it is probability-calibrated.  Extending the method across the
-Rubin footprint will require field-dependent count priors, uncertainty
-propagation, and validation in samples beyond the present COSMOS
-complete-case data.
+The best-fit $\Delta m$ versus $m$ and $D_{griz}$ models are not universal and should vary with sky
+location and image depth. The fitting algorithm was tested here on coadded Rubin images from the
+COSMOS field, which are deeper than single-visit images (the $5\sigma$ detection limit for point
+sources in the $r$ band is 26.4). It may be more difficult to constrain the $\Delta m$ distribution
+of galaxies at brighter magnitudes in shallower, lower-S/N data. In addition, stars will eventually
+dominate the sample closer to the Galactic plane, and the algorithmic steps may need to be
+reoptimized. We leave these considerations for future work.
+
+
+We have also tested star-galaxy separation based on the novel \texttt{griz\_model\_extendedness}
+parameter. Although based on an ad hoc approach, it performs remarkably well (see \S\ref{sec:comparegriz}).
+Its main practical shortcoming is that it is not a calibrated probability that an object is a star or a
+galaxy, and does not allow users to estimate sample completeness and contamination without
+external labels.
+
+
+Finally, we note that a similar approach to star-galaxy classification, based on modeling $\Delta m$
+versus magnitude distributions, was discussed by \cite{2021PASP..133e4502M}. The main difference
+between their method and ours is that they used a KDE (kernel density estimation) method, which
+requires an external training sample. Their Pan-STARRS1 dataset was approximately three magnitudes
+shallower and therefore cannot be directly compared with our results.
+
+
