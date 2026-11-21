@@ -56,9 +56,9 @@ is used for classification. With explicit modeling of these distributions, descr
 \(\Delta m \) based on S\'{e}rsic magnitudes is clearly superior to its alternative based
 on CModel magnitudes, especially at the faint end of the sample. 
 
-\begin{figure*}
+\begin{figure*}[!tb]
   \centering
-     \includegraphics[width=\textwidth]{CCcurvesSersiCmodel.png}
+     \includegraphics[width=\textwidth]{COSMOS1deg_Type_Fig08.pdf}
      \caption{A comparison of contamination (see eq.~\ref{eq:complS} for definition) vs. completeness (see eq.~\ref{eq:contS})
       curves for unresolved sources
       using two versions of the $r$-band $\dm$ based on Sersic and CModel fluxes, in different magnitude bins, as
@@ -70,9 +70,9 @@ on CModel magnitudes, especially at the faint end of the sample.
 
 
 
-\begin{figure*}
+\begin{figure*}[!tb]
   \centering
-  \includegraphics[width=\textwidth]{Figure8.pdf}
+  \includegraphics[width=\textwidth]{COSMOS1deg_Type_Fig09.pdf}
   \caption{The panels compare the \(\Delta m \) vs. \(m_{\mathrm{CModel}}\) (top row) and
     the \(\Delta m \) vs. \(m_{\mathrm{Sersic}}\) (bottom row)  distributions for
     unresolved (left) and resolved (right) objects classified using HST labels. Note that some
@@ -84,6 +84,11 @@ on CModel magnitudes, especially at the faint end of the sample.
     discussed here. 
   }
   \label{fig:magdmcomparison}
+\end{figure*}
+
+\begin{figure*}[!tb]
+  \centering
+  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{COSMOS1deg_Type_Fig09_companion.pdf}\par
 \end{figure*}
 
 
@@ -213,18 +218,18 @@ In the final fitting step, the normalization functions $w_U(m)$ and $f(m)$, and 
 parameters are fit as smooth functions of magnitude (e.g., eqs.~\ref{eq:wUmag} and \ref{eq:fmag} for
 $w_U(m)$ and $f(m)$, respectively). For more details, see Appendix A. 
 
-\begin{figure*}
+\begin{figure*}[!tb]
   \centering
-  \includegraphics[width=\textwidth,height=0.85\textheight,keepaspectratio]{fig10_histogram_fits.pdf}
+  \includegraphics[width=\textwidth,height=0.85\textheight,keepaspectratio]{COSMOS1deg_Type_Fig10.pdf}
   \caption{Observed r-band S\'{e}rsic-based \(\Delta m\) histograms (black) and the best-fit two-component
     mixture models (dashed: unresolved component; dotted: resolved component) in magnitude bins, as
     marked. }
   \label{fig:slice_fits}
 \end{figure*}
 
-\begin{figure*}[!t]
+\begin{figure*}[!tb]
 \centering
-\includegraphics[width=\textwidth,height=0.85\textheight,keepaspectratio]{Figure12_with_HST_histograms.pdf}
+\includegraphics[width=\textwidth,height=0.85\textheight,keepaspectratio]{COSMOS1deg_Type_Fig11.pdf}
 \caption{The top four rows show zoomed-in comparison of observed $r$-band $\Delta m$ distributions
   and their best-fit two-component models, in  magnitude bins, as marked.  Black histograms show the
   observed counts, while dashed blue, dotted orange, and dot-dashed green curves show the
@@ -235,9 +240,9 @@ $w_U(m)$ and $f(m)$, respectively). For more details, see Appendix A.
 \label{fig:singleband-component-comparison}
 \end{figure*}
 
-\begin{figure*}
+\begin{figure*}[!tb]
   \centering
-  \includegraphics[width=\textwidth,height=0.85\textheight,keepaspectratio]{fig11_residuals_ury.pdf}
+  \includegraphics[width=\textwidth,height=0.85\textheight,keepaspectratio]{COSMOS1deg_Type_Fig12.pdf}
   \caption{Two-dimensional comparison of the observed (left), modeled (center), and fractional residual
     (right) source counts in the \(\Delta m\) vs.\ \(m_{\mathrm{Sersic}}\) plane, for the $u$, $r$,
     and $y$ bands from top to bottom. Residuals show $(N_{\rm data}-N_{\rm model})/N_{\rm data}$.
@@ -246,14 +251,10 @@ $w_U(m)$ and $f(m)$, respectively). For more details, see Appendix A.
 \end{figure*}
 
 
-\begin{figure*} 
+\begin{figure*}[!tb]
 \centering
-\includegraphics[width=\textwidth,height=0.62\textheight,keepaspectratio]{fig09_ratio.pdf}
-\caption{A comparison of model-predicted (solid red line) and HST-observed (green dot-dashed line)
-   galaxy-to-star count ratio as a function of the  $r$-band Sersic magnitude. 
-       The counts of sources classified using the $r$ band \texttt{extendedness} (dotted line) 
-      shows a spurious turnover at $r > 24$ due to a large number of galaxies misclassified as
-      stars.} 
+\includegraphics[width=\textwidth,height=0.62\textheight,keepaspectratio]{COSMOS1deg_Type_Fig13.pdf}
+\caption{The galaxy-to-star count ratio as a function of $r$-band S\'ersic magnitude. The solid teal line with circles shows the V12 prediction, and the red dash-dotted line with diamonds shows direct counts from the HST reference sample.}
   \label{fig:star_galaxy_ratio}
 \end{figure*}
   
@@ -324,9 +325,9 @@ by choosing $p_S$ threshold. This optimization is discussed in more detail using
 multiband classification parameter in \S\ref{sec:userCC}. 
  
  
-\begin{figure*}[!t]
+\begin{figure*}[!tb]
 \centering
-\includegraphics[width=\textwidth]{Figure12.pdf}
+\includegraphics[width=\textwidth]{COSMOS1deg_Type_Fig14.pdf}
 \caption{Model-predicted (red dashed lines) and HST-observed (solid blue lines) $r$-band completeness--contamination relations in
   different magnitude bins, as marked.  Observed curves are based on direct HST counts of unresolved
   and resolved sources. The model-predicted curves are based on integrals given by
@@ -340,9 +341,9 @@ multiband classification parameter in \S\ref{sec:userCC}.
 \subsection{The Multi-band Case}
 
 
-\begin{figure*}[t]
+\begin{figure*}[!tb]
   \centering
-  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{fig15_D_distributions.pdf}
+  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{COSMOS1deg_Type_Fig15.pdf}
   \caption{Observed $D$ distributions of HST stars (blue) and HST
     galaxies (red). Rows show $r$, $ri$, $riz$, and $griz$ band combinations of the
     $D$ metric; columns show
@@ -417,9 +418,9 @@ In particular,  the middle column in  Figure~\ref{fig:multiband18} shows good ag
 model components with subsets of data classified using HST labels. 
 
 
-\begin{figure*}[t]
+\begin{figure*}[!tb]
   \centering
-  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{04_Dgriz_full_range_fit.pdf}
+  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{COSMOS1deg_Type_Fig16.pdf}
   \caption{The best-fit two-component models (smooth lines) to observed (histograms) $D_{griz}$ distributions in different
     magnitude bins, as marked. Note that x axis is shown on logarithmic scale. The large peak
     corresponds to resolved component; unresolved component peaks at $D_{griz} \sim 2$. }
@@ -427,9 +428,9 @@ model components with subsets of data classified using HST labels.
 \end{figure*}
  
 
-\begin{figure*}[t]
+\begin{figure*}[!tb]
   \centering
-  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{figures/fixed_completeness_and_comparisons/02_Dgriz_combined_12panels.pdf}
+  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{COSMOS1deg_Type_Fig17.pdf}
   \caption{The panels in the first column are zoomed-in versions of Fig.~\ref{fig:multiband04}, in four
     selected magnitude bins, as marked. Unresolved and resolved model components are shown with
      blue dashed and red dotted lines, respectively. The middle column is analogous to the left
@@ -443,14 +444,13 @@ model components with subsets of data classified using HST labels.
 
 \subsection{The Performance of the $D$ Metric-based Classification} 
 
-\begin{figure*}[t]
+\begin{figure*}[!tb]
   \centering
-  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{D_bands_CC_23_26.pdf}
+  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{COSMOS1deg_Type_Fig18.pdf}
   \caption{The performance of multi-band $D$ classificators for stellar subsamples in different
     magnitude bins, as marked. 
     Empirical contamination--completeness curves based
-    on objects with HST classification labels are shown for the following band combinations: $r$,
-    $ri$, $riz$ and $griz$. All curves within a panel use the same cleaned HST reference sample with valid $D$ in all required bands.
+    on objects with HST classification labels are shown for $D_r$ and $D_{griz}$. All curves within a panel use the same cleaned HST reference sample with valid $D$ in all required bands.
     Diamonds and squares mark approximately 20\% and 50\% stellar completeness on the $griz$ curves;
     circles mark $D_{griz}=3$ threshold.
     Objects that are beyond the plotting window in Fig.~\ref{fig:D-observed-distributions} remain in the
@@ -495,21 +495,18 @@ high-latitude COSMOS field, the implied contamination levels are an upper limit 
 Galactic plane the stellar counts will go up and thus the stellar sample contamination will go down). 
 
 
-\begin{figure*}[t]
+\begin{figure*}[!tb]
   \centering
-  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{figures/fixed_completeness_and_comparisons/01_D_targets_comparison.pdf}
-  \caption{Target completeness application. We will fix caption after this figure is finalized. WE
-    NEED TO ADD CURVES FOR MODEL-BASED CONTAMINATION. ALSO, WE NEED 4th PANEL THAT
-    WOULD SHOW WHAT HAPPENS FOR TARGET CONTAMINATION OF 20\%}
+  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{COSMOS1deg_Type_Fig19.pdf}
+  \caption{Stellar completeness and contamination by galaxies as functions of $r$-band magnitude. The upper three panels use $D_{griz}$ thresholds chosen for model stellar completeness of 20\%, 50\%, and 90\%, respectively. The bottom panel uses thresholds chosen for 20\% model contamination and shows the magnitude range where this target is attainable. The curves compare V12 predictions with direct counts of HST-labeled objects at the same thresholds.}
   \label{fig:fixed-target-completeness}
 \end{figure*}
 
 
-\begin{figure*}[t]
+\begin{figure*}[!tb]
   \centering
-  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{figures/fixed_completeness_and_comparisons/01_D_thresholds_vs_magnitude.pdf}
-  \caption{D values for target completeness application.  We will fix caption after this figure is
-    finalized. IT WOULD BE GOOD TO SHOW Y AXIS ON LOG SCALE.}
+  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{COSMOS1deg_Type_Fig20.pdf}
+  \caption{Thresholds for selecting objects with $D_{griz}$ below the plotted value. The solid curves give model stellar completeness of 20\%, 50\%, and 90\%. The dashed curve gives the 20\% model contamination by galaxies used in the bottom panel of Figure~\ref{fig:fixed-target-completeness}. It ends at the $24\leq r<24.5$ bin; the model does not reach this target in the three fainter bins.}
   \label{fig:fixed-target-Dvalues}
 \end{figure*}
 
@@ -550,22 +547,22 @@ shows the variation of completeness and contamination for stellar selection usin
 three different values of \texttt{griz\_model\_extendedness} threshold. 
 
 
-\begin{figure*}[t]
+\begin{figure*}[!tb]
   \centering
   % this figure copied from End-to-end-morphology-star-probability/v12/outputs/notebook 
-  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{official_CC_23_26.pdf }
-  \caption{A comparison of completeness--contamination curves for two different classification
-    methods based on $D_{griz}$ developed here and \texttt{griz\_model\_extendedness} computed by
-    Rubin Science Pipelines.}
+  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{COSMOS1deg_Fig21_four_CC_curves.pdf}
+  \caption{Completeness--contamination curves for four stellar selection methods evaluated on the same HST reference objects in each magnitude bin. The dotted red curve shows \(D_{\mathrm{griz}}\), and the dashed black curve shows Rubin's \texttt{griz\_model\_extendedness}. The solid blue curve shows \(\Delta m_{\mathrm{griz}}\), computed by separately summing the PSF and S\'{e}rsic fluxes across \(griz\) and converting their ratio to a magnitude difference. The dot-dashed green curve shows \(\overline{\Delta m}_{\mathrm{griz}}\), the arithmetic mean of the four individual-band PSF--S\'{e}rsic magnitude differences.}
   \label{fig:CCgrizCompare}
 \end{figure*}
 
 
 
-\begin{figure*}[t]
+
+
+\begin{figure*}[!tb]
   \centering
   % this figure copied from End-to-end-morphology-star-probability/v12/outputs/notebook 
-  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{01_extendedness_versus_magnitude.pdf}
+  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{COSMOS1deg_Type_Fig22.pdf}
   \caption{Performance vs. magnitude for a fixed threshold. IF we keep this figure, we will fix caption after this figure is finalized. }
   \label{fig:CCgrizCompareGrizmodel}
 \end{figure*}
@@ -575,29 +572,27 @@ three different values of \texttt{griz\_model\_extendedness} threshold.
 
 \subsection{Improved Stellar Classification Using Color Selection}
 
-\begin{figure*}[t]
+\begin{figure*}[!tb]
   \centering
-  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{Figure18.pdf}
+  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{COSMOS1deg_Type_Fig23.pdf}
   \caption{The color distribution of objects morphologically classified as unresolved using Rubin DP2 measurements
-    (with $D_{griz}$ thresholds selected to ensure 20\% completeness), and then separated into stars (blue dots) and galaxies
+    (with $D_{griz}$ thresholds selected for 50\% and 20\% stellar completeness in the top and bottom rows, respectively), and then separated into stars (blue dots) and galaxies
     (red crosses) using HST labels, in two magnitude bins: $24\leq r<24.5$ (top) and $24.5\leq r<25$ (bottom).
-    The fraction of HST-classified galaxies in these two subsamples is 2.6\% and 18\%, respectively. Note that galaxies appear
+    The brighter subsample contains 105 stars and 22 galaxies (17.3\% contamination); the fainter subsample contains 35 stars and 21 galaxies (37.5\% contamination). Note that galaxies appear
     systematically bluer than stars, except for the $z-y$ color, which allows for improved color-based classification.}
   \label{fig:color-ccdiags}
 \end{figure*}
  
 
 
-\begin{figure*}[t]
+\begin{figure*}[!tb]
   \centering
   % this is copy of End-to-end-morphology-star-probability/v12/outputs/notebook/fig21_official_color.pdf 
-  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{Figure19.pdf}
+  \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{COSMOS1deg_Type_Fig24.pdf}
   \caption{The performance of color-aided multi-band $D$ classificators for stellar subsamples in two magnitude bins:
     $24\leq r<24.5$ (left) and $24.5\leq r<25$ (right), and for three color cuts: $g-r>0.3$ (top), $g-r>1.0$ (middle)
     and $r-i>0.8$ (bottom). In each panel, empirical contamination-completeness curves based on objects with HST
-    classification labels are shown for the following band combinations: $r$, $ri$, $riz$ and $griz$. A curve corresponding
-    to the $griz$ case without color cut is also shown for reference. Note the marked decrease of
-    sample contamination when morphological classification is aided with color selection.
+    classification labels are shown for $D_r$ and $D_{griz}$ with the indicated dereddened color cut. The gray curve shows $D_{griz}$ without a color cut. Completeness is relative to all reference stars in the bin before color selection. In the upper right panel, the color cut raises contamination at 50\% completeness but slightly lowers it at 20\%.
     Diamonds and squares mark the $griz$ thresholds corresponding to approximately 20\% and 50\%
     completeness before the color cut, respectively; circles mark $D_{griz}<3$.
     Open gray diamonds show the 20\% completeness selection without a color cut.}
@@ -627,17 +622,7 @@ sequence and red giant stars; see e.g., \citealt{2026A&A...707A.333P}). The cut 
 selects red (M type) stars and excludes almost all galaxies. The cut $r-i > 0.8$ is similar
 but more effective at excluding galaxies.
 
-The top panel in Figure~\ref{fig:color-performance} shows substantial decrease of unresolved
-sample contamination when $g-r>0.3$ condition is added, both in single-band and multiband
-cases.  For example, for $24\leq r<24.5$ bin at fiducial stellar completeness of 50\%,
-$D_{griz}$ and $g-r>0.3$ selection decrease contamination to 25\% from 45\% in the $r$ band case
-without a color cut; at stellar completeness of 20\%, the contamination level is even more
-dramatically decreased from 40\% to 12\%. Corresponding values for $24.5\leq r<25$ are 78\% to
-63\%, and 72\% to 54\%. 
+The top row of Figure~\ref{fig:color-performance} compares $D_{griz}$ selections at the same stellar completeness, measured relative to all HST reference stars in each magnitude bin. For $24\leq r<24.5$, contamination at 50\% completeness changes from 17.3\% without a color cut to 18.0\% with $(g-r)_0>0.3$. For $24.5\leq r<25$, the cut slightly reduces contamination when selecting 35 of 174 stars (37.5\% to 35.2\%). At 50\% completeness, however, recovering 87 stars requires raising the $D_{griz}$ threshold from 7.61 to 11.99 after the color cut. The number of selected galaxies rises from 224 to 367, increasing contamination from 72.0\% to 80.8\%.
 
-Decrease of contamination is much more substantial in case of red stars. For example, even in
-the fainter bin, $24.5\leq r<25$, the addition of $g-r>1.0$ criterion results in contamination
-as low as 20\% with substantial completeness of 45\%. When completeness of ~20\% is
-acceptable (relative to all stars, not just the red subsample), contamination levels as low as ~10\%
-can be achieved. 
+A stricter color cut can yield a cleaner sample at lower completeness. In the fainter bin, $(g-r)_0>1.0$ combined with a $D_{griz}$ threshold selects 35 stars and two galaxies, giving 5.4\% contamination at 20.1\% completeness. Only 60 of the 174 reference stars pass this color cut, so even accepting every object that passes it can recover at most 34.5\% of the stars.
 

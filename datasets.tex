@@ -11,8 +11,8 @@
 \section{Datasets}
 \label{sec:data-methods}
 
-Here we describe two  datasets used in our analysis: Rubin Data Preview 2 catalogs and HST
-data with star-galaxy labels used for testing methods discussed in \S 3. 
+Here we describe two datasets used in our analysis: Rubin Data Preview 2 catalogs and HST data with
+star-galaxy labels used for testing methods discussed in \S3.
 
 
 \subsection{Rubin Data Preview 2} 
@@ -25,8 +25,7 @@ single-visit images and cover about 3,000 sq. deg. of sky.
 
 In our analysis we focus on the COSMOS field because it is both already well observed by Rubin (to
 only about 1 magnitude shallower limit than anticipated for 10-year LSST), and space-based HST
-COSMOS2020/FARMER star and galaxy labels are available \citep{2022ApJS..258...11W}. As a control
-sample for testing code robustness, we also used Rubin data for the Extended Chandra Deep Field South (ECDFS). 
+COSMOS2020/FARMER star and galaxy labels are available \citep{2022ApJS..258...11W}.
 The Rubin $5\sigma$ depth for point sources in the COSMOS field, estimated as the median magnitude
 of point sources with photometric errors of $\sim$0.2 mag, is (25.66, 26.66, 26.36, 25.91, 24.94, 23.59)
 in the $ugrizy$ bands, respectively. 
@@ -34,9 +33,9 @@ in the $ugrizy$ bands, respectively.
 
 \subsection{HST Star-galaxy Classification Labels in the COSMOS Field} 
 
-\begin{figure*}[t]
+\begin{figure*}[!tb]
  \centering
- \includegraphics[width=0.9\textwidth]{fig01_cosmos_sky_coverage.pdf}
+ \includegraphics[width=0.9\textwidth]{COSMOS1deg_Type_Fig01.pdf}
  \caption{
  The central DP2-COSMOS region used for the dataset overview. Gray points show Rubin DP2 objects 
  and green points show the subset matched to the HST COSMOS2020/FARMER sample using
@@ -46,9 +45,9 @@ in the $ugrizy$ bands, respectively.
  \label{fig:cosmos-footprint}
 \end{figure*}
 
-\begin{figure*}[t]
+\begin{figure*}[!tb]
  \centering
- \includegraphics[width=0.8\textwidth]{fig02_cosmos_dataset_overview.pdf}
+ \includegraphics[width=0.8\textwidth]{COSMOS1deg_Type_Fig02.pdf}
  \caption{
  Magnitude distribution of the DP2-COSMOS sample. The black curve shows
  all selected DP2 sources, while the blue and red curves show matched
@@ -80,9 +79,9 @@ The low fraction stars is due to very faint sample limit $r \sim 26$) and high G
 \label{sec:reference-distributions}
 
 
-\begin{figure*}[!htbp]
+\begin{figure*}[!tb]
 \centering
- \includegraphics[width=\textwidth]{fig03_truth_morphology_color.pdf}
+ \includegraphics[width=\textwidth]{COSMOS1deg_Type_Fig03.pdf}
  \caption{The distribution of stars with $r$-band S\'{e}rsic magnitude $<24.5$ (blue dots) and galaxies (red contours), classified using HST labels, in various informative
  diagrams. Green points show Rubin DP2 sources with $r$-band S\'{e}rsic magnitude $24.5 < r <26$ and \(m_{\mathrm{PSF}} - m_{\mathrm{S\acute{e}rsic}}\) $<0.05$. The CModel-magnitude based colors are corrected for the ISM dust extinction, while the $r$-band S\'{e}rsic magnitude is not.
  The top left panel shows the \(\Delta m = m_{\mathrm{PSF}} - m_{\mathrm{S\acute{e}rsic}}\) vs. \(m_{\mathrm{S\acute{e}rsic}}\) diagram, where
@@ -93,9 +92,9 @@ The low fraction stars is due to very faint sample limit $r \sim 26$) and high G
 \end{figure*}
 
 
-\begin{figure*}[!htbp]
+\begin{figure*}[!tb]
 \centering
- \includegraphics[width=0.8\textwidth]{fig04_revised_1103.pdf}
+ \includegraphics[width=0.8\textwidth]{COSMOS1deg_Type_Fig04.pdf}
  \caption{Similar to the bottom two panels in Figure~\ref{fig:truth_morphology_color}, except that
  here all principal color-color diagrams are shown and the data are split by the $r$-band S\'{e}rsic magnitude
  to show deterioration of photometry close to the faint magnitude limit (left: $16<r_{\rm mag}<25$; right: $25<r_{\rm mag}<26$). The $5\sigma$ depth for point sources in the $r$ band for this dataset is 26.36.}
@@ -142,9 +141,9 @@ quasars ($u-g<0.6$) than of main sequence stars (for a detailed discussion of th
 \label{sec:extendedness-baseline}
 
 
-\begin{figure*}
+\begin{figure*}[!tb]
  \centering
- \includegraphics[width=\textwidth]{fig05_r_extendedness_confusion_cmd.pdf}
+ \includegraphics[width=\textwidth]{COSMOS1deg_Type_Fig05.pdf}
  \caption{Performance of Rubin's default single-band binary \texttt{extendedness} classifier in the $r$ band
  relative to HST ground-truth labels. The top left and bottom right panels show
  correctly classified unresolved and resolved sources in the $r$ vs. $g-i$ color-magnitude
@@ -180,7 +179,7 @@ selecting unresolved objects.
 
 
 
-\begin{figure*}
+\begin{figure*}[!tb]
  \centering
  \includegraphics[width=\textwidth]{fig06_revised_1103.pdf}
  \caption{The distribution of objects classified as ``stars'' by HST in color-magnitude
@@ -196,7 +195,7 @@ selecting unresolved objects.
 
 
 
-\begin{figure*}
+\begin{figure*}[!tb]
  \centering
  \includegraphics[width=\textwidth]{suspectHSTimages.pdf}
  \caption{The Rubin $gri$ color composite images extracted from ``deep\_coadd'', 10 arcsec by
