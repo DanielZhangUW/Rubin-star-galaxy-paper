@@ -89,16 +89,11 @@ on CModel magnitudes, especially at the faint end of the sample.
 \begin{figure*}[!tb]
   \centering
   \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{COSMOS1deg_Type_Fig09_companion.pdf}
-   \caption{The panels compare the \(\Delta m \) vs. \(m_{\mathrm{CModel}}\) (top row) and
-    the \(\Delta m \) vs. \(m_{\mathrm{Sersic}}\) (bottom row)  distributions for
-    unresolved (left) and resolved (right) objects classified using HST labels. Note that some
-    objects in the left panels appear clearly resolved by Rubin ($\dm > 0.05$), even for $r<24$
-    (see \S \ref{sec:suspectHST}). Galaxies 
-    dominate the region around $\dm \sim 0$ at the faint end ($r > 24$) much more strongly
-    in the top right panel than in the bottom right panel.  Quantitative modeling
-    of the two-dimensional distributions in the bottom row is at the core of the star-galaxy separation method
-    discussed here. 
-  }
+  \caption{Analogous to Figure~\ref{fig:magdmcomparison} except that the top panel
+    uses \(\Delta m \) based on separately summed PSF and S\'{e}rsic fluxes across \(griz\). 
+    The x axis in the two bottom row panels shows the diffference between this \(\Delta m \) and the
+    $r$-band \(\Delta m \). {\bf XXX the bottow row needs update}}
+  \label{fig:magdmcomparison2}
 \end{figure*}
 
 
@@ -264,7 +259,9 @@ $w_U(m)$ and $f(m)$, respectively). For more details, see Appendix A.
 \begin{figure*}[!tb]
 \centering
 \includegraphics[width=\textwidth,height=0.62\textheight,keepaspectratio]{COSMOS1deg_Type_Fig13.pdf}
-\caption{The galaxy-to-star count ratio as a function of $r$-band S\'ersic magnitude. The solid teal line with circles shows the V12 prediction, and the red dash-dotted line with diamonds shows direct counts from the HST reference sample.}
+\caption{The galaxy-to-star count ratio as a function of $r$-band S\'ersic magnitude. The solid teal
+  line with circles shows the V12 prediction, and the red dash-dotted line with diamonds shows
+  direct counts from the HST reference sample.}
   \label{fig:star_galaxy_ratio}
 \end{figure*}
   
@@ -636,3 +633,40 @@ The top row of Figure~\ref{fig:color-performance} compares $D_{griz}$ selections
 
 A stricter color cut can yield a cleaner sample at lower completeness. In the fainter bin, $(g-r)_0>1.0$ combined with a $D_{griz}$ threshold selects 35 stars and two galaxies, giving 5.4\% contamination at 20.1\% completeness. Only 60 of the 174 reference stars pass this color cut, so even accepting every object that passes it can recover at most 34.5\% of the stars.
 
+
+
+\subsection{An Independent Method Test Using Euclid Data in the ECDFS Field}
+\label{sec:ecdfs-check}
+
+To test whether our method works outside of the COSMOS field, we fit and evaluate the model in
+a separate sky region known as the Extended Chandra Deep Field South (ECDFS). For classification
+labels, we use the Euclid Data Release 1 (DR1) Deep Survey MER and PHZ classification catalogs from
+IRSA\footnote{\href{https://irsa.ipac.caltech.edu/euclid-archive-documentation/data-access/\#catalogs}{IRSAEuclid DR1 catalog access}.}. 
+We positionally cross-matched Rubin DP2 objects to the MER catalog and retained nearest neighbors
+separated by less than 0.3 arcsec. We required a Euclid visible-band (VIS) detection, a zero
+detection-quality flag, and a spurious-detection probability below 0.2. We join the PHZ catalog by
+Euclid object ID and use \texttt{PHZ\_CLASSIFICATION} values of 1 for stars and 2 for galaxies.
+
+We follow the same method as before and estimate all coefficients from the ECDFS calibration data.
+% IS THIS TRUE? We first fit the stellar and galaxy profiles using Rubin \(r\)-band measurements of Euclid DR1 reference stars and galaxies.
+Figure~\ref{fig:ecdfs-r-cc} compares the predicted and measured
+completeness and contamination for the same set of Euclid DR1
+matches with Rubin DP2 ECDFS. The measured curves are based on Euclid classification labels. 
+For \(24\leq r_{\mathrm{S\acute{e}rsic}}<24.5\), the model predicts
+\(67.6\%\) completeness and \(55.9\%\) contamination, while the measured values 
+are \(66.7\%\) and \(50.6\%\), respectively. For \(24.5\leq r_{\mathrm{S\acute{e}rsic}}<25\),
+the model predicts \(45.2\%\) completeness and \(64.4\%\) contamination, compared with
+the measured \(52.4\%\) and \(72.9\%\). Therefore, the algorithm and its implementation
+seems robust and remains accurate for an independent sample. 
+
+\begin{figure}[!hb]
+  \centering
+  \includegraphics[width=0.85\linewidth]{ECDFS_r_performance.pdf}
+  \caption{Stellar completeness and galaxy contamination in the ECDFS for 
+    two bins of Rubin \(r\)-band S\'{e}rsic magnitude. The solid blue
+    curves are measured using the Euclid classification labels. 
+    The dashed red curves give the model predictions
+    for the same sample. Open circles and squares mark the measurements
+    and predictions at \(p_{\mathrm S}>0.2\), respectively.}
+  \label{fig:ecdfs-r-cc}
+\end{figure}
