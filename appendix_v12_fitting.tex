@@ -1,0 +1,190 @@
+\FloatBarrier
+\appendix
+\section{Fitting the V12 mixture model}
+\label{app:v12-fitting}
+
+For a given Rubin band, let \(m\) be the S\'{e}rsic magnitude and let
+\(x=\Delta m=m_{\mathrm{PSF}}-m_{\mathrm{S\acute{e}rsic}}\).
+At each magnitude \(m\), the stellar profile \(U(x\mid m)\) and the
+galaxy profile \(R(x\mid m)\) describe the distribution of \(x\) for
+stars and galaxies, respectively. Each profile integrates to one. If
+\(\omega_U(m)\) is the stellar fraction at magnitude \(m\), the
+distribution of \(x\) for all objects is
+\begin{equation}
+ p(x\mid m)=\omega_U(m)\,U(x\mid m)+[1-\omega_U(m)]\,R(x\mid m).
+ \label{eq:v12-mixture}
+\end{equation}
+
+We use HST labels to identify reference stars and galaxies
+across the full COSMOS footprint. In Step~1, we fit the stellar profile
+\(U(x\mid m)\) to Rubin measurements of the reference stars. In Step~2,
+we fit the galaxy profile \(R(x\mid m)\) to Rubin measurements of the
+reference galaxies. To apply the resulting \(r\)-band model to the
+\(1^\circ\times1^\circ\) COSMOS field used in this paper, we keep both
+profiles fixed at their full-COSMOS fits. In Step~3, we use the Rubin
+measurements in this field to fit the stellar fraction \(\omega_U(m)\)
+without using HST labels.
+
+For each single-band fit, we use objects with a finite \(\Delta m\)
+and a S\'{e}rsic magnitude \(18 \leq m < 26\) in the band being fitted.
+This cut defines the sample used to fit that band's model.
+
+For multi-band fit, we select objects with \(18 \leq r_{\mathrm{S\acute{e}rsic}} < 26\) from the original Rubin catalog.
+We require finite, positive PSF and S\'{e}rsic fluxes in all four bands
+\(g,r,i,z\).
+
+\subsection{Step 1. Fit the stellar profile \texorpdfstring{\(U\)}{U}}
+
+We use HST labels to identify the reference stars matched to
+Rubin objects. For each reference star, the fit uses its Rubin
+S\'{e}rsic magnitude \(m\) and its Rubin morphology measurement
+\(x=\Delta m\) in the band being fitted.
+
+The stellar profile combines a Johnson \(S_U\) component \(J\), which
+describes the main concentration of stars, and a shifted lognormal
+component \(T\), which describes the right tail:
+\begin{equation}
+ U(x\mid m)=[1-f(m)]\,J(x\mid m)+f(m)\,T(x\mid m),
+ \label{eq:v12-stellar-profile}
+\end{equation}
+where \(f(m)\) is the fraction of the total area under \(U\) assigned
+to \(T\) at magnitude \(m\). For example, \(f(m)=0.2\) assigns 20\%
+of the stellar probability to \(T\) and 80\% to \(J\). We fit \(\operatorname{logit} f(m)\) jointly with the other stellar
+profile parameters and convert it back to \(f(m)\). This keeps
+\(f(m)\) between zero and one.
+
+Let \(\phi(z)=(2\pi)^{-1/2}\exp(-z^2/2)\) be the standard normal
+density. Its cumulative distribution function
+\(\Phi(z)=\int_{-\infty}^{z}\phi(t)\,\mathrm{d}t\) gives the area
+under the standard normal curve to the left of \(z\).
+The cumulative distributions of \(J\) and \(T\) are
+\begin{align}
+ F_J(x\mid m) &=
+ \Phi\!\left[\gamma+\delta\operatorname{asinh}
+                 \!\left(\frac{x-\mu}{\sigma_c}\right)\right],\\
+ F_T(x\mid m) &=
+ \begin{cases}
+ 0, & x\leq\mu,\\[.15em]
+ \displaystyle
+ \Phi\!\left[\frac{1}{h}
+             \ln\!\left(\frac{x-\mu}{\sigma_c\kappa}\right)\right],
+                   & x>\mu.
+ \end{cases}
+ \label{eq:v12-stellar-cdf}
+\end{align}
+The two components share the location parameter \(\mu\). For \(J\),
+\(\sigma_c\) sets the scale, and \(\gamma\) and \(\delta\) control
+the shape. For \(T\), \(\sigma_c\kappa\) sets the scale of the
+positive offset \(x-\mu\), and \(h\) sets its spread on a log scale.
+
+We fit seven quantities as functions of magnitude.
+\begin{equation}
+ x_J,\quad \ln\sigma_c,\quad \ln(-\gamma),\quad
+ \ln\delta,\quad\ln h,\quad\operatorname{logit}f,\quad
+ \eta=\ln\!\left(\frac{x_T-\mu}{x_J-\mu}\right).
+ \label{eq:v12-stellar-parameters}
+\end{equation}
+The position \(x_J\) specifies the peak of \(J\), while \(\sigma_c\),
+\(\gamma\), and \(\delta\) control its scale and shape. For \(T\),
+\(h\) controls the spread on a log scale, and \(\eta\) determines
+where its peak lies relative to the peak of \(J\). The fraction \(f\)
+controls how much of the total stellar probability goes into \(T\).
+We fit the logit of the tail fraction,
+\(\operatorname{logit}f=\ln[f/(1-f)]\), as a function of magnitude.
+We then convert it back to \(f\), which gives the fraction of the
+stellar profile assigned to \(T\) and stays between zero and one.
+
+At each magnitude, we first determine the shared location \(\mu\).
+The shape of \(J\) determines how far its peak lies to the right
+of \(\mu\). We calculate this distance by solving for the positive
+value of \(y\) in
+\begin{equation}
+ \delta y+\frac{\tanh y}{\delta}=-\gamma .
+\end{equation}
+The peak of \(J\) lies a distance \(\sigma_c\sinh y\) to the right
+of \(\mu\). Since the fitted peak position is \(x_J\), we obtain
+\(\mu\) by moving left from \(x_J\) by that distance.
+
+Once we have \(\mu\), the fitted \(\eta\) tells us where the peak of
+\(T\) should lie. The distance \(x_T-\mu\) is \(e^\eta\) times the
+distance \(x_J-\mu\). For example, if \(\eta=\ln 2\), the peak of
+\(T\) lies twice as far from \(\mu\) as the peak of \(J\).
+
+Knowing \(x_T\) tells us where \(T\) should peak. To evaluate the
+lognormal profile itself, we also need its scale
+\(\sigma_c\kappa\). The peak position of a shifted lognormal depends
+on both its scale and its log width \(h\). With \(h\) already
+specified by the fit, we calculate \(\kappa\) so that the resulting
+profile peaks at the position set by \(\eta\). The three derived
+quantities are given by
+\begin{equation}
+ \mu=x_J-\sigma_c\sinh y,\qquad
+ \ln\kappa=\ln(\sinh y)+h^2+\eta,\qquad
+ x_T=\mu+\sigma_c\kappa e^{-h^2}.
+ \label{eq:v12-stellar-derived}
+\end{equation}
+
+We find the peak of the full stellar profile by combining \(J\) and
+\(T\) with the weights in equation~\eqref{eq:v12-stellar-profile} and
+finding where the combined density is highest. Its position therefore
+also depends on \(f\).
+
+In the single-band fit, we evaluate \(U(x_i\mid m_i)\) at each
+reference star's measured \(x_i\) and \(m_i\). We adjust the seven
+magnitude-dependent functions together to maximize
+\(\sum_i\ln U(x_i\mid m_i)\) over the reference stars, recalculating
+\(\mu\), \(\kappa\), and \(x_T\) for each trial fit. The fitted coefficients of \(U(x\mid m)\) will be fixed in Step~3.
+
+\subsection{Step 2. Fit the galaxy profile \texorpdfstring{\(R\)}{R}}
+
+We fit \(R\) to the Rubin measurements of the matched reference
+galaxies, using the same magnitude and measurement requirements as in
+Step 1. The galaxy profile combines two skew-normal components,
+\begin{equation}
+ R(x\mid m)=[1-v(m)]\,R_1(x\mid m)+v(m)\,R_2(x\mid m),
+ \label{eq:v12-galaxy-profile}
+\end{equation}
+where \(v(m)\) is the fraction within \(R\) assigned to \(R_2\).
+Component \(R_j\) has location \(\ell_j\), positive scale \(s_j\), and
+skew parameter \(\alpha_j\). With \(z_j=(x-\ell_j)/s_j\), its density is
+\begin{equation}
+ R_j(x\mid m)=\frac{2}{s_j}\phi(z_j)\Phi(\alpha_j z_j),
+\end{equation}
+where \(\phi\) and \(\Phi\) are the standard normal density and
+cumulative distribution function defined in Step~1.
+
+The seven fitted quantities are
+\begin{equation}
+ \ell_1,\quad\ln s_1,\quad\alpha_1,\quad
+ \ell_2,\quad\ln s_2,\quad\alpha_2,\quad\operatorname{logit}v.
+\end{equation}
+We use an ordering constraint on the two component means to keep the
+labels \(R_1\) and \(R_2\) consistent. Each mean is calculated from that
+component's location, scale, and skew. For the single-band fit, we maximize \(\sum_i \ln R(x_i\mid m_i)\)
+over the matched reference galaxies.
+The two class profiles from Steps 1 and 2 then enter Step 3.
+
+\enlargethispage{2\baselineskip}
+\begin{samepage}
+\paragraph{Magnitude dependence in Steps 1 and 2.}
+Each of the seven fitted quantities in either profile follows a cubic
+spline. For a quantity \(a\), the form is
+\begin{equation}
+ \begin{split}
+ a(m)={}&c_0+c_1t+c_2t^2+c_3t^3
+      +c_4(t+1/3)_+^3+c_5(t-1/3)_+^3,\\
+ t={}&(m-22)/4,\qquad z_+=\max(0,z).
+ \end{split}
+ \label{eq:v12-spline}
+\end{equation}
+We fit the values of each spline at six equally spaced magnitudes from
+18 to 26. These six values specify the same spline as the coefficients
+\(c_0,\ldots,c_5\). Each class fit therefore estimates 42 coefficients
+using the density at each object's measured \((m_i,x_i)\). The HST
+reference fit starts from its class histograms. The Rubin fit tries two
+data-derived starting points and keeps the converged, feasible solution
+with the highest likelihood.
+\par
+\end{samepage}
+
+
