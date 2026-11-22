@@ -15,15 +15,15 @@ distribution of \(x\) for all objects is
  \label{eq:v12-mixture}
 \end{equation}
 
-We use HST labels to identify reference stars and galaxies
-across the full COSMOS footprint. In Step~1, we fit the stellar profile
-\(U(x\mid m)\) to Rubin measurements of the reference stars. In Step~2,
-we fit the galaxy profile \(R(x\mid m)\) to Rubin measurements of the
-reference galaxies. To apply the resulting \(r\)-band model to the
-\(1^\circ\times1^\circ\) COSMOS field used in this paper, we keep both
-profiles fixed at their full-COSMOS fits. In Step~3, we use the Rubin
-measurements in this field to fit the stellar fraction \(\omega_U(m)\)
-without using HST labels.
+We use HST labels to identify reference stars and galaxies over the
+full COSMOS footprint. In Step~1, we fit the stellar profile \(U(x\mid m)\)
+to Rubin measurements of the reference stars. In Step~2, we fit the
+galaxy profile \(R(x\mid m)\) to Rubin measurements of the reference
+galaxies. For the main COSMOS results, we apply both fitted profiles
+in the \(1^\circ\times1^\circ\) field. Step~3 holds both profiles
+fixed and fits the stellar fraction \(\omega_U(m)\) to the Rubin
+calibration measurements in that field without using HST labels.
+The ECDFS transfer test also starts with the full-footprint profiles.
 
 For each single-band fit, we use objects with a finite \(\Delta m\)
 and a S\'{e}rsic magnitude \(18 \leq m < 26\) in the band being fitted.
@@ -188,3 +188,318 @@ with the highest likelihood.
 \end{samepage}
 
 
+\subsection{Step 3. Fit the stellar fraction \texorpdfstring{\(\omega_U(m)\)}{omega U}}
+
+Fits in magnitude bins show how the profile parameters vary. In
+Steps~1 and~2, we fit each smooth profile directly to individual
+Rubin measurements of the corresponding HST reference class. The
+two data-derived starting points described above initialize the
+42 spline coefficients of a single class fit. We optimize those
+coefficients together using that class's calibration measurements.
+
+In Step~3, the unlabeled Rubin calibration sample in the
+\(1^\circ\times1^\circ\) field constrains the relative normalization
+of the two profiles. We write the stellar weight as \(\omega_U(m)\),
+denoted by \(w_U(m)\) in Section~\ref{sec:mixmodel}. The galaxy weight
+is \(1-\omega_U(m)\). Combining equations~\eqref{eq:v12-mixture}
+and~\eqref{eq:v12-stellar-profile} gives the three contributions to
+the conditional density at magnitude \(m\).
+\[
+\begin{aligned}
+ p(x\mid m)={}&\omega_U(m)[1-f(m)]\,J(x\mid m)
+              +\omega_U(m)f(m)\,T(x\mid m)\\
+             &+[1-\omega_U(m)]\,R(x\mid m).
+\end{aligned}
+\]
+Thus \(\omega_U(m)\) sets the total stellar fraction, while \(f(m)\)
+sets how much of the stellar profile is in the tail. The fitted
+functions \(f(m)\) and \(v(m)\) from Steps 1 and 2 specify the
+relative contributions within \(U\) and \(R\), respectively.
+
+We fit the stellar fraction \(\omega_U(m)\) in Step~3 using the form
+\begin{equation}
+ \omega_U(m)=\sum_{j=0}^6 w_j\binom{6}{j}q^j(1-q)^{6-j},\qquad
+ q=(m-18)/8 .
+ \label{eq:v12-weight}
+\end{equation}
+The coordinate \(q\) maps \(18\leq m\leq26\) to \([0,1]\). The
+weights on the coefficients \(w_j\) are nonnegative and sum to one on this interval.
+Bounding each coefficient \(w_j\) between \(10^{-7}\) and
+\(1-10^{-7}\) therefore keeps \(\omega_U(m)\) between zero and one.
+All objects constrain the same seven coefficients, with each object's
+contribution evaluated at its own magnitude.
+
+\paragraph{Rubin fit.}
+We use all eligible objects in the Rubin calibration regions. For an
+object with measurements \((m_i,x_i)\), we evaluate both profiles at
+\((m_i,x_i)\) and combine them using \(\omega_U(m_i)\). We find the
+seven coefficients that minimize the mean negative log likelihood
+\[
+ \mathcal L=-\frac{1}{N}\sum_{i=1}^{N}\ln p_i,
+ \qquad p_i=p(x_i\mid m_i),
+\]
+where \(N\) is the number of eligible objects. Each object contributes
+one term, and the likelihood uses its measured values directly.
+For the COSMOS application, all coefficients of \(U\) and \(R\),
+including those for \(f(m)\) and \(v(m)\), retain their full-footprint
+values from Steps~1 and~2. These splines still give different profiles
+at different magnitudes. The seven \(w_j\) are the only free coefficients
+in the local likelihood fit. The COSMOS evaluation tiles are held out
+from this local fit. The full-footprint profile training includes
+reference sources in those tiles. In the ECDFS transfer test, we keep
+the full COSMOS spline coefficients fixed and estimate location and
+scale corrections separately from unlabeled Rubin data. We hold each
+candidate's corrections fixed while fitting its seven \(w_j\), as
+described below.
+
+\paragraph{HST-reference fit.}
+For the matched reference sample, we fit a separate stellar fraction
+using the known classes. Let \(s_i=1\) for an HST reference star and
+\(s_i=0\) for an HST reference galaxy. Maximizing the labeled
+likelihood with fixed profiles reduces to maximizing
+\begin{equation}
+ \sum_i\left[s_i\ln\omega_U(m_i)
+          +(1-s_i)\ln\bigl(1-\omega_U(m_i)\bigr)\right].
+ \label{eq:v12-reference-weight-likelihood}
+\end{equation}
+A reference star contributes \(\ln\omega_U(m_i)\), and a reference
+galaxy contributes \(\ln[1-\omega_U(m_i)]\). This estimates the
+fraction for the matched reference sample. The Rubin fit above estimates
+the fraction for the full Rubin calibration sample.
+
+\paragraph{Transferring the \(r\)-band profiles to another field.}
+In the COSMOS-to-ECDFS transfer test, we start with the \(U\) and \(R\)
+profiles fitted over the full COSMOS footprint. We check whether the
+concentration of bright objects near \(x=0\) has a different center or
+width in the target Rubin field. We use objects with \(19\leq m<22\)
+and \(|x|<0.025\) mag. In each of the three one-magnitude bins, we
+measure the median of \(x\) and the half-width between its 16th and
+84th percentiles. We compare the target and COSMOS reference samples
+using the mean of the three medians for the center and the geometric
+mean of the three half-widths for the width. We resample sky tiles 1,600
+times to estimate the uncertainty in the center difference and in the
+logarithm of the width ratio. We use a 99.5\% bootstrap interval for each
+of these two comparisons.
+
+If the interval for the center difference excludes zero, we use the
+measured difference \(\Delta_x\) to shift both profiles. If the interval
+for the log width ratio excludes zero, we multiply the stellar width
+by the measured ratio \(a_U\). Otherwise the corresponding correction
+is \(\Delta_x=0\) or \(a_U=1\). In terms of the original Step 1 core
+peak \(x_J(m)\), the corrected profiles are
+\[
+ \begin{aligned}
+ U^*(x\mid m)
+   &=\frac{1}{a_U}\,
+      U\!\left(x_J(m)+\frac{x-x_J(m)-\Delta_x}{a_U}\,\middle|\,m\right),\\
+ R^*(x\mid m)&=R(x-\Delta_x\mid m).
+ \end{aligned}
+\]
+The factor \(1/a_U\) keeps the stellar profile normalized. The same
+shift and scale apply at all fitted magnitudes. The shift and stretch
+change \(x_J\), \(\mu\), \(x_T\), and the
+scale \(\sigma_c\), while retaining \(\gamma\), \(\delta\), \(h\),
+\(\kappa\), and \(f(m)\) from Step 1. The galaxy locations
+\(\ell_1\) and \(\ell_2\) shift by the same amount. The galaxy scales
+\(s_j\), skew parameters \(\alpha_j\), and component fraction
+\(v(m)\) retain their Step 2 values.
+
+We fit \(\omega_U(m)\) using all eligible Rubin objects in the target
+calibration regions for each candidate, with the original profiles or
+with the measured corrections. We adopt the corrections if the resulting
+mixture has a higher mean log likelihood in a separate set of Rubin sky
+tiles. Euclid labels enter only in the evaluation of this transfer
+test. For the four COSMOS regions tested, neither correction was
+needed, and the procedure reproduced the fixed-profile fits.
+
+\paragraph{Calibration using additional Rubin bands.}
+When the catalog includes measurements in multiple bands, we use the
+available subset of \(g,r,i,z\). For the \(r\)-band comparison in
+Figure~\ref{fig:ecdfs-r-cc}, the additional measurements come from
+\(g,i,z\). In each available auxiliary band \(b\), we estimate the
+center of the bright concentration in \(x_b\), then use measurements
+with \(18\leq m_b<24.5\) to identify candidate compact or extended
+objects. A compact candidate has \(x_b\) within 0.025 mag of the
+bright center in at least two usable bands. An extended candidate
+lies more than 0.10 mag above that center in at least two usable bands.
+We exclude objects for which another usable band gives the opposite
+indication. If only one auxiliary measurement is usable, we require
+a distance of less than 0.0125 mag for compact candidates or an excess
+of more than 0.15 mag for extended candidates. This selection uses only
+the auxiliary photometry and leaves \(x_r\) available to measure the
+difference between fields.
+
+For each group, we compare COSMOS and ECDFS objects in the same
+\(r\)-band magnitude bin and with the same set of usable auxiliary
+bands. We require at least 30 objects spanning at least 10 sky tiles
+in each field. We estimate a shift from the two medians and a scale
+from the ratio of the widths between the 16th and 84th percentiles.
+We combine estimates across band-availability groups, giving more
+weight to groups well represented in both fields. This yields a
+magnitude-dependent shift and scale for each profile. A shift and
+scale given by \(x'=a_C(m)x+b_C(m)\) transform the density of
+\(C\in\{U,R\}\) to
+\[
+  C^*(x\mid m)=\frac{1}{a_C(m)}
+   C\!\left(\frac{x-b_C(m)}{a_C(m)}\,\middle|\,m\right).
+\]
+For \(U\) we express the shift relative to the COSMOS core peak \(x_J(m)\),
+as in the bright calibration above. The two galaxy components share
+the same shift and scale.
+
+Starting from the \(r\)-only calibration, we test applying one quarter,
+one half, three quarters, or all of the additional shift and log-scale
+correction to \(U\), to \(R\), or to both. We refit \(\omega_U(m)\)
+for each choice on the Rubin calibration regions. We compare the
+candidates on separate unlabeled Rubin tiles using the mean log
+likelihood of \(x_r\) and a second likelihood that groups \(x_r\) into
+intervals with boundaries at \(-0.025\), \(0\), \(0.025\), and \(0.10\) mag.
+We require an improvement of more than one paired sky-tile standard
+error in the first likelihood and allow a decrease of at most one
+such standard error in the second. Among candidates within one
+standard error of the best eligible likelihood, we prefer fewer
+changed profiles and a smaller correction. If no candidate meets
+the criteria, the procedure uses the \(r\)-only calibration. The ECDFS
+comparison uses half of the additional correction for both profiles.
+The fitted profiles and stellar fraction then give \(p_{\mathrm S}\)
+from \(m_r,x_r\) for each object. Auxiliary measurements are used
+during calibration, so objects with finite \(r\)-band measurements
+in the fitted magnitude range can be scored even when some auxiliary
+measurements are unavailable.
+
+\paragraph{Performance on the held-out ECDFS sample.}
+The \(r\)-only calibration uses the bright-object shift
+\(\Delta_x=-0.0076\) mag and stellar scale factor \(a_U=1.61\).
+Figure~\ref{fig:ecdfs-r-cc} shows its results and those of the
+additional \(griz\) calibration on the same Euclid DR1 holdout.
+To compare the full curves, we measure the absolute difference
+between predicted and measured contamination at each percentage
+point in completeness from \(20\%\) to \(80\%\) and take the mean.
+The additional calibration reduces this difference in both bins.
+At approximately \(50\%\) measured completeness, the measured
+contamination is also lower in both bins, although a paired
+sky-tile bootstrap interval for each change includes zero.
+
+The markers in Figure~\ref{fig:ecdfs-r-cc} show the result of applying
+\(p_{\mathrm S}>0.2\) to each model prediction and to the corresponding
+Rubin scores in the holdout. 
+In the fainter bin, the \(griz\)-assisted model predicts
+\(25.8\%\) completeness and \(65.3\%\) contamination. Among the
+170 reference stars, 92 pass the threshold, and 266 reference galaxies
+pass as well. The measured completeness and contamination are
+\(54.1\%\) and \(74.3\%\).
+
+\begin{table}[htbp]
+\centering
+\caption{Performance on the same ECDFS Euclid DR1 for each
+   calibration. Completeness and contamination at \(p_{\mathrm S}>0.2\)
+   are listed as pairs. Curve differences are in percentage points and
+   are averaged over \(20\%\) to \(80\%\) stellar completeness.}
+\label{tab:v12-ecdfs-transfer}
+\begin{tabular}{lrr}
+\hline
+Metric & \(24\leq r_{\mathrm{S\acute{e}rsic}}<24.5\)
+       & \(24.5\leq r_{\mathrm{S\acute{e}rsic}}<25\)\\
+\hline
+Mean CC difference, \(r\) alone & 16.9 & 12.6\\
+Mean CC difference, available \(griz\) & 13.8 & 8.3\\
+Measured contamination near \(50\%\) completeness, \(r\) alone & \(47.9\%\) & \(71.1\%\)\\
+Measured contamination near \(50\%\) completeness, available \(griz\) & \(43.7\%\) & \(68.8\%\)\\
+\hline
+\multicolumn{3}{l}{At \(p_{\mathrm S}>0.2\), (completeness, contamination)}\\
+Predicted, \(r\) alone & \((58.8\%,\,41.2\%)\) & \((42.2\%,\,52.3\%)\)\\
+Measured, \(r\) alone & \((83.1\%,\,73.5\%)\) & \((73.5\%,\,86.0\%)\)\\
+Predicted, available \(griz\) & \((56.1\%,\,44.7\%)\) & \((25.8\%,\,65.3\%)\)\\
+Measured, available \(griz\) & \((76.9\%,\,67.0\%)\) & \((54.1\%,\,74.3\%)\)\\
+\hline
+\end{tabular}
+\end{table}
+
+\paragraph{Application to \(D_{\mathrm{griz}}\).}
+For bands \(b\in\{g,r,i,z\}\), we construct the distance from the
+individual deviations from the stellar peak,
+\begin{equation}
+ D_{\mathrm{griz}}=
+ \left[
+ \sum_b\left(
+ \frac{\Delta m_b-x_{\mathrm{peak},b}(m_b)}{\sigma_{U,b}(m_b)}
+ \right)^2
+ \right]^{1/2}.
+ \label{eq:v12-appendix-distance}
+\end{equation}
+Here \(x_{\mathrm{peak},b}\) is the peak of the full-footprint
+\(J+T\) profile from Step~1. To obtain \(\sigma_{U,b}\), we fit
+\(J+T\) separately to the full-footprint reference stars in each
+magnitude bin. The bins are 1 mag wide from 18 to 24
+and 0.5 mag wide from 24 to 26. With \(n\) stars in a bin, we use a
+window of width \(2\,\mathrm{IQR}(\Delta m)n^{-1/3}\), where
+\(\mathrm{IQR}\) denotes the interquartile range of the measurements.
+We find the window center \(p\) that encloses the most fitted
+probability. A very sharp spike can be tall while contributing little
+probability to the window. We move left from \(p\) to the point \(x_L\)
+so that the area between \(x_L\) and \(p\) is \(68.27\%\) of the
+probability below \(p\). If \(F\) is the fitted cumulative distribution
+in that bin, then
+\begin{equation}
+ F(x_L)=2\Phi(-1)F(p),\qquad \sigma_U=p-x_L.
+ \label{eq:v12-appendix-left-width}
+\end{equation}
+For the multiband distance, we smooth these widths with the
+photometric-error law of \citet[their equation 5]{2007AJ....134.2236S},
+\[
+ \sigma_U(m)=\sqrt{\sigma_0^2+a^2\,10^{\beta(m-m_{\mathrm{ref}})}}.
+\]
+We fit this law by least squares in log width, separately for each
+band and fit.
+Each bin contributes equally at the median magnitude of its stars.
+We set \(m_{\mathrm{ref}}\) to the median magnitude of calibration
+objects with PSF magnitude errors within 0.012 mag of
+\(2.5/(5\ln 10)\) mag, the error at a signal-to-noise ratio of five.
+We use \(m_{\mathrm{ref}}=24\) if fewer than 15 objects meet that
+condition. Each distance uses the width at the object's measured
+magnitude in that band. For band magnitudes outside the single-band
+fit range, we use the stellar peak at the nearest endpoint.
+
+We select objects with \(18\leq r_{\mathrm{S\acute{e}rsic}}<26\) and
+finite, positive PSF and S\'{e}rsic fluxes in all four bands. We use
+the same full-footprint peak and width functions to compute distances
+for training and application. We fit the two \(D_{\mathrm{griz}}\)
+profiles in Steps~1 and~2 using the full COSMOS reference classes and
+\(r_{\mathrm{S\acute{e}rsic}}\) as the magnitude. In the
+\(1^\circ\times1^\circ\) field, we fix both distance profiles and
+fit only \(\omega_U(m)\) in Step~3. Since \(D\geq0\),
+we normalize each elementary component over this range. For a
+component with cumulative distribution \(F_k\), its bin probability is
+\begin{equation}
+ \frac{F_k(D_{j+1}\mid m)-F_k(D_j\mid m)}{1-F_k(0\mid m)}.
+ \label{eq:v12-appendix-distance-bin}
+\end{equation}
+The distance-bin edges are zero, 151 logarithmically spaced values
+from 0.05 to \(4\times 10^5\), and infinity. Steps 1 and 2 use counts
+in these bins and in 0.125-mag cells. The likelihood uses the
+integrated distance probability evaluated at the magnitude-cell
+center. Rubin Step 3 also uses the component probabilities for the
+object's cell. It evaluates \(\omega_U\) at the object's measured
+\(r\). For the HST-reference comparison, we use the same fixed profiles
+and estimate a separate fraction from the labels, using the likelihood
+above. Table~\ref{tab:v12-calibration-counts} lists the full-footprint
+profile training counts and the local stellar-fraction calibration
+counts.
+
+\begin{table}[htbp]
+\centering
+\caption{Class-profile training counts over full COSMOS (Steps~1 and~2)
+and stellar-fraction calibration counts in the \(1^\circ\times1^\circ\)
+field (Step~3).}
+\label{tab:v12-calibration-counts}
+\begin{tabular}{llrrr}
+\hline
+Observable & Fit & Step 1 stars & Step 2 galaxies & Step 3 total\\
+\hline
+\(x_r\) & HST reference & 13,175 & 283,162 & 90,818\\
+        & Rubin         & 13,175 & 283,162 & 147,341\\
+\(D_{\mathrm{griz}}\) & HST reference & 13,159 & 281,558 & 90,305\\
+        & Rubin         & 13,159 & 281,558 & 145,087\\
+\hline
+\end{tabular}
+\end{table}

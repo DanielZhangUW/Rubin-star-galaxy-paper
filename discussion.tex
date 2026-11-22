@@ -41,9 +41,11 @@ method of SIL2020.
 
 In each band, we model the distribution of sources in the two-dimensional space defined by $\Delta m
 = m_{\mathrm{PSF}} - m_{\mathrm{Sersic}}$ and magnitude $m_{\mathrm{Sersic}}$ as a two-component
-mixture model. Given the large number of objects, the two components, corresponding to unresolved
-and resolved sources, can be constrained without using external information such as HST-based
-labels. Once the best-fit model is available, sample contamination and completeness can be readily
+mixture model. We use HST reference stars and galaxies across full COSMOS to fit the two
+profiles to Rubin measurements in Steps~1 and~2. In the \(1^\circ\times1^\circ\) field,
+we hold these profiles fixed and fit only the stellar fraction \(\omega_U(m)\) from
+unlabeled Rubin measurements. HST labels also provide the measured completeness and
+contamination for comparison with the predictions. Once the best-fit model is available, sample contamination and completeness can be readily
 computed, and their variation with magnitude can be controlled by tuning the sample selection
 criteria (see \S\ref{sec:userCC}). Our results can be extended to fields closer to the Galactic
 plane. However, the contamination levels for stellar samples discussed here for the high-latitude COSMOS field can
@@ -87,9 +89,8 @@ external labels.
 
 
 Finally, we note that a similar approach to star-galaxy classification, based on modeling $\Delta m$
-versus magnitude distributions, was discussed by \cite{2021PASP..133e4502M}. The main difference
-between their method and ours is that they used a KDE (kernel density estimation) method, which
-requires an external training sample. Their Pan-STARRS1 dataset was approximately three magnitudes
+versus magnitude distributions, was discussed by \cite{2021PASP..133e4502M}. They estimated the class distributions using
+kernel density estimation (KDE), while we fit parametric profiles to the full COSMOS reference sample. Their Pan-STARRS1 dataset was approximately three magnitudes
 shallower and therefore cannot be directly compared with our results.
 
 

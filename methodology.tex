@@ -104,11 +104,12 @@ Using realistic simulations, SIL2020 showed that adopting a fixed, predefined th
 
 The subsample of objects with HST labels can be used to quantify the $\Delta m$ distribution separately
 for unresolved and resolved objects (see Figure~\ref{fig:magdmcomparison}). However, such a ``training'' sample is currently available only
-for a very small fraction of the LSST footprint (less than 1\% of the area). Instead, we use the fact
-that very large numbers of objects remaining even after binning in both sky location and magnitude
-can robustly constrain the two components of the $\Delta m$ distribution  when such labels are not
-available a priori. We only use the subsample of objects with HST labels to independently assess the
-performance of our method. 
+for a very small fraction of the LSST footprint (less than 1\% of the area).
+In Steps~1 and~2, we use HST labels across the full COSMOS footprint to identify the
+reference stars and galaxies whose Rubin measurements determine the two profiles.
+In the \(1^\circ\times1^\circ\) field, we hold these profiles fixed and fit only the
+stellar fraction \(\omega_U(m)\) using unlabeled Rubin measurements. We use HST labels
+again to measure completeness and contamination for comparison with the predictions. 
 
 
 
@@ -165,63 +166,78 @@ We test these predictions below using HST-based labels.
 
 
 
-Therefore, a good model for $p(\dm \,|\, m)$ (eq.~\ref{eq:mixpdf1}) is crucial. Informed by observed
-$\dm$ distributions (see Figure~\ref{fig:magdmcomparison}), we model the unresolved component
-as a weighted sum of a ``core''  distribution $J$ and a ``tail'' distribution $T$. 
+We write \(x=\Delta m\). The stellar profile \(U(x\mid m)\equiv\funr(x\mid m)\)
+combines a Johnson \(S_U\) core \(J\) and a shifted lognormal tail \(T\),
 \begin{equation}
-          \funr (\dm) = [1-f(m)] \, J (\Delta m) + f(m) \, T(\Delta m), 
-  \label{eq:mixpdf2}
+ U(x\mid m)=[1-f(m)]\,J(x\mid m)+f(m)\,T(x\mid m).
+ \label{eq:mixpdf2}
 \end{equation}
-where function $f(m)$ quantifies observed strentgth of the tail component. The core component
-is modeled as
+Here \(f(m)\) is the fraction of the stellar probability in the tail.
+Writing \(z=(x-\mu)/\sigma_c\) and letting \(\phi\) and \(\Phi\) denote
+the standard normal density and cumulative distribution function, we use
 \begin{equation}
-       J(\Delta m) = {\delta \over \sigma_c(m) \sqrt{2\pi} \sqrt{1+z^2}} \,  {\rm e}^{-\eta^2/2},
+ J(x\mid m)=\frac{\delta}{\sigma_c\sqrt{1+z^2}}\,
+       \phi\!\left(\gamma+\delta\operatorname{asinh}z\right).
 \end{equation}
-where $z = [\Delta m - \mu_c(m)]/\sigma_c(m)$ and $\eta = \gamma + \delta \,\ asinh(z)$ ($\delta>0$). 
-This is a normal density in the transformed coordinate multiplied by $|d\eta / d \Delta m|= \delta /[\sigma_c \sqrt{1 +  z^2}]$.
-Increasing $\sigma_c(m)$ generally broadens the curve; $\gamma$ and $\delta$ change its shape. 
- 
-The tail component is modeled as
+The tail shares the same location \(\mu\) and has scale \(\sigma_c\kappa\),
 \begin{equation}
-             T(\Delta m)  = {1 \over h y  \sqrt{2\pi} } {\rm exp}\left[-{ (\ln[y / a(m)])^2  \over  2h^2} \right]
-\label{eq:mixpd4}
+ T(x\mid m)=
+ \begin{cases}
+ 0 & x\leq\mu,\\[.2em]
+ \displaystyle\frac{1}{h(x-\mu)}\,
+    \phi\!\left[\frac{1}{h}\ln\!\left(\frac{x-\mu}{\sigma_c\kappa}\right)\right]
+     & x>\mu.
+ \end{cases}
+ \label{eq:mixpd4}
 \end{equation}
-where $y = \Delta m - \mu_c(m)$ and $a(m) = k \sigma_c(m)$, with $h$ and $k$ free model parameters
-(with $\gamma$ and $\delta$,  the shape of unresolved component is modeled with four free parameters).
- 
-Based on data exploration and trial-and-error attempts, we assume the following functions to model
-variations of normalization functions with magnitude
-\begin{equation}
-              w_U(m) = w_{floor} +   {1 - w_{floor}\over 1 + {\rm e}^{-c - d(m-22)}}
-   \label{eq:wUmag}
-\end{equation}
-and       
-\begin{equation}
-        f(m) =     {1 \over 1 + {\rm e}^{-f_0 - f_1(m-22)}} .
-\label{eq:fmag}
-\end{equation}
-Here $w_{floor}$, $c$, $d$, $f_0$, $f_1$ are additional five free model parameters that describe
-the variation of the tail-to-core and unresolved-to-resolved ratios with magnitude.
+The seven fitted stellar quantities and the calculation of \(\mu\),
+\(\kappa\), and the tail peak \(x_T\) are given in Appendix~\ref{app:v12-fitting}.
 
-The resolved component is modeled as a sum of $K$=2 skew-normal distributions with weight \(w_{R,k}\), location
-\(\mu_{R,k}\), scale \(\sigma_{R,k}\), and shape parameter \(\alpha_{R,k}\),  
+The galaxy profile \(R(x\mid m)\equiv\fres(x\mid m)\) combines two
+skew-normal densities,
 \begin{equation}
-  \fres (\dm) =  \sum_{k=1}^{K} w_{R,k} \, \mathcal{SN}(\Delta m | \, \mu_{R,k},\, \sigma_{R,k},\, \alpha_{R,k}),
-  \label{eq:mixpd5}
+ \begin{aligned}
+ R(x\mid m)&=[1-v(m)]\,R_1(x\mid m)+v(m)\,R_2(x\mid m),\\
+ R_j(x\mid m)&=\frac{2}{s_j}\phi(z_j)\Phi(\alpha_jz_j),\qquad
+ z_j=\frac{x-\ell_j}{s_j}.
+ \end{aligned}
+ \label{eq:mixpd5}
 \end{equation}
-where \(\mathcal{N}\) denotes the Gaussian distribution  and \(\mathcal{SN}\) the skew-normal
-distribution. Here \(\mathcal{SN}(x\mid\mu,\sigma,\alpha)=2\phi(t)\Phi(\alpha t)/\sigma\),
-with \(t=(x-\mu)/\sigma\), where \(\phi\) and \(\Phi\) are the standard-normal density and
-cumulative distribution functions. Therefore, the resolved component shape model includes 7 additional free
-parameters (note the normalization constraint $\sum_{k=1}^{K} w_{R,k}$ = 1).
+Each component has location \(\ell_j\), scale \(s_j\), and skew
+\(\alpha_j\). The fraction \(v(m)\) specifies the contribution of \(R_2\).
 
-Details of an iterative
-fitting algorithm are described in Appendix. In short, in the first step the shape of unresolved component
-is initially constrained at bright magnitudes ($r<22.5$) and at $|\Delta m| < 0.05$, while the shape of
-resolved component is constrained at fainter magnitudes ($23 < 24$) and at $\Delta m > 0.05$.
-In the final fitting step, the normalization functions $w_U(m)$ and $f(m)$, and only a subset of shape
-parameters are fit as smooth functions of magnitude (e.g., eqs.~\ref{eq:wUmag} and \ref{eq:fmag} for
-$w_U(m)$ and $f(m)$, respectively). For more details, see Appendix A. 
+In Step~1, we fit \(U\) to Rubin measurements of HST reference stars.
+In Step~2, we fit \(R\) to Rubin measurements of HST reference galaxies.
+We use fits in magnitude bins to inspect the variation of the profile
+parameters. The final smooth fits use each reference object's measured
+\((m,x)\) directly. Each profile has seven fitted quantities, each
+represented by a six-coefficient cubic spline (equation~\eqref{eq:v12-spline}).
+In particular, the stellar tail fraction is
+\begin{equation}
+ f(m)=\frac{1}{1+\exp[-s_f(m)]},\qquad
+ s_f(m)=\operatorname{logit}f(m),
+ \label{eq:fmag}
+\end{equation}
+where \(s_f(m)\) is the spline fitted in Step~1. Step~2 represents
+\(\operatorname{logit}v(m)\) in the same way.
+
+In Step~3, we fit the stellar fraction \(w_U(m)\), written
+\(\omega_U(m)\) in the Appendix, to the unlabeled Rubin calibration sample.
+The fitted stellar fraction is
+\begin{equation}
+ w_U(m)=\sum_{j=0}^{6} w_j\binom{6}{j}q^j(1-q)^{6-j},
+ \qquad q=(m-18)/8 .
+ \label{eq:wUmag}
+\end{equation}
+The galaxy fraction is \(w_R(m)=1-w_U(m)\). We train the class
+profiles in Steps~1 and~2 over the full COSMOS footprint. To apply them
+in the \(1^\circ\times1^\circ\) COSMOS field, we use the same functions
+and coefficients for \(U\) and \(R\), including those for \(f(m)\)
+and \(v(m)\). The profiles still vary with magnitude. Step~3 optimizes
+only the seven \(w_j\) using the unlabeled Rubin calibration sample in
+the smaller field. We apply the same training and application procedure
+to the \(D_{\mathrm{griz}}\) mixture. Appendix~\ref{app:v12-fitting}
+gives the fitting details.
 
 \begin{figure*}[!tb]
   \centering
@@ -280,7 +296,7 @@ are reliable (see next section).
 
 The galaxy-to-star count ratio, which serves as Bayesian prior, is
 \begin{equation}
-                   N_{GS} \equiv   {N_G \over N_S}  = {\sum_{k=1}^{K} w_{R,k}  \over  w_U}. 
+                   N_{GS} \equiv   {N_G \over N_S}  = \frac{1-w_U(m)}{w_U(m)}. 
 \end{equation}
 The effectiveness of our fitting procedure is also demonstrated in
 Figure~\ref{fig:star_galaxy_ratio}, which compares the implied galaxy-to-star count ratio
@@ -306,6 +322,48 @@ and Bayes factor is important later when combining multiple sources of classific
  
  
 
+Figures~\ref{fig:v12-r-profile-overlays} and~\ref{fig:v12-r-parameter-diagnostics}
+show the full-footprint \(r\)-band class profiles and the fitted
+parameters used for the \(1^\circ\times1^\circ\) application.
+
+\begin{figure*}[!tb]
+  \centering
+  \includegraphics[width=\textwidth,keepaspectratio]{01_UR_profiles_by_magnitude.pdf}
+  \caption{Stellar \(U(x\mid m)\) (left) and galaxy \(R(x\mid m)\) (right)
+    probability densities, with \(x=\Delta m_r\) and \(m=r_{\mathrm{S\acute{e}rsic}}\).
+    Steps~1 and~2 fit these smooth profiles to Rubin measurements of
+    HST reference stars and galaxies, respectively, over the full COSMOS
+    footprint. Color and line style identify the magnitude interval.
+    Each curve evaluates the corresponding fitted profile at the midpoint
+    of that interval and integrates to one over its full support. Step~3
+    uses these same profiles and coefficients in the
+    \(1^\circ\times1^\circ\) field and fits only the stellar fraction
+    \(\omega_U(m)\). The curves show the profiles before multiplication by
+    the stellar and galaxy fractions, \(\omega_U(m)\) and \(1-\omega_U(m)\).}
+  \label{fig:v12-r-profile-overlays}
+\end{figure*}
+
+\begin{figure*}[!tp]
+  \centering
+  \includegraphics[width=\textwidth,height=0.77\textheight,keepaspectratio]{02_parameters_by_magnitude.pdf}
+  \caption{Parameters of the \(r\)-band COSMOS transfer model versus
+    S\'{e}rsic magnitude. Each circle is the best-fit value from an
+    independent maximum-likelihood fit in one magnitude bin, plotted at
+    the bin midpoint. The stellar and galaxy panels use Rubin measurements
+    of HST reference stars and galaxies, respectively, across the full
+    COSMOS footprint. Open circles indicate fits in which at least one
+    parameter reaches a constraint. The blue and orange curves come from
+    the smooth Step~1 and Step~2 fits to individual reference measurements
+    across the fitted magnitude range. Step~3 uses both sets of spline
+    coefficients, including those for \(f(m)\) and \(v(m)\), at their
+    full-footprint values. In the \(\omega_U\) panel, the purple curve
+    shows the stellar fraction \(\omega_U(m)\) fitted in Step~3 using
+    individual unlabeled Rubin measurements in the \(1^\circ\times1^\circ\) field. Each circle in that panel fits
+    a constant stellar fraction in one bin of the same Rubin sample,
+    evaluating the fixed profiles at each object's measured magnitude.}
+  \label{fig:v12-r-parameter-diagnostics}
+\end{figure*}
+
 \subsection{The Classification Performance of the Single-band \(\Delta m\) Mixture Model}
 
 Given the best-fit model for the data distribution in the $\Delta m$ vs. $m_{\mathrm{Sersic}}$
@@ -324,8 +382,9 @@ Using the mixture model from eq.~\ref{eq:mixpdf1}, we compare
 completeness and contamination for the stellar subsample predicted by
 eqs.~\ref{eq:complS} and \ref{eq:contS} with direct counts from the cleaned HST sample
 in Figure~\ref{fig:singleband-prediction-comparison}.
-As the figure shows, the agreement betweem the model and data is remarkable, given that
-HST labels were not used to constrain the model.
+The stellar and galaxy profiles come from the full-COSMOS fits to Rubin measurements
+of HST reference objects. In the \(1^\circ\times1^\circ\) field, the Rubin fit holds
+both profiles fixed and estimates only \(\omega_U(m)\) from unlabeled measurements.
 
 Depending on particular science case, a user can control completeness or contamination
 by choosing $p_S$ threshold. This optimization is discussed in more detail using better-performing
@@ -390,20 +449,25 @@ Motivated by the fact that the multi-band $\dm$ distribution for the unresolved 
 be described as a multivariate nearly-Gaussian with diagonal covariance matrix, we define a standardized
 variable in each band
 \begin{equation} 
-                             D_i = \frac{\dm_i - \mu_{c}(m_i)}{\sigma_{c}(m_i)},
+                             D_i = \frac{\dm_i-x_{\mathrm{peak},i}(m_i)}{\sigma_{U,i}(m_i)},
 \end{equation}
-where $i$ is the band index and $\mu_c$ and $\sigma_c$ come from the best-fit function for
-unresolved component ($\mu_c \sim 0$). The utilized bands may be all of
+where \(m_i\) is the S\'{e}rsic magnitude in band \(i\),
+\(x_{\mathrm{peak},i}(m_i)\) is the peak of the full stellar profile \(U=J+T\),
+and \(\sigma_{U,i}(m_i)\) is its characteristic width. Both functions are derived
+from the full COSMOS reference stars as described in Appendix~\ref{app:v12-fitting}.
+The utilized bands may be all of
 $ugrizy$ or any subset of $N$ usable (depending on data depth and spectral energy distribution of
 objects of interest) bands, $B$. We then define a radial metric
 \begin{equation} 
-                               D = \left( \sum_B  D^2_i  \right)^{1/2}. 
+                               D = \left( \sum_{i\in B} D_i^2 \right)^{1/2}. 
 \end{equation}
-When $N=1$, $D \sim |\dm/\sigma_c|$, and it measures the distance from the origin in units of
-$\sigma_c$. For  the unresolved component, $D$ follows a $\chi$-distribution with one degree of
-freedom, $\chi_1$ (which is also the half-normal distribution). If $\mu_U$ cannot be ignored,
-$D$ follows a noncentral $\chi$ distribution. When $N>1$, for the unresolved component
-$D \sim \chi_N$, with an expectation value approximately equal to $\langle D\rangle = \sqrt{N-1/2}$.
+When \(N=1\), \(D=|D_i|\) is the distance from the stellar peak in units of
+\(\sigma_{U,i}\). If the standardized stellar deviations are independent
+standard normal variables, \(D\) follows a \(\chi_N\) distribution. For \(N=1\),
+this is the half-normal distribution. Residual offsets in the standardized
+deviations give a noncentral \(\chi\) distribution under the same variance and
+independence assumptions. For the central case with \(N>1\), the mean is
+approximately \(\sqrt{N-1/2}\).
 Depending on the desired completeness for the unresolved component, a hard $D$ threshold of
 several times $\sqrt{N}$ can be used for sample classification (this is a standard case of
 hypothesis testing in frequentist statistics). However, without a quantitative
@@ -416,9 +480,12 @@ estimated.
 Figure~\ref{fig:D-observed-distributions} shows $D$ distributions for HST stars and HST galaxies,
 and their dependence on the $r$-band magnitude and band combination. The behavior of $D$
 distributions for HST stars is approximately consistent with expectation ($D \sim \chi_N$).
-We purse fits to the overall $D$ distributions (that is, without using HST labels to define classes)
-using an analogous two-component mixture model and the same fitting algorithm as we used for
-$\Delta m$ distributions.
+We use the same three-step mixture procedure as for the \(\Delta m\) distributions.
+In Steps~1 and~2, we fit the \(D_{\mathrm{griz}}\) profiles of HST reference stars
+and galaxies across full COSMOS using their Rubin measurements. In Step~3, we
+hold both profiles fixed and fit only \(\omega_U(m)\) to unlabeled Rubin data in the
+\(1^\circ\times1^\circ\) field. We use HST labels for the measured comparisons
+with the model predictions.
 
 The model performs well, as illustrated in Figures~\ref{fig:multiband04} and \ref{fig:multiband18}.  
 In particular,  the middle column in  Figure~\ref{fig:multiband18} shows good agreement of implied
@@ -440,10 +507,13 @@ model components with subsets of data classified using HST labels.
   \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{COSMOS1deg_Type_Fig17.pdf}
   \caption{The panels in the first column are zoomed-in versions of Fig.~\ref{fig:multiband04}, in four
     selected magnitude bins, as marked. Unresolved and resolved model components are shown with
-     blue dashed and red dotted lines, respectively. The middle column is analogous to the left
-     column, except that sources are separated by their HST labels (which were not used in model
-     fitting). The right panels compare model-predicted and HST-observed contamination--completeness
-     curves. The two symbols mark the locations of $D_{griz} = 3$ (circles) and $D_{griz} = 5$ thresholds.} 
+     blue dashed and red dotted lines, respectively. The middle column shows the HST reference stars
+     and galaxies separately. HST labels identify the training classes across the full COSMOS footprint
+     in Steps~1 and~2 and provide the reference measurements in the middle and right columns.
+     The middle-column model curves use the stellar fraction of the labeled reference sample.
+     For the Rubin prediction, Step~3 holds both profiles fixed and fits only \(\omega_U(m)\) to
+     unlabeled Rubin measurements in the \(1^\circ\times1^\circ\) field. The right panels compare
+     the predicted and HST-measured contamination--completeness curves. The two symbols mark the locations of $D_{griz} = 3$ (circles) and $D_{griz} = 5$ thresholds.} 
   \label{fig:multiband18}
 \end{figure*}
 
@@ -472,12 +542,11 @@ Here we again use HST labels to evaluate completeness and contamination for the 
 samples and compare them to the single-band performance. As before, we focus on the ``transition'' magnitude
 range, $23\leq r<26$, with six 0.5 mag wide magnitude bins.
  
-Figure~\ref{fig:multiband_performance} compares the empirical performance of the $ri$, $riz$ and $griz$
-band combinations to the $r$-band case, for a grid of $D$ thresholds. As more bands are added, the
-sample contamination decreases at a given completeness level. For example, at a completeness level
-of 40\% in the magnitude $24.5\leq r<25$, contamination decreases from 50\% to 30\% between the
-$r$ and $griz$ cases. At a completness level of 20\%, the contamination decreases by more than a
-factor two. In practice, detailed optimization of the tradeoff between sample completeness and
+Figure~\ref{fig:multiband_performance} compares the empirical performance of
+\(D_r\) and \(D_{\mathrm{griz}}\) on the same HST reference sample over a range of
+thresholds. For \(24.5\leq r<25\), contamination at 40\% stellar completeness
+falls from 43.0\% with \(D_r\) to 32.1\% with \(D_{\mathrm{griz}}\). At 20\%
+completeness, it falls from 36.9\% to 24.3\%. In practice, detailed optimization of the tradeoff between sample completeness and
 contamination depends on science case. 
 
 
@@ -542,8 +611,11 @@ is so superior to Rubin's default \texttt{extendedness} parameter, we realized t
 the dominant reason is the use of  S\'{e}rsic flux instead of CModel magnitudes. 
 We compare the contamination--completeness curves for our $D_{griz}$ classifier
 and \texttt{griz\_model\_extendedness} classifier in Figure~\ref{fig:CCgrizCompare}.
-As evident, their performance is comparable, with \texttt{griz\_model\_extendedness}
-slighly better than $D_{griz}$. We show in Appendix B that we can reproduce
+Their relative performance depends on the completeness target. For
+\(24.5\leq r<25\), at 20\% stellar completeness the contamination is 18.5\%
+with \texttt{griz\_model\_extendedness} and 24.3\% with \(D_{\mathrm{griz}}\).
+At approximately 50\% completeness, the corresponding values are 50.2\% and
+43.9\%. We show in Appendix B that we can reproduce
 \texttt{griz\_model\_extendedness} using cataloged parameters to apply uncertainty
 and source size corrections.
 
@@ -585,7 +657,8 @@ three different values of \texttt{griz\_model\_extendedness} threshold.
   \caption{The color distribution of objects morphologically classified as unresolved using Rubin DP2 measurements
     (with $D_{griz}$ thresholds selected for 50\% and 20\% stellar completeness in the top and bottom rows, respectively), and then separated into stars (blue dots) and galaxies
     (red crosses) using HST labels, in two magnitude bins: $24\leq r<24.5$ (top) and $24.5\leq r<25$ (bottom).
-    The brighter subsample contains 105 stars and 22 galaxies (17.3\% contamination); the fainter subsample contains 35 stars and 21 galaxies (37.5\% contamination). Note that galaxies appear
+    The brighter subsample contains 106 stars and 27 galaxies (20.3\% contamination).
+    The fainter subsample contains 53 stars and 17 galaxies (24.3\% contamination). Note that galaxies appear
     systematically bluer than stars, except for the $z-y$ color, which allows for improved color-based classification.}
   \label{fig:color-ccdiags}
 \end{figure*}
@@ -599,7 +672,7 @@ three different values of \texttt{griz\_model\_extendedness} threshold.
   \caption{The performance of color-aided multi-band $D$ classificators for stellar subsamples in two magnitude bins:
     $24\leq r<24.5$ (left) and $24.5\leq r<25$ (right), and for three color cuts: $g-r>0.3$ (top), $g-r>1.0$ (middle)
     and $r-i>0.8$ (bottom). In each panel, empirical contamination-completeness curves based on objects with HST
-    classification labels are shown for $D_r$ and $D_{griz}$ with the indicated dereddened color cut. The gray curve shows $D_{griz}$ without a color cut. Completeness is relative to all reference stars in the bin before color selection. In the upper right panel, the color cut raises contamination at 50\% completeness but slightly lowers it at 20\%.
+    classification labels are shown for $D_r$ and $D_{griz}$ with the indicated dereddened color cut. The gray curve shows $D_{griz}$ without a color cut. Completeness is relative to all reference stars in the bin before color selection. In the upper right panel, the color cut lowers contamination at both the 20\% and 50\% completeness targets.
     Diamonds and squares mark the $griz$ thresholds corresponding to approximately 20\% and 50\%
     completeness before the color cut, respectively; circles mark $D_{griz}<3$.
     Open gray diamonds show the 20\% completeness selection without a color cut.}
@@ -629,44 +702,69 @@ sequence and red giant stars; see e.g., \citealt{2026A&A...707A.333P}). The cut 
 selects red (M type) stars and excludes almost all galaxies. The cut $r-i > 0.8$ is similar
 but more effective at excluding galaxies.
 
-The top row of Figure~\ref{fig:color-performance} compares $D_{griz}$ selections at the same stellar completeness, measured relative to all HST reference stars in each magnitude bin. For $24\leq r<24.5$, contamination at 50\% completeness changes from 17.3\% without a color cut to 18.0\% with $(g-r)_0>0.3$. For $24.5\leq r<25$, the cut slightly reduces contamination when selecting 35 of 174 stars (37.5\% to 35.2\%). At 50\% completeness, however, recovering 87 stars requires raising the $D_{griz}$ threshold from 7.61 to 11.99 after the color cut. The number of selected galaxies rises from 224 to 367, increasing contamination from 72.0\% to 80.8\%.
+The top row of Figure~\ref{fig:color-performance} compares $D_{griz}$
+selections at the same stellar completeness, measured relative to all HST
+reference stars in each magnitude bin. For $24\leq r<24.5$, contamination
+at approximately 50\% completeness falls from 20.3\% without a color cut
+to 17.8\% with $(g-r)_0>0.3$. For $24.5\leq r<25$, the same cut reduces
+contamination from 24.3\% to 22.1\% when selecting 53 of 265 stars (20\%
+completeness). At approximately 50\% completeness, the $D_{griz}$ threshold
+needed to recover 133 stars rises from 6.02 to 6.49 after the color cut.
+The number of selected galaxies falls from 104 to 87, reducing
+contamination from 43.9\% to 39.5\%.
 
-A stricter color cut can yield a cleaner sample at lower completeness. In the fainter bin, $(g-r)_0>1.0$ combined with a $D_{griz}$ threshold selects 35 stars and two galaxies, giving 5.4\% contamination at 20.1\% completeness. Only 60 of the 174 reference stars pass this color cut, so even accepting every object that passes it can recover at most 34.5\% of the stars.
+A stricter color cut can yield a cleaner sample at lower completeness.
+In the fainter bin, $(g-r)_0>1.0$ combined with a $D_{griz}$ threshold
+selects 53 stars and five galaxies, giving 8.6\% contamination at 20\%
+completeness. The color cut itself retains 151 of the 265 reference stars,
+so the maximum stellar completeness with this cut is 57.0\%.
 
 
 
 \subsection{An Independent Method Test Using Euclid Data in the ECDFS Field}
 \label{sec:ecdfs-check}
 
-To test whether our method works outside of the COSMOS field, we fit and evaluate the model in
-a separate sky region known as the Extended Chandra Deep Field South (ECDFS). For classification
+To test whether the COSMOS profiles can be transferred to another field,
+we use separate calibration and evaluation regions in the Extended
+Chandra Deep Field South (ECDFS). For classification
 labels, we use the Euclid Data Release 1 (DR1) Deep Survey MER and PHZ classification catalogs from
-IRSA\footnote{\href{https://irsa.ipac.caltech.edu/euclid-archive-documentation/data-access/\#catalogs}{IRSAEuclid DR1 catalog access}.}. 
-We positionally cross-matched Rubin DP2 objects to the MER catalog and retained nearest neighbors
+IRSA\footnote{\href{https://irsa.ipac.caltech.edu/euclid-archive-documentation/data-access/\#catalogs}{IRSA Euclid DR1 catalog access}.}.
+We positionally cross-matched Rubin DP2 objects to the MER catalog and retained mutual nearest neighbors
 separated by less than 0.3 arcsec. We required a Euclid visible-band (VIS) detection, a zero
 detection-quality flag, and a spurious-detection probability below 0.2. We join the PHZ catalog by
 Euclid object ID and use \texttt{PHZ\_CLASSIFICATION} values of 1 for stars and 2 for galaxies.
 
-We follow the same method as before and estimate all coefficients from the ECDFS calibration data.
-% IS THIS TRUE? We first fit the stellar and galaxy profiles using Rubin \(r\)-band measurements of Euclid DR1 reference stars and galaxies.
-Figure~\ref{fig:ecdfs-r-cc} compares the predicted and measured
-completeness and contamination for the same set of Euclid DR1
-matches with Rubin DP2 ECDFS. The measured curves are based on Euclid classification labels. 
-For \(24\leq r_{\mathrm{S\acute{e}rsic}}<24.5\), the model predicts
-\(67.6\%\) completeness and \(55.9\%\) contamination, while the measured values 
-are \(66.7\%\) and \(50.6\%\), respectively. For \(24.5\leq r_{\mathrm{S\acute{e}rsic}}<25\),
-the model predicts \(45.2\%\) completeness and \(64.4\%\) contamination, compared with
-the measured \(52.4\%\) and \(72.9\%\). Therefore, the algorithm and its implementation
-seems robust and remains accurate for an independent sample. 
+We use the \(r\)-band stellar and galaxy profiles from Steps 1 and 2,
+fitted over the full COSMOS footprint, as the starting point for both
+ECDFS fits. The first fit calibrates those profiles using Rubin \(r\)
+observations. The second uses the available Rubin \(g,i,z\) measurements
+to refine that calibration. In the ECDFS transfer test, we
+keep the full-COSMOS spline coefficients and estimate location and
+scale corrections from unlabeled Rubin data before fitting \(w_U(m)\)
+with the corrected profiles held fixed. Both fits estimate the stellar fraction
+from unlabeled ECDFS Rubin data and assign stellar probabilities using
+\(r\)-band measurements. We use Euclid DR1 labels only to evaluate
+the fits in separate ECDFS sky regions.
+
+Figure~\ref{fig:ecdfs-r-cc} compares both predictions with the
+measurements from the same sample. Over the range from
+\(20\%\) to \(80\%\) stellar completeness, the mean absolute
+difference between predicted and measured contamination decreases
+from 16.9 to 13.8 percentage points for \(24\leq r_{\mathrm{S\acute{e}rsic}}<24.5\)
+and from 12.6 to 8.3 percentage points for
+\(24.5\leq r_{\mathrm{S\acute{e}rsic}}<25\).
+Appendix~\ref{app:v12-fitting} describes the calibration and gives the
+numerical comparison.
 
 \begin{figure}[!hb]
   \centering
-  \includegraphics[width=0.85\linewidth]{ECDFS_r_performance.pdf}
-  \caption{Stellar completeness and galaxy contamination in the ECDFS for 
-    two bins of Rubin \(r\)-band S\'{e}rsic magnitude. The solid blue
-    curves are measured using the Euclid classification labels. 
-    The dashed red curves give the model predictions
-    for the same sample. Open circles and squares mark the measurements
-    and predictions at \(p_{\mathrm S}>0.2\), respectively.}
+  \includegraphics[width=0.98\linewidth]{ECDFS_r_vs_griz_CC_24_25.pdf}
+  \caption{Stellar completeness and galaxy contamination in the ECDFS for
+    two bins of Rubin \(r\)-band S\'{e}rsic magnitude. Blue denotes
+    calibration using \(r\) alone and orange denotes calibration using
+    available \(griz\) photometry. The solid curves use Euclid DR1
+    labels on the same set of Rubin objects. The dashed curves
+    give the corresponding model predictions. Open markers show the
+    \(p_{\mathrm S}>0.2\) selection for each model and curve.}
   \label{fig:ecdfs-r-cc}
 \end{figure}
