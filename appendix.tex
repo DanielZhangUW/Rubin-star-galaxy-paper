@@ -57,12 +57,129 @@ our full 2D model includes 24 free parameters.
 
 
 
-\vskip 0.3in
-\leftline{\bf B. Reproducing \texttt{griz\_model\_extendedness} parameter} 
+
+We write \(x=\Delta m\). The stellar profile \(U(x\mid m)\equiv\funr(x\mid m)\)
+combines a Johnson \(S_U\) core \(J\) and a shifted lognormal tail \(T\),
+\begin{equation}
+ U(x\mid m)=[1-f(m)]\,J(x\mid m)+f(m)\,T(x\mid m).
+ \label{eq:mixpdf2}
+\end{equation}
+Here \(f(m)\) is the fraction of the stellar probability in the tail.
+Writing \(z=(x-\mu)/\sigma_c\) and letting \(\phi\) and \(\Phi\) denote
+the standard normal density and cumulative distribution function, we use
+\begin{equation}
+ J(x\mid m)=\frac{\delta}{\sigma_c\sqrt{1+z^2}}\,
+       \phi\!\left(\gamma+\delta\operatorname{asinh}z\right).
+\end{equation}
+The tail shares the same location \(\mu\) and has scale \(\sigma_c\kappa\),
+\begin{equation}
+ T(x\mid m)=
+ \begin{cases}
+ 0 & x\leq\mu,\\[.2em]
+ \displaystyle\frac{1}{h(x-\mu)}\,
+    \phi\!\left[\frac{1}{h}\ln\!\left(\frac{x-\mu}{\sigma_c\kappa}\right)\right]
+     & x>\mu.
+ \end{cases}
+ \label{eq:mixpd4}
+\end{equation}
+The seven fitted stellar quantities and the calculation of \(\mu\),
+\(\kappa\), and the tail peak \(x_T\) are given in Appendix~\ref{app:v12-fitting}.
+
+The galaxy profile \(R(x\mid m)\equiv\fres(x\mid m)\) combines two
+skew-normal densities,
+\begin{equation}
+ \begin{aligned}
+ R(x\mid m)&=[1-v(m)]\,R_1(x\mid m)+v(m)\,R_2(x\mid m),\\
+ R_j(x\mid m)&=\frac{2}{s_j}\phi(z_j)\Phi(\alpha_jz_j),\qquad
+ z_j=\frac{x-\ell_j}{s_j}.
+ \end{aligned}
+ \label{eq:mixpd5}
+\end{equation}
+Each component has location \(\ell_j\), scale \(s_j\), and skew
+\(\alpha_j\). The fraction \(v(m)\) specifies the contribution of \(R_2\).
+
+In Step~1, we fit \(U\) to Rubin measurements of HST reference stars.
+In Step~2, we fit \(R\) to Rubin measurements of HST reference galaxies.
+We use fits in magnitude bins to inspect the variation of the profile
+parameters. The final smooth fits use each reference object's measured
+\((m,x)\) directly. Each profile has seven fitted quantities, each
+represented by a six-coefficient cubic spline (equation~\eqref{eq:v12-spline}).
+In particular, the stellar tail fraction is
+\begin{equation}
+ f(m)=\frac{1}{1+\exp[-s_f(m)]},\qquad
+ s_f(m)=\operatorname{logit}f(m),
+ \label{eq:fmag}
+\end{equation}
+where \(s_f(m)\) is the spline fitted in Step~1. Step~2 represents
+\(\operatorname{logit}v(m)\) in the same way.
+
+In Step~3, we fit the stellar fraction \(w_U(m)\), written
+\(\omega_U(m)\) in the Appendix, to the unlabeled Rubin calibration sample.
+The fitted stellar fraction is
+\begin{equation}
+ w_U(m)=\sum_{j=0}^{6} w_j\binom{6}{j}q^j(1-q)^{6-j},
+ \qquad q=(m-18)/8 .
+ \label{eq:wUmag}
+\end{equation}
+The galaxy fraction is \(w_R(m)=1-w_U(m)\). We train the class
+profiles in Steps~1 and~2 over the full COSMOS footprint. To apply them
+in the \(1^\circ\times1^\circ\) COSMOS field, we use the same functions
+and coefficients for \(U\) and \(R\), including those for \(f(m)\)
+and \(v(m)\). The profiles still vary with magnitude. Step~3 optimizes
+only the seven \(w_j\) using the unlabeled Rubin calibration sample in
+the smaller field. We apply the same training and application procedure
+to the \(D_{\mathrm{griz}}\) mixture. Appendix~\ref{app:v12-fitting}
+gives the fitting details.
 
 
-Here Daniel describes corrections for uncertainties and size, and shows a plot
-that compares CC curves for our basic $D_{griz}$, corrected $D_{griz}$, and
-for \texttt{griz\_model\_extendedness}. 
 
- 
+
+
+
+
+Figures~\ref{fig:v12-r-profile-overlays} and~\ref{fig:v12-r-parameter-diagnostics}
+show the full-footprint \(r\)-band class profiles and the fitted
+parameters used for the \(1^\circ\times1^\circ\) application.
+
+\begin{figure*}[!tb]
+  \centering
+  \includegraphics[width=\textwidth,keepaspectratio]{01_UR_profiles_by_magnitude.pdf}
+  \caption{Stellar \(U(x\mid m)\) (left) and galaxy \(R(x\mid m)\) (right)
+    probability densities, with \(x=\Delta m_r\) and \(m=r_{\mathrm{S\acute{e}rsic}}\).
+    Steps~1 and~2 fit these smooth profiles to Rubin measurements of
+    HST reference stars and galaxies, respectively, over the full COSMOS
+    footprint. Color and line style identify the magnitude interval.
+    Each curve evaluates the corresponding fitted profile at the midpoint
+    of that interval and integrates to one over its full support. Step~3
+    uses these same profiles and coefficients in the
+    \(1^\circ\times1^\circ\) field and fits only the stellar fraction
+    \(\omega_U(m)\). The curves show the profiles before multiplication by
+    the stellar and galaxy fractions, \(\omega_U(m)\) and \(1-\omega_U(m)\).}
+  \label{fig:v12-r-profile-overlays}
+\end{figure*}
+
+\begin{figure*}[!tp]
+  \centering
+  \includegraphics[width=\textwidth,height=0.77\textheight,keepaspectratio]{02_parameters_by_magnitude.pdf}
+  \caption{Parameters of the \(r\)-band COSMOS transfer model versus
+    S\'{e}rsic magnitude. Each circle is the best-fit value from an
+    independent maximum-likelihood fit in one magnitude bin, plotted at
+    the bin midpoint. The stellar and galaxy panels use Rubin measurements
+    of HST reference stars and galaxies, respectively, across the full
+    COSMOS footprint. Open circles indicate fits in which at least one
+    parameter reaches a constraint. The blue and orange curves come from
+    the smooth Step~1 and Step~2 fits to individual reference measurements
+    across the fitted magnitude range. Step~3 uses both sets of spline
+    coefficients, including those for \(f(m)\) and \(v(m)\), at their
+    full-footprint values. In the \(\omega_U\) panel, the purple curve
+    shows the stellar fraction \(\omega_U(m)\) fitted in Step~3 using
+    individual unlabeled Rubin measurements in the \(1^\circ\times1^\circ\) field. Each circle in that panel fits
+    a constant stellar fraction in one bin of the same Rubin sample,
+    evaluating the fixed profiles at each object's measured magnitude.}
+  \label{fig:v12-r-parameter-diagnostics}
+\end{figure*}
+
+
+
+
+

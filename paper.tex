@@ -134,6 +134,10 @@
 \affiliation{Department of Astrophysical Sciences, Princeton University, Princeton, NJ 08544, USA}
 \email{rhl@astro.princeton.edu} 
 
+\author[0000-0000-0000-0000]{Melissa Graham}
+\affiliation{Department of Astronomy, University of Washington, Box 351580, Seattle, WA 98195, USA}
+\email{mlg3k@uw.edu}
+
 \author{Yumi Choi}
 \affiliation{NSF-DOE Vera C. Rubin Observatory / NSF NOIRLab, 950 N. Cherry Ave., Tucson, AZ 85719, USA}
 \email{ccamzzichyuk@gmail.com}
@@ -195,7 +199,10 @@ further improved by incorporating complementary color-based classifiers.
  
 \input{discussion}
 
+\input{appendix}
+
 \input{appendix_v12_fitting}
+
 
 \bibliography{paper}{}
 \bibliographystyle{aasjournalv7.1}
@@ -291,4 +298,62 @@ decreased if a lower completeness level can be afforded in a particular science 
 
 
 
- 
+
+
+
+OK, thanks for this summary! I also studied the new plots in detail on my train ride.
+Here are a few general remarks first, and then a concrete proposal.
+
+The fitting strategy has to be different for dm and D fits. When fitting dm, we expect
+that the resolved component will vary very little between fields. The only freedom
+we should give it (in addition to normalization wR=1-wU) are the same shift and
+broadening that we give to the unresolved component (mu_c and sigma_c). On the
+other hand, the unresolved component can have important changes that depend
+critically on mu_c and sigma_c.
+
+When we fit D, we expect that the unresolved component will not change much
+because we account for the shift and broadening with magnitude through the
+definition of D. However, now the resolved component can vary a lot because
+dm is normalized by sigU and we probably need to let some parameters vary,
+as you actually do. 
+
+Just to confirm: when you construct D in each band, you use D=(x-mu_c)/sigU,
+where mu is the same offset parameter from the fitting, but sigU is computed
+as int[(x-mu)^2 * funr(x) dx] / int[funr(x) dx], correct?
+
+Now to specific comments. The new plots for dm fits, e.g. page 1 in pdf #1
+show that the width of the unresolved component is overestimated (especially
+clear in mag bin 23-24). We MUST look at the equivalent of Fig. 16 from the
+paper, as we discussed it yesterday:
+
+> So, in the 3rd step we fit for wU(m), mu(m) and sigma_c(m). For mu(m) we use parabola
+> and for sigma_c(m) the Sesar function (the top two panels in fig. 16. indeed look like
+> that). I don’t know what function you used for wU(m), but the fit in fig. 16 looks great.
+> Once you obtain best-fits for wU(m), mu(m) and sigma_c(m), both for the COSMOS and
+> ECDFS fields, please add those lines to Fig. 16.  
+
+to understand what is going on. Somehow, the Sesar function doesn't do what it's
+supposed to do. But we will not know with uncertainty until we look at its best
+fit line and compare it to the values from per-bin fits in Figure 16.
+
+Assuming that this is the case, there is a potentially easy way to ``stabilize'' it.
+Take first the error of Sersic mag vs. mag data and fit the Sesar function to it.
+This will give you photometric error vs. mag, sigma_ph(m). Then assume that
+sigma_c(m) = k * sigma_ph(m), and fit only for k, not for all 3 parameters from
+the Sesaar function. I am hopeful that this might work.
+
+I am not sure what function you used for wU(m). It should be some function
+that will ensure its monotonic decrease with magnitude, and an exponential
+rise in the galaxy-to-star count ratio.
+
+Before we meet tomorrow (Tue, 11:59:59pm Pacific), could you please try to
+produce Fig. 16 for the latest dm fits? If you will have time, it would be great
+to try to rerun with the sigma_c(m) = k * sigma_ph(m) ansatz and see how it does.
+
+I will finish the text today (assuming it will all work) and send message to slack
+after I git push. 
+
+
+
+
+
