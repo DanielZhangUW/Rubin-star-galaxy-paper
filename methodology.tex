@@ -157,19 +157,26 @@ We test these predictions below using HST-based labels.
 
 \subsection{Constraining the \(\Delta m\) vs. \(m_{\mathrm{Sersic}}\) Mixture Model  \label{sec:mixmodel2}} 
 
-The functions $\funr (\dm \,|\, m)$ and $\fres (\dm\ ,|\, m)$ must provide an adequate description of
+The functions $\funr (\dm \,|\, m)$ and $\fres (\dm\,|\, m)$ must provide an adequate description of
 the data for the Bayesian model to work reliably. The adopted functional forms must be sufficiently
 general to describe data in arbitrary sky regions and to account for variations in limiting
 depth. We implemented our solution as a two-step procedure, described in detail in the
 Appendix. Here we provide a high-level summary.
-
+ 
 In the first step, we select appropriate analytic fitting functions for each mixture component using
-HST classifications of stars and galaxies in the COSMOS field. We first fit the $\dm$ distributions
-in $\sim$10 magnitude bins. After examining how the best-fit model parameters vary with magnitude,
-we select a new set of functional forms that enforce smooth magnitude dependence, separately for
-each mixture component. In the second step, we fit the full, unlabeled dataset, determining the
-parameters that describe the magnitude dependence of a subset of the initial model parameters, along
-with the relative normalization of the two mixture components.
+HST classifications of stars and galaxies in the COSMOS field. For unresolved objects, we use a
+Gaussian core with a positive tail, while for resolved objects, we use a sum of skew-normal
+distributions. We first fit the \(\dm\) distributions in approximately 10 magnitude bins. After
+examining how the best-fit model parameters vary with magnitude, we select additional functional
+forms that enforce smooth magnitude dependence for each mixture component separately. The most
+important modifications are allowing the location and scale parameters of the unresolved component
+to vary with magnitude and enforcing a smooth variation in the relative normalization of the two
+mixture components.
+
+In the second step, we fit the full, unlabeled dataset, determining the parameters that describe the
+magnitude dependence of a subset of the initial model parameters, together with the relative
+normalization of the two components.
+
 
 This approach provides sufficient flexibility for the model to be applied to other sky regions and
 datasets with different limiting depths. It also allows the model to accommodate variations in the
