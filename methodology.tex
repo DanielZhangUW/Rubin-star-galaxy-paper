@@ -490,14 +490,14 @@ Galactic plane the stellar counts will go up and thus the stellar sample contami
 Rubin (\citealt{2026arXiv261022613O}) introduced a novel star-galaxy separation metric
 named \texttt{griz\_model\_extendedness}. The score is clipped to the interval [0, 1] but
 it is not a calibrated probability that an object is a star or galaxy and should be 
-be interpreted as a morphology ranking statistic. Given a subsets of bands, the algorithm
-separately adds PSF and S\'{e}rsic fluxes and then utilizes these total fluxes to define
-PSF a magnitude difference between PSF and S\'{e}rsic, as used here. In addition,
+interpreted as a morphology ranking statistic. Given a subsets of bands, the algorithm
+first separately adds PSF and S\'{e}rsic fluxes and then utilizes these total fluxes to define
+a difference between PSF and S\'{e}rsic magnitudes, as used here. In addition,
 the algorithm applies an empirical calibration and an uncertainty correction, and then
-modifies the result using a characteristic source size (for more details see Appendix B).
+modifies the result using a characteristic source size.
 The last two modifications do not have a theoretical underpinning. Adding fluxes
-from different bands is also not optimal (for example, in case of a barely resolved galaxy
-in red bands with a strong blue AGN component this addition could mask the fact that
+from different bands sometimes may not be justified (for example, in case of a barely resolved galaxy
+in red bands with a strong blue AGN component, this addition could mask the fact that
 the source is a galaxy) unless galaxy morphology is strongly correlated between bands. 
 
 We tested \texttt{griz\_model\_extendedness} using HST labels and it shows a
@@ -510,15 +510,27 @@ Their relative performance depends on the completeness target. For
 \(24.5\leq r<25\), at 20\% stellar completeness the contamination is 18.5\%
 with \texttt{griz\_model\_extendedness} and 24.3\% with \(D_{\mathrm{griz}}\).
 At approximately 50\% completeness, the corresponding values are 50.2\% and
-43.9\%. We show in Appendix B that we can reproduce
-\texttt{griz\_model\_extendedness} using cataloged parameters to apply uncertainty
-and source size corrections.
+43.9\%.
 
 We reiterate that \texttt{griz\_model\_extendedness} is not a calibrated probability that
 an object is a star or galaxy, and by itself does not allow user to estimate completeness
 and contamination for a selected threshold. Figure~\ref{fig:CCgrizCompareGrizmodel}
 shows the variation of completeness and contamination for stellar selection using
 three different values of \texttt{griz\_model\_extendedness} threshold. 
+
+We also investigated the impact of directly summing PSF and Sérsic fluxes across different
+bands. Figure~\ref{fig:magdmcomparison2} quantitatively illustrates the change in \( \Delta m\) between
+the single-band $r$-band case and the coadded fluxes in the $griz$ bands. The impact is larger for
+resolved objects, amounting to about 0.05 mag on average, and exhibits a noticeable dependence on
+magnitude. As shown in Figure~\ref{fig:CCgrizCompare}, the contamination-versus-completeness
+performance of \( \Delta m_{griz} \) is only slightly worse at the faint end than that of the $D_{griz}$
+and \texttt{griz\_model\_extendedness} methods. This result further reinforces the conclusion that the
+primary source of the performance improvement over the default \texttt{extendedness} parameter is
+the switch from CModel to Sérsic fluxes.
+
+Figure~\ref{fig:CCgrizCompare} also shows the contamination-versus-completeness curves obtained
+using the mean value of \( \Delta m\)  across the $griz$ bands. The performance is again comparable,
+with some degradation at the very faint end, particularly at low completeness levels.
 
 
 \begin{figure*}[!tb]
@@ -529,27 +541,15 @@ three different values of \texttt{griz\_model\_extendedness} threshold.
   \label{fig:CCgrizCompare}
 \end{figure*}
 
-
-
-
-
 \begin{figure*}[!tb]
   \centering
   % this figure copied from End-to-end-morphology-star-probability/v12/outputs/notebook 
   \includegraphics[width=0.9\textwidth,height=0.78\textheight,keepaspectratio]{COSMOS1deg_Type_Fig22.pdf}
-  \caption{Performance vs. magnitude for a fixed threshold. IF we keep this figure, we will fix caption after this figure is finalized. }
+  \caption{Performance vs. magnitude for a fixed threshold of \texttt{griz\_model\_extendedness}, as
+    marked. The smaller is the threshold for selecting stellar samples, the smaller is contamination
+  by galaxies, at the expense of decreasing sample completeness.}
   \label{fig:CCgrizCompareGrizmodel}
 \end{figure*}
-
-
-
-
-
-\subsection{Further Comments on  \texttt{griz\_model\_extendedness} Parameter}
-\label{sec:comparegriz}
-
-
-Describe Figure~\ref{ig:magdmcomparison2}. Find also figure with averaged dm and performance plot. 
 
 
 \begin{figure*}[!tb]
@@ -561,8 +561,6 @@ Describe Figure~\ref{ig:magdmcomparison2}. Find also figure with averaged dm and
     \(\Delta m_{\mathrm{griz}}-\Delta m_r\).}
   \label{fig:magdmcomparison2}
 \end{figure*}
-
-
 
 
 
