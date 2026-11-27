@@ -406,7 +406,7 @@ model components with subsets of data classified using HST labels.
      and galaxies separately. HST labels identify the training classes across the full COSMOS footprint
      in Steps~1 and~2 and provide the reference measurements in the middle and right columns.
      The middle-column model curves use the stellar fraction of the labeled reference sample.
-     For the Rubin prediction, Step~3 holds both profiles fixed and fits only \(\omega_U(m)\) to
+     For the Rubin prediction, Step~3 fits \(\omega_U(m)\) and the location and scale adjustments of \(R_1\) to
      unlabeled Rubin measurements in the \(1^\circ\times1^\circ\) field. The right panels compare
      the predicted and HST-measured contamination--completeness curves. The two symbols mark the locations of $D_{griz} = 3$ (circles) and $D_{griz} = 5$ thresholds.} 
   \label{fig:multiband18}
@@ -440,8 +440,8 @@ range, $23\leq r<26$, with six 0.5 mag wide magnitude bins.
 Figure~\ref{fig:multiband_performance} compares the empirical performance of
 \(D_r\) and \(D_{\mathrm{griz}}\) on the same HST reference sample over a range of
 thresholds. For \(24.5\leq r<25\), contamination at 40\% stellar completeness
-falls from 43.0\% with \(D_r\) to 32.1\% with \(D_{\mathrm{griz}}\). At 20\%
-completeness, it falls from 36.9\% to 24.3\%. In practice, detailed optimization of the tradeoff between sample completeness and
+falls from 49.3\% with \(D_r\) to 41.8\% with \(D_{\mathrm{griz}}\). At 20\%
+completeness, it falls from 45.4\% to 25.4\%. In practice, detailed optimization of the tradeoff between sample completeness and
 contamination depends on science case. 
 
 
@@ -508,9 +508,9 @@ We compare the contamination--completeness curves for our $D_{griz}$ classifier
 and \texttt{griz\_model\_extendedness} classifier in Figure~\ref{fig:CCgrizCompare}.
 Their relative performance depends on the completeness target. For
 \(24.5\leq r<25\), at 20\% stellar completeness the contamination is 18.5\%
-with \texttt{griz\_model\_extendedness} and 24.3\% with \(D_{\mathrm{griz}}\).
+with \texttt{griz\_model\_extendedness} and 25.4\% with \(D_{\mathrm{griz}}\).
 At approximately 50\% completeness, the corresponding values are 50.2\% and
-43.9\%. We show in Appendix B that we can reproduce
+54.8\%. We show in Appendix B that we can reproduce
 \texttt{griz\_model\_extendedness} using cataloged parameters to apply uncertainty
 and source size corrections.
 
@@ -575,8 +575,8 @@ Describe Figure~\ref{ig:magdmcomparison2}. Find also figure with averaged dm and
   \caption{The color distribution of objects morphologically classified as unresolved using Rubin DP2 measurements
     (with $D_{griz}$ thresholds selected for 50\% and 20\% stellar completeness in the top and bottom rows, respectively), and then separated into stars (blue dots) and galaxies
     (red crosses) using HST labels, in two magnitude bins: $24\leq r<24.5$ (top) and $24.5\leq r<25$ (bottom).
-    The brighter subsample contains 106 stars and 27 galaxies (20.3\% contamination).
-    The fainter subsample contains 53 stars and 17 galaxies (24.3\% contamination). Note that galaxies appear
+    The brighter subsample contains 106 stars and 26 galaxies (19.7\% contamination).
+    The fainter subsample contains 53 stars and 18 galaxies (25.4\% contamination). Note that galaxies appear
     systematically bluer than stars, except for the $z-y$ color, which allows for improved color-based classification.}
   \label{fig:color-ccdiags}
 \end{figure*}
@@ -623,17 +623,17 @@ but more effective at excluding galaxies.
 The top row of Figure~\ref{fig:color-performance} compares $D_{griz}$
 selections at the same stellar completeness, measured relative to all HST
 reference stars in each magnitude bin. For $24\leq r<24.5$, contamination
-at approximately 50\% completeness falls from 20.3\% without a color cut
-to 17.8\% with $(g-r)_0>0.3$. For $24.5\leq r<25$, the same cut reduces
-contamination from 24.3\% to 22.1\% when selecting 53 of 265 stars (20\%
+at approximately 50\% completeness rises from 19.7\% without a color cut
+to 22.6\% with $(g-r)_0>0.3$. For $24.5\leq r<25$, the same cut reduces
+contamination from 25.4\% to 22.1\% when selecting 53 of 265 stars (20\%
 completeness). At approximately 50\% completeness, the $D_{griz}$ threshold
-needed to recover 133 stars rises from 6.02 to 6.49 after the color cut.
-The number of selected galaxies falls from 104 to 87, reducing
-contamination from 43.9\% to 39.5\%.
+needed to recover 133 stars rises from 5.48 to 6.56 after the color cut.
+The number of selected galaxies falls from 161 to 127, reducing
+contamination from 54.8\% to 48.8\%.
 
 A stricter color cut can yield a cleaner sample at lower completeness.
 In the fainter bin, $(g-r)_0>1.0$ combined with a $D_{griz}$ threshold
-selects 53 stars and five galaxies, giving 8.6\% contamination at 20\%
+selects 53 stars and four galaxies, giving 7.0\% contamination at 20\%
 completeness. The color cut itself retains 151 of the 265 reference stars,
 so the maximum stellar completeness with this cut is 57.0\%.
 
@@ -648,41 +648,32 @@ Chandra Deep Field South (ECDFS). For classification
 labels, we use the Euclid Data Release 1 (DR1) Deep Survey MER and PHZ classification catalogs from
 IRSA\footnote{\href{https://irsa.ipac.caltech.edu/euclid-archive-documentation/data-access/\#catalogs}{IRSA Euclid DR1 catalog access}.}.
 We positionally cross-matched Rubin DP2 objects to the MER catalog and retained mutual nearest neighbors
-separated by less than 0.3 arcsec. We required a Euclid visible-band (VIS) detection, a zero
-detection-quality flag, and a spurious-detection probability below 0.2. We join the PHZ catalog by
+separated by less than 0.3 arcsec. We required a Euclid visible-band (VIS) detection and a spurious-detection probability below 0.2. We join the PHZ catalog by
 Euclid object ID and use \texttt{PHZ\_CLASSIFICATION} values of 1 for stars and 2 for galaxies.
 
-We use the \(r\)-band stellar and galaxy profiles from Steps 1 and 2,
-fitted over the full COSMOS footprint, as the starting point for both
-ECDFS fits. The first fit calibrates those profiles using Rubin \(r\)
-observations. The second uses the available Rubin \(g,i,z\) measurements
-to refine that calibration. In the ECDFS transfer test, we
-keep the full-COSMOS spline coefficients and estimate location and
-scale corrections from unlabeled Rubin data before fitting \(w_U(m)\)
-with the corrected profiles held fixed. Both fits estimate the stellar fraction
-from unlabeled ECDFS Rubin data and assign stellar probabilities using
-\(r\)-band measurements. We use Euclid DR1 labels only to evaluate
-the fits in separate ECDFS sky regions.
+We start with the stellar and galaxy profiles fitted over full COSMOS.
+In Step~3 we fit the stellar location, core width, and stellar fraction jointly
+to unlabeled Rubin \(r\)-band measurements in the ECDFS calibration regions.
+The galaxy profile follows the stellar shift and broadening.
+We use Euclid DR1 labels only to evaluate the resulting predictions in
+separate ECDFS regions.
 
-Figure~\ref{fig:ecdfs-r-cc} compares both predictions with the
-measurements from the same sample. Over the range from
-\(20\%\) to \(80\%\) stellar completeness, the mean absolute
-difference between predicted and measured contamination decreases
-from 16.9 to 13.8 percentage points for \(24\leq r_{\mathrm{S\acute{e}rsic}}<24.5\)
-and from 12.6 to 8.3 percentage points for
-\(24.5\leq r_{\mathrm{S\acute{e}rsic}}<25\).
-Appendix~\ref{app:v12-fitting} describes the calibration and gives the
-numerical comparison.
+Figure~\ref{fig:ecdfs-r-cc} compares the predicted and measured completeness
+and contamination. At \(p_{\mathrm S}>0.2\), the model predicts
+66.0\% completeness and 37.4\% contamination for
+\(24\leq r_{\mathrm{S\acute{e}rsic}}<24.5\), compared with 67.4\% and
+69.7\% measured. For \(24.5\leq r_{\mathrm{S\acute{e}rsic}}<25\),
+the predicted values are 45.5\% and 55.3\%, compared with 56.5\% and
+84.0\% measured. The model underestimates contamination in both bins.
 
 \begin{figure}[!hb]
   \centering
   \includegraphics[width=0.98\linewidth]{ECDFS_r_vs_griz_CC_24_25.pdf}
   \caption{Stellar completeness and galaxy contamination in the ECDFS for
-    two bins of Rubin \(r\)-band S\'{e}rsic magnitude. Blue denotes
-    calibration using \(r\) alone and orange denotes calibration using
-    available \(griz\) photometry. The solid curves use Euclid DR1
-    labels on the same set of Rubin objects. The dashed curves
-    give the corresponding model predictions. Open markers show the
-    \(p_{\mathrm S}>0.2\) selection for each model and curve.}
+    two bins of Rubin \(r\)-band S\'{e}rsic magnitude. The solid blue curves show direct counts
+    using Euclid DR1 labels in the held-out sample. The dashed red curves
+    show the model predictions for the same objects' magnitudes. Open circles
+    and squares mark the measured and predicted values at \(p_{\mathrm S}>0.2\),
+    respectively.}
   \label{fig:ecdfs-r-cc}
 \end{figure}
